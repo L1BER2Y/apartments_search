@@ -1,9 +1,12 @@
-package by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto;
+package by.it_academy.jd2.Mk_JD2_103_23.user_service.dao.entity;
+
+import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.Role;
+import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.Status;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class User {
+public class UserEntity {
     private UUID id;
     private LocalDateTime dt_create;
     private LocalDateTime dt_update;
@@ -13,10 +16,10 @@ public class User {
     private Status UserStatus;
     private String password;
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(UUID id, LocalDateTime dt_create, LocalDateTime dt_update, String mail, String fio, Role userRole, Status userStatus, String password) {
+    public UserEntity(UUID id, LocalDateTime dt_create, LocalDateTime dt_update, String mail, String fio, Role userRole, Status userStatus, String password) {
         this.id = id;
         this.dt_create = dt_create;
         this.dt_update = dt_update;
@@ -96,7 +99,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
+        UserEntity user = (UserEntity) o;
 
         if (id != null ? !id.equals(user.id) : user.id != null) return false;
         if (dt_create != null ? !dt_create.equals(user.dt_create) : user.dt_create != null) return false;
