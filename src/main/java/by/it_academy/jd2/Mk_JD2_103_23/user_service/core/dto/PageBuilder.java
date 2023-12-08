@@ -8,7 +8,7 @@ public class PageBuilder {
     private boolean first;
     private int numberOfElements;
     private boolean last;
-    private User[] content;
+    private UserDTO[] content;
 
     public PageBuilder setNumber(int number) {
         this.number = number;
@@ -45,12 +45,12 @@ public class PageBuilder {
         return this;
     }
 
-    public PageBuilder setContent(User[] content) {
+    public PageBuilder setContent(UserDTO[] content) {
         this.content = content;
         return this;
     }
 
-    public Page createPage() {
-        return new Page(number, size, totalPages, totalElements, first, numberOfElements, last, content);
+    public PageDTO build() {
+        return new PageDTO(number, size, totalPages, totalElements, first, numberOfElements, last, content);
     }
 }

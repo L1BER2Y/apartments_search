@@ -53,7 +53,7 @@ public class UserBuilder {
         return this;
     }
 
-    public User createUser() {
-        return new User(id, dt_create, dt_update, mail, fio, userRole, userStatus, password);
+    public UserDTO build() {
+        return new UserDTO(id, dt_create, dt_update, mail, fio, userRole, userStatus, password);
     }
 }

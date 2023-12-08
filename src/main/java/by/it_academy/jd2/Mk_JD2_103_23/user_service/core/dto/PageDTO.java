@@ -2,7 +2,7 @@ package by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto;
 
 import java.util.Arrays;
 
-public class Page {
+public class PageDTO {
     private int number;
     private int size;
     private int totalPages;
@@ -10,12 +10,12 @@ public class Page {
     private boolean first;
     private int numberOfElements;
     private boolean last;
-    private User[] content;
+    private UserDTO[] content;
 
-    public Page() {
+    public PageDTO() {
     }
 
-    public Page(int number, int size, int totalPages, int totalElements, boolean first, int numberOfElements, boolean last, User[] content) {
+    public PageDTO(int number, int size, int totalPages, int totalElements, boolean first, int numberOfElements, boolean last, UserDTO[] content) {
         this.number = number;
         this.size = size;
         this.totalPages = totalPages;
@@ -82,11 +82,11 @@ public class Page {
         this.last = last;
     }
 
-    public User[] getContent() {
+    public UserDTO[] getContent() {
         return content;
     }
 
-    public void setContent(User[] content) {
+    public void setContent(UserDTO[] content) {
         this.content = content;
     }
 
@@ -95,17 +95,17 @@ public class Page {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Page page = (Page) o;
+        PageDTO pageDTO = (PageDTO) o;
 
-        if (number != page.number) return false;
-        if (size != page.size) return false;
-        if (totalPages != page.totalPages) return false;
-        if (totalElements != page.totalElements) return false;
-        if (first != page.first) return false;
-        if (numberOfElements != page.numberOfElements) return false;
-        if (last != page.last) return false;
+        if (number != pageDTO.number) return false;
+        if (size != pageDTO.size) return false;
+        if (totalPages != pageDTO.totalPages) return false;
+        if (totalElements != pageDTO.totalElements) return false;
+        if (first != pageDTO.first) return false;
+        if (numberOfElements != pageDTO.numberOfElements) return false;
+        if (last != pageDTO.last) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(content, page.content);
+        return Arrays.equals(content, pageDTO.content);
     }
 
     @Override

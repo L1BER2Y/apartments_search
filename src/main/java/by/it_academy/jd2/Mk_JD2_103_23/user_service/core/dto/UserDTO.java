@@ -3,7 +3,7 @@ package by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class User {
+public class UserDTO {
     private UUID id;
     private LocalDateTime dt_create;
     private LocalDateTime dt_update;
@@ -13,10 +13,10 @@ public class User {
     private Status UserStatus;
     private String password;
 
-    public User() {
+    public UserDTO() {
     }
 
-    public User(UUID id, LocalDateTime dt_create, LocalDateTime dt_update, String mail, String fio, Role userRole, Status userStatus, String password) {
+    public UserDTO(UUID id, LocalDateTime dt_create, LocalDateTime dt_update, String mail, String fio, Role userRole, Status userStatus, String password) {
         this.id = id;
         this.dt_create = dt_create;
         this.dt_update = dt_update;
@@ -96,16 +96,16 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
+        UserDTO userDTO = (UserDTO) o;
 
-        if (id != null ? !id.equals(user.id) : user.id != null) return false;
-        if (dt_create != null ? !dt_create.equals(user.dt_create) : user.dt_create != null) return false;
-        if (dt_update != null ? !dt_update.equals(user.dt_update) : user.dt_update != null) return false;
-        if (mail != null ? !mail.equals(user.mail) : user.mail != null) return false;
-        if (fio != null ? !fio.equals(user.fio) : user.fio != null) return false;
-        if (UserRole != user.UserRole) return false;
-        if (UserStatus != user.UserStatus) return false;
-        return password != null ? password.equals(user.password) : user.password == null;
+        if (id != null ? !id.equals(userDTO.id) : userDTO.id != null) return false;
+        if (dt_create != null ? !dt_create.equals(userDTO.dt_create) : userDTO.dt_create != null) return false;
+        if (dt_update != null ? !dt_update.equals(userDTO.dt_update) : userDTO.dt_update != null) return false;
+        if (mail != null ? !mail.equals(userDTO.mail) : userDTO.mail != null) return false;
+        if (fio != null ? !fio.equals(userDTO.fio) : userDTO.fio != null) return false;
+        if (UserRole != userDTO.UserRole) return false;
+        if (UserStatus != userDTO.UserStatus) return false;
+        return password != null ? password.equals(userDTO.password) : userDTO.password == null;
     }
 
     @Override
