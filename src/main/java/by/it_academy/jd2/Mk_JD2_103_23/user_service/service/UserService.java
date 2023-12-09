@@ -1,8 +1,6 @@
 package by.it_academy.jd2.Mk_JD2_103_23.user_service.service;
 
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.PageDTO;
-import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.UserBuilder;
-import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.UserDTO;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.dao.api.IUserDao;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.dao.entity.UserEntity;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.service.api.IUserService;
@@ -18,30 +16,17 @@ public class UserService implements IUserService {
     }
 // для перевода из entity в dto применить паттерн адаптер
     @Override
-    public List<UserDTO> getAll(PageDTO page) {
-        return this.dao.findAll()
-                .stream().map(UserService::map).toList();
+    public List<UserEntity> getAll(PageDTO page) {
+        return this.dao.findAll();
     }
 
     @Override
-    public UserDTO getById(UUID id) {
-        return null;
+    public UserEntity getById(UUID uuid) {
+        return this.dao.getAllById(uuid);
     }
 
     @Override
-    public void createUser(UserDTO user) {
-
-    }
-
-    private static UserDTO map(UserEntity entity) {
-        return new UserBuilder()
-                .setId(entity.getId())
-                .setDt_create(entity.getDt_create())
-                .setDt_update(entity.getDt_update())
-                .setMail(entity.getMail())
-                .setFio(entity.getFio())
-                .setUserRole(entity.getUserRole())
-                .setUserStatus(entity.getUserStatus())
-                .build();
+    public void createUser(UserEntity user) {
+        this.dao.addUser(user);
     }
 }

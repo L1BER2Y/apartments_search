@@ -2,11 +2,16 @@ package by.it_academy.jd2.Mk_JD2_103_23.user_service.dao.entity;
 
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.Role;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.Status;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Entity
 public class UserEntity {
+    @Id
     private UUID id;
     private LocalDateTime dt_create;
     private LocalDateTime dt_update;
