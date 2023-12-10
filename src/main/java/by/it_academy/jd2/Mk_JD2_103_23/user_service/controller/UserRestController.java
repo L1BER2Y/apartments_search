@@ -3,6 +3,7 @@ package by.it_academy.jd2.Mk_JD2_103_23.user_service.controller;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.PageDTO;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.UserDTO;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.dao.entity.UserEntity;
+import by.it_academy.jd2.Mk_JD2_103_23.user_service.service.UserService;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.service.api.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -29,12 +30,6 @@ public class UserRestController {
         return convertToDto(userCreated);
     }
 
-    @GetMapping("/{uuid}")
-    @ResponseBody
-    public UserDTO getUser(@PathVariable("uuid") UUID id) {
-        return convertToDto(this.service.getById(id));
-    }
-
     @GetMapping()
     @ResponseBody
     public Page<UserDTO> getPage(@RequestParam(defaultValue =  "0") Integer number,
@@ -43,6 +38,12 @@ public class UserRestController {
         PageDTO pageDTO = new PageDTO(number, size);
         return this.service.getPage(pageDTO)
                 .map(this::convertToDto);
+    }
+
+    @GetMapping("/{uuid}")
+    @ResponseBody
+    public UserDTO getUser(@RequestParam("uuid") UUID id) {
+        return convertToDto(this.service.getById(id));
     }
 
     @PutMapping("/{uuid}/dt_update/{dt_update}")

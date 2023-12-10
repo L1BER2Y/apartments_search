@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:80/apartments_search
+    username: postgres
+    password: 4712vs5988gh
+    hikari:
+      maximum-pool-size: 10
+server:
+  port: 80
