@@ -4,12 +4,12 @@ import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.Role;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import org.springframework.data.jpa.repository.EntityGraph;
-
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Table(name = "user")
 public class UserEntity {
     @Id
     private UUID id;

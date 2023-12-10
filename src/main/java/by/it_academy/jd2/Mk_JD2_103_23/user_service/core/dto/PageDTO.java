@@ -10,12 +10,17 @@ public class PageDTO {
     private boolean first;
     private int numberOfElements;
     private boolean last;
-    private UserDTO[] content;
+    private UserDTO content;
 
     public PageDTO() {
     }
 
-    public PageDTO(int number, int size, int totalPages, int totalElements, boolean first, int numberOfElements, boolean last, UserDTO[] content) {
+    public PageDTO(int number, int size) {
+        this.number = number;
+        this.size = size;
+    }
+
+    public PageDTO(int number, int size, int totalPages, int totalElements, boolean first, int numberOfElements, boolean last, UserDTO content) {
         this.number = number;
         this.size = size;
         this.totalPages = totalPages;
@@ -82,11 +87,11 @@ public class PageDTO {
         this.last = last;
     }
 
-    public UserDTO[] getContent() {
+    public UserDTO getContent() {
         return content;
     }
 
-    public void setContent(UserDTO[] content) {
+    public void setContent(UserDTO content) {
         this.content = content;
     }
 
@@ -104,8 +109,7 @@ public class PageDTO {
         if (first != pageDTO.first) return false;
         if (numberOfElements != pageDTO.numberOfElements) return false;
         if (last != pageDTO.last) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(content, pageDTO.content);
+        return content != null ? content.equals(pageDTO.content) : pageDTO.content == null;
     }
 
     @Override
@@ -117,13 +121,13 @@ public class PageDTO {
         result = 31 * result + (first ? 1 : 0);
         result = 31 * result + numberOfElements;
         result = 31 * result + (last ? 1 : 0);
-        result = 31 * result + Arrays.hashCode(content);
+        result = 31 * result + (content != null ? content.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Page{" +
+        return "PageDTO{" +
                 "number=" + number +
                 ", size=" + size +
                 ", totalPages=" + totalPages +
@@ -131,7 +135,7 @@ public class PageDTO {
                 ", first=" + first +
                 ", numberOfElements=" + numberOfElements +
                 ", last=" + last +
-                ", content=" + Arrays.toString(content) +
+                ", content=" + content +
                 '}';
     }
 }

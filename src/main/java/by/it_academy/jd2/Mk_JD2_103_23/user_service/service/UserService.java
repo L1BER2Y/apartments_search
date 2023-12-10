@@ -4,20 +4,22 @@ import by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto.PageDTO;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.dao.api.IUserDao;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.dao.entity.UserEntity;
 import by.it_academy.jd2.Mk_JD2_103_23.user_service.service.api.IUserService;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 import java.util.UUID;
 
+@Service
 public class UserService implements IUserService {
     private final IUserDao dao;
 
     public UserService(IUserDao dao) {
         this.dao = dao;
     }
-// для перевода из entity в dto применить паттерн адаптер
+
     @Override
-    public List<UserEntity> getAll(PageDTO page) {
-        return this.dao.findAll();
+    public Page<UserEntity> getPage(PageDTO page) {
+        return this.dao.findAll(PageRequest.of(page.getNumber(), page.getSize()));
     }
 
     @Override
@@ -26,7 +28,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void createUser(UserEntity user) {
-        this.dao.addUser(user);
+    public UserEntity createUser(UserEntity user) {
+        return this.dao.addUser(user);
+    }
+
+    @Override
+    public void updateUser(UserEntity entity) {
+        this.dao.update(entity);
     }
 }
