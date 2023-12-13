@@ -11,12 +11,11 @@ public class UserDTO {
     private String fio;
     private Role UserRole;
     private Status UserStatus;
-    private String password;
 
     public UserDTO() {
     }
 
-    public UserDTO(UUID id, LocalDateTime dt_create, LocalDateTime dt_update, String mail, String fio, Role userRole, Status userStatus, String password) {
+    public UserDTO(UUID id, LocalDateTime dt_create, LocalDateTime dt_update, String mail, String fio, Role userRole, Status userStatus) {
         this.id = id;
         this.dt_create = dt_create;
         this.dt_update = dt_update;
@@ -24,7 +23,6 @@ public class UserDTO {
         this.fio = fio;
         UserRole = userRole;
         UserStatus = userStatus;
-        this.password = password;
     }
 
     public UUID getId() {
@@ -83,14 +81,6 @@ public class UserDTO {
         UserStatus = userStatus;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,8 +94,7 @@ public class UserDTO {
         if (mail != null ? !mail.equals(userDTO.mail) : userDTO.mail != null) return false;
         if (fio != null ? !fio.equals(userDTO.fio) : userDTO.fio != null) return false;
         if (UserRole != userDTO.UserRole) return false;
-        if (UserStatus != userDTO.UserStatus) return false;
-        return password != null ? password.equals(userDTO.password) : userDTO.password == null;
+        return UserStatus == userDTO.UserStatus;
     }
 
     @Override
@@ -117,13 +106,12 @@ public class UserDTO {
         result = 31 * result + (fio != null ? fio.hashCode() : 0);
         result = 31 * result + (UserRole != null ? UserRole.hashCode() : 0);
         result = 31 * result + (UserStatus != null ? UserStatus.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserDTO{" +
                 "id=" + id +
                 ", dt_create=" + dt_create +
                 ", dt_update=" + dt_update +
@@ -131,7 +119,6 @@ public class UserDTO {
                 ", fio='" + fio + '\'' +
                 ", UserRole=" + UserRole +
                 ", UserStatus=" + UserStatus +
-                ", password='" + password + '\'' +
                 '}';
     }
 }

@@ -8,6 +8,7 @@ import by.it_academy.jd2.Mk_JD2_103_23.user_service.service.api.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
@@ -33,12 +34,13 @@ public class UserRestController {
 
     @GetMapping()
     @ResponseBody
-    public Page<UserDTO> getPage(@RequestParam(defaultValue =  "0") Integer number,
-                                 @RequestParam(defaultValue = "20") Integer size
+    public ResponseEntity<Page<PageDTO>> getPage(@RequestParam(defaultValue =  "0") Integer page,
+                                                 @RequestParam(defaultValue = "20") Integer size
     ) {
-        PageDTO pageDTO = new PageDTO(number, size);
-        return this.service.getPage(pageDTO)
-                .map(this::convertToDto);
+        PageDTO pageDTO = new PageDTO(page, size);
+//        Page<PageDTO> servicePage = this.service.getPage(pageDTO);
+        return ResponseEntity.ok()
+                .body();
     }
 
     @GetMapping("/{uuid}")

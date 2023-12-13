@@ -1,4 +1,5 @@
 package by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto;
+import java.util.List;
 
 public class PageDTO {
     private int number;
@@ -8,7 +9,7 @@ public class PageDTO {
     private boolean first;
     private int numberOfElements;
     private boolean last;
-    private UserDTO content;
+    private List<UserDTO> content;
 
     public PageDTO() {
     }
@@ -18,7 +19,7 @@ public class PageDTO {
         this.size = size;
     }
 
-    public PageDTO(int number, int size, int totalPages, int totalElements, boolean first, int numberOfElements, boolean last, UserDTO content) {
+    public PageDTO(int number, int size, int totalPages, int totalElements, boolean first, int numberOfElements, boolean last, List<UserDTO> content) {
         this.number = number;
         this.size = size;
         this.totalPages = totalPages;
@@ -85,11 +86,11 @@ public class PageDTO {
         this.last = last;
     }
 
-    public UserDTO getContent() {
+    public List<UserDTO> getContent() {
         return content;
     }
 
-    public void setContent(UserDTO content) {
+    public void setContent(List<UserDTO> content) {
         this.content = content;
     }
 
