@@ -23,8 +23,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserEntity getById(UUID uuid) {
-        return this.dao.getAllById(uuid);
+    public UserEntity findById(UUID uuid) {
+        return this.dao.findById(uuid);
     }
 
     @Override

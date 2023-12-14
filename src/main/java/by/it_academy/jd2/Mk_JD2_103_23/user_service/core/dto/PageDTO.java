@@ -1,15 +1,16 @@
 package by.it_academy.jd2.Mk_JD2_103_23.user_service.core.dto;
-import java.util.List;
+import by.it_academy.jd2.Mk_JD2_103_23.user_service.dao.entity.UserEntity;
+import org.springframework.data.domain.Page;
 
 public class PageDTO {
     private int number;
     private int size;
     private int totalPages;
-    private int totalElements;
+    private long totalElements;
     private boolean first;
     private int numberOfElements;
     private boolean last;
-    private List<UserDTO> content;
+    private Page<UserEntity> content;
 
     public PageDTO() {
     }
@@ -19,7 +20,7 @@ public class PageDTO {
         this.size = size;
     }
 
-    public PageDTO(int number, int size, int totalPages, int totalElements, boolean first, int numberOfElements, boolean last, List<UserDTO> content) {
+    public PageDTO(int number, int size, int totalPages, long totalElements, boolean first, int numberOfElements, boolean last, Page<UserEntity> content) {
         this.number = number;
         this.size = size;
         this.totalPages = totalPages;
@@ -54,11 +55,11 @@ public class PageDTO {
         this.totalPages = totalPages;
     }
 
-    public int getTotalElements() {
+    public long getTotalElements() {
         return totalElements;
     }
 
-    public void setTotalElements(int totalElements) {
+    public void setTotalElements(long totalElements) {
         this.totalElements = totalElements;
     }
 
@@ -86,11 +87,11 @@ public class PageDTO {
         this.last = last;
     }
 
-    public List<UserDTO> getContent() {
+    public Page<UserEntity> getContent() {
         return content;
     }
 
-    public void setContent(List<UserDTO> content) {
+    public void setContent(Page<UserEntity> content) {
         this.content = content;
     }
 
@@ -116,7 +117,7 @@ public class PageDTO {
         int result = number;
         result = 31 * result + size;
         result = 31 * result + totalPages;
-        result = 31 * result + totalElements;
+        result = 31 * result + (int) (totalElements ^ (totalElements >>> 32));
         result = 31 * result + (first ? 1 : 0);
         result = 31 * result + numberOfElements;
         result = 31 * result + (last ? 1 : 0);
