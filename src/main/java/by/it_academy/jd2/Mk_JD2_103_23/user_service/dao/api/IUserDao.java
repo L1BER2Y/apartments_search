@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface IUserDao extends Repository<UserEntity, UUID> {
     Page<UserEntity> findAll(Pageable pageable);
-    UserEntity addUser(UserEntity user);
+    UserEntity save(UserEntity user);
     UserEntity findById(UUID id);
     void update(UserEntity entity);
 }

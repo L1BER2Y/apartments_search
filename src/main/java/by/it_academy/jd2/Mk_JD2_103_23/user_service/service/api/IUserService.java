@@ -8,6 +8,6 @@ import java.util.UUID;
 public interface IUserService {
     Page<UserEntity> getPage(PageDTO page);
     UserEntity findById(UUID id);
-    UserEntity createUser(UserEntity user);
+    UserEntity saveUser(UserEntity user);
     void updateUser(UserEntity entity);
 }

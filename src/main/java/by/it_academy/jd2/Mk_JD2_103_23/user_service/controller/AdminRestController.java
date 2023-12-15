@@ -29,7 +29,7 @@ public class AdminRestController {
     @ResponseBody
     public ResponseEntity<String> createUser(@RequestBody UserCreateDTO user) {
         UserEntity userEntity = convertToEntity(user);
-        this.service.createUser(userEntity);
+        this.service.saveUser(userEntity);
         return new ResponseEntity<>("Пользователь добавлен", HttpStatus.CREATED);
     }
 

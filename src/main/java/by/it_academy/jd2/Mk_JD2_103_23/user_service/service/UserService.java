@@ -28,8 +28,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserEntity createUser(UserEntity user) {
-        return this.dao.addUser(user);
+    public UserEntity saveUser(UserEntity user) {
+        return this.dao.save(user);
     }
 
     @Override
