@@ -22,19 +22,31 @@ services:
       - flats_ntwrk
   swagger-ui:
     build: swagger-ui
-    image: flats_swagger-ui:1.0.2
+    image: flats_swagger-ui:1.0.3
     ports:
       - "81:8080"
+    networks:
+      - flats_ntwrk
+  user-service:
+    build: user-service
+    image: flats_user-service:1.0.0
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - flats_ntwrk
+  audit-service:
+    build: audit-service
+    image: flats_audit-service:1.0.0
     networks:
       - flats_ntwrk
 
   proxy:
     build: proxy
-    image: flats_proxy:1.0.0
+    image: flats_proxy:1.0.1
     ports:
       - "80:80"
     networks:
       - flats_ntwrk
 networks:
-    flats_ntwrk:
-      name: flats_ntwrk
+  flats_ntwrk:
+    name: flats_ntwrk
