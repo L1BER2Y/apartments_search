@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://db:5432/user-service?currentSchema=security
+    password: root
+    username: root
+
+app:
+  user:
+    storage: JDBC #MEMORY or JDBC
