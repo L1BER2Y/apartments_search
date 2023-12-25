@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/user-service?currentSchema=security
-    password: postgres
+    url: jdbc:postgresql://localhost:5432/user_service?currentSchema=user
+    password: 4712vs5988gh
     username: postgres
 
 app:
