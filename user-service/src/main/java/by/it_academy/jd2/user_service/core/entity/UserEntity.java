@@ -3,20 +3,24 @@ package by.it_academy.jd2.user_service.core.entity;
 import by.it_academy.jd2.user_service.core.dto.Status;
 import jakarta.persistence.*;
 import by.it_academy.jd2.user_service.core.dto.Role;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "user", name = "user")
+@Table(schema = "users", name = "users")
 public class UserEntity {
     @Id
     @Column(name = "id")
     private UUID id;
     @Column(name = "dt_create")
+    @CreationTimestamp()
     private LocalDateTime dtCreate;
     @Column(name = "dt_update")
+    @UpdateTimestamp
     private LocalDateTime dtUpdate;
     @Column(name = "mail")
     private String mail;
