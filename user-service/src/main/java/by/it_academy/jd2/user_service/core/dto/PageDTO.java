@@ -2,6 +2,8 @@ package by.it_academy.jd2.user_service.core.dto;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public class PageDTO {
     private int number;
     private int size;
@@ -10,7 +12,7 @@ public class PageDTO {
     private boolean first;
     private int numberOfElements;
     private boolean last;
-    private Page<UserEntity> content;
+    private List<UserEntity> content;
 
     public PageDTO() {
     }
@@ -20,7 +22,7 @@ public class PageDTO {
         this.size = size;
     }
 
-    public PageDTO(int number, int size, int totalPages, long totalElements, boolean first, int numberOfElements, boolean last, Page<UserEntity> content) {
+    public PageDTO(int number, int size, int totalPages, long totalElements, boolean first, int numberOfElements, boolean last, List<UserEntity> content) {
         this.number = number;
         this.size = size;
         this.totalPages = totalPages;
@@ -87,11 +89,11 @@ public class PageDTO {
         this.last = last;
     }
 
-    public Page<UserEntity> getContent() {
+    public List<UserEntity> getContent() {
         return content;
     }
 
-    public void setContent(Page<UserEntity> content) {
+    public void setContent(List<UserEntity> content) {
         this.content = content;
     }
 

@@ -7,6 +7,7 @@ import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,15 +36,14 @@ public class AdminRestController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<PageDTO> getPage(@RequestParam(defaultValue =  "0") Integer page,
+    public PageDTO getPage(@RequestParam(defaultValue =  "0") Integer page,
                                            @RequestParam(defaultValue = "20") Integer size
     ) {
         PageDTO pageDTO = new PageDTO(page, size);
         Page<UserEntity> page1 = this.service.getPage(pageDTO);
-        PageDTO page2 = new PageDTO(page, size, page1.getTotalPages(),page1.getTotalElements(),
+        return new PageDTO(page, size, page1.getTotalPages(),page1.getTotalElements(),
                                     page1.isFirst(), page1.getSize(),
-                                    page1.isLast(), page1);
-        return ResponseEntity.ok(page2);
+                                    page1.isLast(), null);
     }
 
     @GetMapping("/{uuid}")
@@ -53,18 +53,17 @@ public class AdminRestController {
     }
 
     @PutMapping("/{uuid}/dt_update/{dt_update}")
-    public void updateUser(@PathVariable("uuid") UUID uuid,
-                           @PathVariable("dt_update") LocalDateTime dt_update,
-                           @RequestBody UserCreateDTO userCreateDTO) {
+    public ResponseEntity<String> updateUser(@PathVariable("uuid") UUID uuid,
+                           @PathVariable("dt_update") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dt_update,
+                           @RequestBody UserCreateDTO userCreateDTO
+    ) {
         UserEntity userEntity = convertToEntity(userCreateDTO);
         userEntity.setDtUpdate(dt_update);
-        this.service.updateUser(userEntity);
+        this.service.updateUser(userEntity, uuid);
+        return ResponseEntity.ok("Пользователь обновлен");
     }
 
     private UserDTO convertToDto(Optional<UserEntity> entity) {
-        return modelMapper.map(entity, UserDTO.class);
-    }
-    private UserDTO convertToDto(UserEntity entity) {
         return modelMapper.map(entity, UserDTO.class);
     }
 

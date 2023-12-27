@@ -1,11 +1,10 @@
 package by.it_academy.jd2.user_service.service;
 
-import by.it_academy.jd2.user_service.core.dto.PageDTO;
-import by.it_academy.jd2.user_service.core.dto.Role;
-import by.it_academy.jd2.user_service.core.dto.Status;
+import by.it_academy.jd2.user_service.core.dto.*;
 import by.it_academy.jd2.user_service.repository.UserRepository;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,11 @@ import java.util.UUID;
 @Service
 public class UserService implements IUserService {
     private final UserRepository dao;
+    private final ModelMapper modelMapper;
 
-    public UserService(UserRepository dao) {
+    public UserService(UserRepository dao, ModelMapper modelMapper) {
         this.dao = dao;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -47,7 +48,18 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void updateUser(UserEntity entity) {
-        this.dao.save(entity);
+    public void updateUser(UserEntity entity, UUID id) {
+        Optional<UserEntity> optional = findById(id);
+        UserEntity user = convertToEntity(optional);
+        user.setDtUpdate(entity.getDtUpdate());
+        user.setMail(entity.getMail());
+        user.setFio(entity.getFio());
+        user.setUserRole(entity.getUserRole());
+        user.setUserStatus(entity.getUserStatus());
+        user.setPassword(entity.getPassword());
+        this.dao.save(user);
+    }
+    private UserEntity convertToEntity(Optional<UserEntity> entity) {
+        return modelMapper.map(entity, UserEntity.class);
     }
 }

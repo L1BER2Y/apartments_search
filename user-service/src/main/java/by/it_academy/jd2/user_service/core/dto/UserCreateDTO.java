@@ -1,5 +1,10 @@
 package by.it_academy.jd2.user_service.core.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 public class UserCreateDTO {
     private String mail;
     private String fio;
@@ -7,14 +12,4 @@ public class UserCreateDTO {
     private Status status = Status.WAITING_ACTIVATION;
     private String password;
 
-    public UserCreateDTO() {
-    }
-
-    public UserCreateDTO(String mail, String fio, Role role, Status status, String password) {
-        this.mail = mail;
-        this.fio = fio;
-        this.role = role;
-        this.status = status;
-        this.password = password;
-    }
 }
