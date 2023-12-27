@@ -3,7 +3,7 @@ package by.it_academy.jd2.user_service.controller;
 import by.it_academy.jd2.user_service.core.dto.PageDTO;
 import by.it_academy.jd2.user_service.core.dto.UserCreateDTO;
 import by.it_academy.jd2.user_service.core.dto.UserDTO;
-import by.it_academy.jd2.user_service.dao.entity.UserEntity;
+import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -62,6 +61,9 @@ public class AdminRestController {
         this.service.updateUser(userEntity);
     }
 
+    private UserDTO convertToDto(Optional<UserEntity> entity) {
+        return modelMapper.map(entity, UserDTO.class);
+    }
     private UserDTO convertToDto(UserEntity entity) {
         return modelMapper.map(entity, UserDTO.class);
     }

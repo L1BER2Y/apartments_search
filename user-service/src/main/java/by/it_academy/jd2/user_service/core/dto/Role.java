@@ -1,16 +1,16 @@
 package by.it_academy.jd2.user_service.core.dto;
 
 public enum Role {
-    ADMIN(0),
-    USER(1),
-    MANAGER(2);
-private final int roleId;
+    ADMIN("ADMIN"),
+    USER("USER"),
+    MANAGER("MANAGER");
+private final String roleId;
 
-    Role(int roleId) {
+    Role(String roleId) {
         this.roleId = roleId;
     }
 
-    public int getRoleId() {
+    public String getRoleId() {
         return roleId;
     }
 }

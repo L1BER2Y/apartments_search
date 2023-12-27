@@ -3,7 +3,7 @@ package by.it_academy.jd2.user_service.controller;
 import by.it_academy.jd2.user_service.core.dto.UserDTO;
 import by.it_academy.jd2.user_service.core.dto.UserLoginDTO;
 import by.it_academy.jd2.user_service.core.dto.UserRegDTO;
-import by.it_academy.jd2.user_service.dao.entity.UserEntity;
+import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;

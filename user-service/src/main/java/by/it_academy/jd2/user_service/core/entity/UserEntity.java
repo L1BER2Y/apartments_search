@@ -1,4 +1,4 @@
-package by.it_academy.jd2.user_service.dao.entity;
+package by.it_academy.jd2.user_service.core.entity;
 
 import by.it_academy.jd2.user_service.core.dto.Status;
 import jakarta.persistence.*;
@@ -12,6 +12,7 @@ import java.util.UUID;
 @Table(schema = "user", name = "user")
 public class UserEntity {
     @Id
+    @Column(name = "id")
     private UUID id;
     @Column(name = "dt_create")
     private LocalDateTime dtCreate;
@@ -22,10 +23,10 @@ public class UserEntity {
     @Column(name = "fio")
     private String fio;
     @Column(name = "user_role")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Role UserRole;
     @Column(name = "user_status")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Status UserStatus;
     @Column(name = "password")
     private String password;

@@ -1,5 +1,5 @@
 package by.it_academy.jd2.user_service.core.dto;
-import by.it_academy.jd2.user_service.dao.entity.UserEntity;
+import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import org.springframework.data.domain.Page;
 
 public class PageDTO {
