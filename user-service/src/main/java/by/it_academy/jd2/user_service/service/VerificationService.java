@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public class VerificationService implements IVerificationService {
-    private VerificationRepository repository;
+    private final VerificationRepository repository;
 
     public VerificationService(VerificationRepository repository) {
         this.repository = repository;
