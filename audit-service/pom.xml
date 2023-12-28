@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>by.it-academy.jd2</groupId>
-    <artifactId>audit-service</artifactId>
+    <artifactId>audit-Service</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>audit-service</name>
+    <name>audit-Service</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

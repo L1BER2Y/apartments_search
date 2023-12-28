@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>by.it-academy.jd2</groupId>
-    <artifactId>user-service</artifactId>
+    <artifactId>user-Service</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>user-service</name>
+    <name>user-Service</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

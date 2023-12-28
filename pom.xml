@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>user-service</module>
-        <module>audit-service</module>
+        <module>user-Service</module>
+        <module>audit-Service</module>
     </modules>
 </project>
