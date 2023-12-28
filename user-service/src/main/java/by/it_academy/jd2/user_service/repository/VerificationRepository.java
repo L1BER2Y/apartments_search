@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface IVerificationRepository extends JpaRepository<VerificationEntity, Integer> {
+public interface VerificationRepository extends JpaRepository<VerificationEntity, Integer> {
     Optional<VerificationEntity> findVerificationEntitiesByCode(String code);
 }
