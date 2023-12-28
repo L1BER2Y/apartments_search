@@ -37,13 +37,13 @@ public class AdminRestController {
     @GetMapping
     @ResponseBody
     public PageDTO getPage(@RequestParam(defaultValue =  "0") Integer page,
-                                           @RequestParam(defaultValue = "20") Integer size
+                           @RequestParam(defaultValue = "20") Integer size
     ) {
-        PageDTO pageDTO = new PageDTO(page, size);
-        Page<UserEntity> page1 = this.service.getPage(pageDTO);
-        return new PageDTO(page, size, page1.getTotalPages(),page1.getTotalElements(),
-                                    page1.isFirst(), page1.getSize(),
-                                    page1.isLast(), null);
+        PageDTO pageable = new PageDTO(page, size);
+        Page<UserEntity> userPage = this.service.getPage(pageable);
+        return new PageDTO(userPage.getNumber(), userPage.getSize(),
+                userPage.getTotalPages(), userPage.getTotalElements(), userPage.isFirst(),
+                userPage.getSize(), userPage.isLast(), userPage.getContent());
     }
 
     @GetMapping("/{uuid}")
