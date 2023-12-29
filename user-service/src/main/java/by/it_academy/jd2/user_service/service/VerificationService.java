@@ -6,6 +6,7 @@ import by.it_academy.jd2.user_service.repository.VerificationRepository;
 import by.it_academy.jd2.user_service.service.api.IVerificationService;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.ValidationException;
 import java.util.Optional;
 
 @Service
@@ -19,5 +20,9 @@ public class VerificationService implements IVerificationService {
     @Override
     public void verify(VerificationDTO verificationDTO) {
         Optional<VerificationEntity> verificationEntity = repository.findVerificationEntitiesByCode(verificationDTO.getCode());
+
+        if(verificationEntity.isEmpty()) {
+            throw new RuntimeException("Wrong email");
+        }
         }
     }
