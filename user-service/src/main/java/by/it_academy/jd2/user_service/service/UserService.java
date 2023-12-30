@@ -4,10 +4,12 @@ import by.it_academy.jd2.user_service.core.dto.*;
 import by.it_academy.jd2.user_service.repository.UserRepository;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
+import by.it_academy.jd2.user_service.service.api.IVerificationQueueService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -15,25 +17,28 @@ import java.util.UUID;
 
 @Service
 public class UserService implements IUserService {
-    private final UserRepository dao;
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final IVerificationQueueService queueService;
 
-    public UserService(UserRepository dao, ModelMapper modelMapper) {
-        this.dao = dao;
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, IVerificationQueueService queueService) {
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.queueService = queueService;
     }
 
     @Override
     public Page<UserEntity> getPage(PageDTO page) {
-        return this.dao.findAll(PageRequest.of(page.getNumber(), page.getSize()));
+        return this.userRepository.findAll(PageRequest.of(page.getNumber(), page.getSize()));
     }
 
     @Override
     public Optional<UserEntity> findById(UUID uuid) {
-        return this.dao.findById(uuid);
+        return this.userRepository.findById(uuid);
     }
 
     @Override
+    @Transactional
     public void saveUser(UserEntity user) {
         UserEntity entity = new UserEntity();
         entity.setId(UUID.randomUUID());
@@ -44,7 +49,8 @@ public class UserService implements IUserService {
         entity.setUserRole(Role.USER);
         entity.setUserStatus(Status.WAITING_ACTIVATION);
         entity.setPassword(user.getPassword());
-        this.dao.save(entity);
+        this.userRepository.save(entity);
+        this.queueService.addInVerificationQueue(entity);
     }
 
     @Override
@@ -57,8 +63,9 @@ public class UserService implements IUserService {
         user.setUserRole(entity.getUserRole());
         user.setUserStatus(entity.getUserStatus());
         user.setPassword(entity.getPassword());
-        this.dao.save(user);
+        this.userRepository.save(user);
     }
+
     private UserEntity convertToEntity(Optional<UserEntity> entity) {
         return modelMapper.map(entity, UserEntity.class);
     }

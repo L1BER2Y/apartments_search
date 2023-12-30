@@ -1,17 +1,15 @@
-package by.it_academy.jd2.user_service;
+package by.it_academy.jd2.mail_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@EnableFeignClients
 @EnableConfigurationProperties
-public class UserServiceApplication {
+public class MailServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UserServiceApplication.class, args);
+		SpringApplication.run(MailServiceApplication.class, args);
 	}
 
 }

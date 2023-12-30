@@ -20,13 +20,6 @@ services:
       - "82:80"
     networks:
       - flats_ntwrk
-  swagger-ui:
-    build: swagger-ui
-    image: flats_swagger-ui:1.0.3
-    ports:
-      - "81:8080"
-    networks:
-      - flats_ntwrk
   user-service:
     build: user-service
     image: flats_user-service:1.0.0

@@ -1,27 +1,30 @@
 package by.it_academy.jd2.user_service.core.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
-@Table(schema = "verify", name = "codes")
+@Table(schema = "users", name = "codes")
 public class VerificationEntity {
     @Id
-    private Integer id;
+    private UUID id;
     private String code;
     private String mail;
+    @Column(name = "send_code")
+    private boolean sendCode;
 
     public VerificationEntity() {
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -41,17 +44,25 @@ public class VerificationEntity {
         this.mail = mail;
     }
 
+    public boolean isSendCode() {
+        return sendCode;
+    }
+
+    public void setSendCode(boolean sendCode) {
+        this.sendCode = sendCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         VerificationEntity that = (VerificationEntity) o;
-        return id == that.id && Objects.equals(code, that.code) && Objects.equals(mail, that.mail);
+        return sendCode == that.sendCode && Objects.equals(id, that.id) && Objects.equals(code, that.code) && Objects.equals(mail, that.mail);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, mail);
+        return Objects.hash(id, code, mail, sendCode);
     }
 
     @Override
@@ -60,6 +71,7 @@ public class VerificationEntity {
                 "id=" + id +
                 ", code='" + code + '\'' +
                 ", mail='" + mail + '\'' +
+                ", sendCode=" + sendCode +
                 '}';
     }
 }
