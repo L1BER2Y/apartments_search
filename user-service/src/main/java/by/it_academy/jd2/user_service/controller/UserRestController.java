@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 public class UserRestController {
-    private final IUserService registrationService;
+    private final IUserService userService;
     private final IVerificationService verificationService;
     private final ModelMapper modelMapper;
 
-    public UserRestController(IUserService registrationService, IVerificationService verificationService, ModelMapper modelMapper) {
-        this.registrationService = registrationService;
+    public UserRestController(IUserService userService, IVerificationService verificationService, ModelMapper modelMapper) {
+        this.userService = userService;
         this.verificationService = verificationService;
         this.modelMapper = modelMapper;
     }
@@ -29,7 +29,7 @@ public class UserRestController {
     @ResponseBody
     public ResponseEntity<String> registration(@RequestBody UserRegDTO userRegDTO) {
         UserEntity userEntity = convertToEntity(userRegDTO);
-        this.registrationService.saveUser(userEntity);
+        this.userService.saveUser(userEntity);
         return new ResponseEntity<>("Пользователь зарегистрирован", HttpStatus.CREATED);
     }
 
@@ -45,14 +45,15 @@ public class UserRestController {
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<String> login(@RequestBody UserLoginDTO userLoginDTO) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        String token = userService.login(userLoginDTO);
+        return new ResponseEntity<>("Токен для авторизации " + token, HttpStatus.OK);
     }
 
-//    @GetMapping("/me")
-//    @ResponseBody
-//    public UserDTO me(){
-//        return this.registrationService.findById();
-//    }
+    @GetMapping("/me")
+    @ResponseBody
+    public UserDTO me(){
+        return convertToDto(userService.findInfo());
+    }
 
     private UserDTO convertToDto(UserEntity entity) {
         return modelMapper.map(entity, UserDTO.class);
