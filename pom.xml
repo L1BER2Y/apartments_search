@@ -14,5 +14,6 @@
         <module>user-Service</module>
         <module>audit-Service</module>
         <module>mail-service</module>
+        <module>report-service</module>
     </modules>
 </project>

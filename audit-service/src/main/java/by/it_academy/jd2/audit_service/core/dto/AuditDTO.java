@@ -1,5 +1,6 @@
 package by.it_academy.jd2.audit_service.core.dto;
 
+import by.it_academy.jd2.audit_service.core.entity.Action;
 import by.it_academy.jd2.audit_service.core.entity.EssenceType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -26,7 +27,7 @@ public class AuditDTO {
 
     private UserDTO user;
 
-    private String text;
+    private Action action;
 
     private EssenceType type;
 

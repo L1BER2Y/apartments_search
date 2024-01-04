@@ -6,10 +6,12 @@ import by.it_academy.jd2.audit_service.repository.AuditRepository;
 import by.it_academy.jd2.audit_service.service.api.IAuditService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class AuditService implements IAuditService {
     private final AuditRepository repository;
 
