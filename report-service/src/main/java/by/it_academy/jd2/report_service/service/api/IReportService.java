@@ -1,5 +1,6 @@
 package by.it_academy.jd2.report_service.service.api;
 
+import by.it_academy.jd2.report_service.core.dto.PageOfReportDTO;
 import by.it_academy.jd2.report_service.core.dto.UserActionAuditParamDTO;
 import by.it_academy.jd2.report_service.core.entity.ReportEntity;
 import by.it_academy.jd2.report_service.core.entity.Status;
@@ -11,7 +12,7 @@ public interface IReportService {
 
     void createReport(Type type, UserActionAuditParamDTO params);
 
-    Page<ReportEntity> getAllReports(Pageable pageable);
+    Page<ReportEntity> getAllReports(PageOfReportDTO reportDTO);
 
     Status getStatusById(String id);
 }

@@ -1,18 +1,21 @@
-package by.it_academy.jd2.report_service.service.api;
+package by.it_academy.jd2.report_service.service;
 
-import by.it_academy.jd2.report_service.core.dto.ReportDTO;
+import by.it_academy.jd2.report_service.core.dto.PageOfReportDTO;
 import by.it_academy.jd2.report_service.core.dto.UserActionAuditParamDTO;
 import by.it_academy.jd2.report_service.core.entity.ReportEntity;
 import by.it_academy.jd2.report_service.core.entity.Status;
 import by.it_academy.jd2.report_service.core.entity.Type;
 import by.it_academy.jd2.report_service.repository.ReportRepository;
+import by.it_academy.jd2.report_service.service.api.IReportService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
-public class ReportService implements IReportService{
+public class ReportService implements IReportService {
 
     private final ReportRepository repository;
 
@@ -28,12 +31,12 @@ public class ReportService implements IReportService{
     }
 
     @Override
-    public Page<ReportEntity> getAllReports(Pageable pageable) {
-        return null;
+    public Page<ReportEntity> getAllReports(PageOfReportDTO page) {
+        return this.repository.findAll(PageRequest.of(page.getNumber(), page.getSize()));
     }
 
     @Override
     public Status getStatusById(String id) {
-        return null;
+        return Status.valueOf(repository.getStatusById(UUID.fromString(id)));
     }
 }

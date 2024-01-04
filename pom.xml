@@ -15,5 +15,6 @@
         <module>audit-Service</module>
         <module>mail-service</module>
         <module>report-service</module>
+        <module>flats-service</module>
     </modules>
 </project>
