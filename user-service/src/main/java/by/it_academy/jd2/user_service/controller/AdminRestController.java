@@ -43,7 +43,7 @@ public class AdminRestController {
         Page<UserEntity> userPage = this.service.getPage(pageable);
         return new PageDTO(userPage.getNumber(), userPage.getSize(),
                 userPage.getTotalPages(), userPage.getTotalElements(), userPage.isFirst(),
-                userPage.getSize(), userPage.isLast(), userPage.getContent());
+                userPage.getNumberOfElements(), userPage.isLast(), userPage.getContent());
     }
 
     @GetMapping("/{uuid}")

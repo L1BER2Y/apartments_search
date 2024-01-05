@@ -31,6 +31,6 @@ public class AuditService implements IAuditService {
 
     @Override
     public AuditEntity saveAction(AuditEntity entity) {
-        return null;
+        return repository.save(entity);
     }
 }

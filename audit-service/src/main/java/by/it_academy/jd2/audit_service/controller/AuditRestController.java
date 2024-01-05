@@ -1,20 +1,25 @@
 package by.it_academy.jd2.audit_service.controller;
 
+import by.it_academy.jd2.audit_service.core.dto.AuditDTO;
 import by.it_academy.jd2.audit_service.core.dto.PageOfAuditDTO;
 import by.it_academy.jd2.audit_service.core.entity.AuditEntity;
 import by.it_academy.jd2.audit_service.service.api.IAuditService;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/audit")
 public class AuditRestController {
     private final IAuditService service;
+    private final ModelMapper mapper;
 
-    public AuditRestController(IAuditService service) {
+    public AuditRestController(IAuditService service, ModelMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @GetMapping
@@ -31,7 +36,12 @@ public class AuditRestController {
 
     @GetMapping("/{uuid}")
     @ResponseBody
-    public PageOfAuditDTO getAuditById(@PathVariable UUID uuid) {
-        return null;
+    public AuditDTO getAuditById(@PathVariable UUID uuid) {
+        Optional<AuditEntity> auditById = this.service.getAuditById(uuid);
+        return convertToDto(auditById);
+    }
+
+    private AuditDTO convertToDto(Optional<AuditEntity> entity) {
+        return mapper.map(entity, AuditDTO.class);
     }
 }
