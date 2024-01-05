@@ -1,6 +1,5 @@
 package by.it_academy.jd2.audit_service.core.dto;
 
-import by.it_academy.jd2.audit_service.core.entity.Action;
 import by.it_academy.jd2.audit_service.core.entity.EssenceType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -18,6 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class AuditDTO {
+
     private UUID uuid;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -27,7 +27,7 @@ public class AuditDTO {
 
     private UserDTO user;
 
-    private Action action;
+    private String text;
 
     private EssenceType type;
 

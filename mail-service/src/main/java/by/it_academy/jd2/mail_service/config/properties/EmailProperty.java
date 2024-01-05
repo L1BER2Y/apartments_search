@@ -14,6 +14,7 @@ import java.util.Properties;
 @ConfigurationProperties(prefix = "app.mail")
 public class EmailProperty {
     private String host;
+
     private int port;
     private String userName;
     private String password;

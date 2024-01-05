@@ -21,15 +21,15 @@ public class FlatEntity {
 
     private String description;
 
-    private Integer bedrooms;
+    private int bedrooms;
 
-    private Integer area;
+    private int area;
 
-    private Integer price;
+    private int price;
 
-    private Integer floor;
+    private int floor;
 
-    private String photoUrls;
+    private String[] photoUrls;
 
     private String originalUrl;
 }

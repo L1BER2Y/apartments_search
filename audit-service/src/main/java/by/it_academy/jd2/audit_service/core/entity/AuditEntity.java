@@ -24,8 +24,7 @@ public class AuditEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Enumerated(EnumType.STRING)
-    private Action action;
+    private String text;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "essence_type")
@@ -37,14 +36,14 @@ public class AuditEntity {
     public AuditEntity() {
     }
 
-    public AuditEntity(UUID id, LocalDateTime dtCreate, UUID uuid, String mail, String fio, Role role, Action action, EssenceType essenceType, String essenceId) {
+    public AuditEntity(UUID id, LocalDateTime dtCreate, UUID uuid, String mail, String fio, Role role, String text, EssenceType essenceType, String essenceId) {
         this.id = id;
         this.dtCreate = dtCreate;
         this.uuid = uuid;
         this.mail = mail;
         this.fio = fio;
         this.role = role;
-        this.action = action;
+        this.text = text;
         this.essenceType = essenceType;
         this.essenceId = essenceId;
     }
@@ -97,12 +96,12 @@ public class AuditEntity {
         this.role = role;
     }
 
-    public Action getAction() {
-        return action;
+    public String getText() {
+        return text;
     }
 
-    public void setAction(Action action) {
-        this.action = action;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public EssenceType getEssenceType() {
@@ -125,13 +124,32 @@ public class AuditEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         AuditEntity that = (AuditEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(dtCreate, that.dtCreate) && Objects.equals(uuid, that.uuid) && Objects.equals(mail, that.mail) && Objects.equals(fio, that.fio) && role == that.role && action == that.action && essenceType == that.essenceType && Objects.equals(essenceId, that.essenceId);
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (dtCreate != null ? !dtCreate.equals(that.dtCreate) : that.dtCreate != null) return false;
+        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
+        if (mail != null ? !mail.equals(that.mail) : that.mail != null) return false;
+        if (fio != null ? !fio.equals(that.fio) : that.fio != null) return false;
+        if (role != that.role) return false;
+        if (text != null ? !text.equals(that.text) : that.text != null) return false;
+        if (essenceType != that.essenceType) return false;
+        return essenceId != null ? essenceId.equals(that.essenceId) : that.essenceId == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dtCreate, uuid, mail, fio, role, action, essenceType, essenceId);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (dtCreate != null ? dtCreate.hashCode() : 0);
+        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
+        result = 31 * result + (mail != null ? mail.hashCode() : 0);
+        result = 31 * result + (fio != null ? fio.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + (essenceType != null ? essenceType.hashCode() : 0);
+        result = 31 * result + (essenceId != null ? essenceId.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -143,7 +161,7 @@ public class AuditEntity {
                 ", mail='" + mail + '\'' +
                 ", fio='" + fio + '\'' +
                 ", role=" + role +
-                ", action=" + action +
+                ", text='" + text + '\'' +
                 ", essenceType=" + essenceType +
                 ", essenceId='" + essenceId + '\'' +
                 '}';

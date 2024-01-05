@@ -30,7 +30,7 @@ public class AuditService implements IAuditService {
     }
 
     @Override
-    public AuditEntity saveAction(AuditEntity entity) {
-        return repository.save(entity);
+    public AuditEntity saveAudit(AuditEntity entity) {
+        return this.repository.save(entity);
     }
 }

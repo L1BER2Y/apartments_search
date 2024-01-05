@@ -37,6 +37,6 @@ public class ReportService implements IReportService {
 
     @Override
     public Status getStatusById(String id) {
-        return Status.valueOf(repository.getStatusById(UUID.fromString(id)));
+        return Status.valueOf(this.repository.getStatusById(UUID.fromString(id)));
     }
 }

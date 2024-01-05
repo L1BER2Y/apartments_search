@@ -21,6 +21,6 @@ public class MailService implements IMailService {
                 + "or follow to the URL http://localhost:8080/users/verification?code="
                 + mailDTO.getCode() + "&mail=" + mailDTO.getMail());
         mailMessage.setTo(mailDTO.getMail());
-        mailSender.send(mailMessage);
+        this.mailSender.send(mailMessage);
     }
 }
