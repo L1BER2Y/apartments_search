@@ -28,9 +28,9 @@ public class AdminRestController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<String> createUser(@RequestBody UserCreateDTO user) {
+    public ResponseEntity<String> create(@RequestBody UserCreateDTO user) {
         UserEntity userEntity = convertToEntity(user);
-        this.service.saveUser(userEntity);
+        this.service.save(userEntity);
         return new ResponseEntity<>("Пользователь добавлен", HttpStatus.CREATED);
     }
 
@@ -48,18 +48,17 @@ public class AdminRestController {
 
     @GetMapping("/{uuid}")
     @ResponseBody
-    public UserDTO getUser(@PathVariable("uuid") UUID id) {
+    public UserDTO get(@PathVariable("uuid") UUID id) {
         return convertToDto(this.service.findById(id));
     }
 
     @PutMapping("/{uuid}/dt_update/{dt_update}")
-    public ResponseEntity<String> updateUser(@PathVariable("uuid") UUID uuid,
-                           @PathVariable("dt_update") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dt_update,
-                           @RequestBody UserCreateDTO userCreateDTO
+    public ResponseEntity<String> update(@PathVariable("uuid") UUID uuid,
+                                         @PathVariable("dt_update") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dtUpdate,
+                                         @RequestBody UserCreateDTO userCreateDTO
     ) {
         UserEntity userEntity = convertToEntity(userCreateDTO);
-        userEntity.setDtUpdate(dt_update);
-        this.service.updateUser(userEntity, uuid);
+        this.service.update(userEntity, uuid, dtUpdate);
         return ResponseEntity.ok("Пользователь обновлен");
     }
 

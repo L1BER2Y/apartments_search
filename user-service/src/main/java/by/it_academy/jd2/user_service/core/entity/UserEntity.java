@@ -1,8 +1,6 @@
 package by.it_academy.jd2.user_service.core.entity;
 
-import by.it_academy.jd2.user_service.core.dto.Status;
 import jakarta.persistence.*;
-import by.it_academy.jd2.user_service.core.dto.Role;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 

@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(name = "mail-service", url = "http://localhost:8081/mail")
 public interface ISendVerificationService {
     @RequestMapping(method = RequestMethod.POST, value = "/send")
-    void sendVerification(VerificationDTO verificationDTO);
+    void send(VerificationDTO verificationDTO);
 }

@@ -3,6 +3,7 @@ package by.it_academy.jd2.user_service.service;
 import by.it_academy.jd2.user_service.core.dto.VerificationDTO;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import by.it_academy.jd2.user_service.core.entity.VerificationEntity;
+import by.it_academy.jd2.user_service.core.exceptions.InternalServerErrorException;
 import by.it_academy.jd2.user_service.repository.VerificationRepository;
 import by.it_academy.jd2.user_service.service.api.ISendVerificationService;
 import by.it_academy.jd2.user_service.service.api.IVerificationQueueService;
@@ -27,7 +28,7 @@ public class SendVerificationService implements IVerificationQueueService {
     }
 
     @Override
-    public void addInVerificationQueue(UserEntity userEntity) {
+    public void add(UserEntity userEntity) {
         VerificationEntity verificationEntity = new VerificationEntity();
         verificationEntity.setId(UUID.randomUUID());
         verificationEntity.setCode(UUID.randomUUID().toString());
@@ -37,24 +38,24 @@ public class SendVerificationService implements IVerificationQueueService {
         try {
             verificationRepository.save(verificationEntity);
         } catch (DataAccessException e) {
-            throw new RuntimeException("gg");
+            throw new InternalServerErrorException(e.getMessage());
         }
 
     }
 
     @Scheduled(fixedRate = 10000)
-    private void sendVerificationCode() {
+    private void sendCode() {
         Optional<VerificationEntity> verificationEntity = verificationRepository.findFirstBySendCodeFalse();
 
         if(verificationEntity.isPresent()) {
             VerificationDTO verificationDTO = convertToDto(verificationEntity.get());
-            sendVerificationService.sendVerification(verificationDTO);
+            sendVerificationService.send(verificationDTO);
             verificationEntity.get().setSendCode(true);
 
             try {
                 verificationRepository.save(verificationEntity.get());
             } catch (DataAccessException e) {
-                throw new RuntimeException("ee");
+                throw new InternalServerErrorException(e.getMessage());
             }
         }
     }

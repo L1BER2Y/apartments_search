@@ -10,7 +10,5 @@ import java.util.Optional;
 import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
-    Page<UserEntity> findAll(Pageable pageable);
-    Optional<UserEntity> findById(UUID id);
     Optional<UserEntity> findByMail(String mail);
 }

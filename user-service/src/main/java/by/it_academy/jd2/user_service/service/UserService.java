@@ -1,12 +1,14 @@
 package by.it_academy.jd2.user_service.service;
 
-import by.it_academy.jd2.user_service.controller.utils.JwtTokenHandler;
 import by.it_academy.jd2.user_service.core.dto.*;
+import by.it_academy.jd2.user_service.core.entity.Role;
+import by.it_academy.jd2.user_service.core.exceptions.InternalServerErrorException;
 import by.it_academy.jd2.user_service.repository.UserRepository;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import by.it_academy.jd2.user_service.service.api.IVerificationQueueService;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,16 +23,17 @@ import java.util.UUID;
 public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-    private final IVerificationQueueService queueService;
+    private final IVerificationQueueService verificationQueueService;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenHandler jwtTokenHandler;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, IVerificationQueueService queueService, PasswordEncoder passwordEncoder, JwtTokenHandler jwtTokenHandler) {
+
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, IVerificationQueueService verificationQueueService,
+                       PasswordEncoder passwordEncoder
+    ) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
-        this.queueService = queueService;
+        this.verificationQueueService = verificationQueueService;
         this.passwordEncoder = passwordEncoder;
-        this.jwtTokenHandler = jwtTokenHandler;
     }
 
     @Override
@@ -45,45 +48,50 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public void saveUser(UserEntity user) {
+    public void save(UserEntity user) {
         UserEntity entity = new UserEntity();
         entity.setId(UUID.randomUUID());
         entity.setDtCreate(LocalDateTime.now());
-        entity.setDtUpdate(LocalDateTime.now());
+        entity.setDtUpdate(entity.getDtCreate());
         entity.setMail(user.getMail());
         entity.setFio(user.getFio());
         entity.setUserRole(Role.USER);
-        entity.setUserStatus(Status.WAITING_ACTIVATION);
+        entity.setUserStatus(user.getUserStatus());
         entity.setPassword(passwordEncoder.encode(user.getPassword()));
-        this.userRepository.save(entity);
-        this.queueService.addInVerificationQueue(entity);
+
+        try{
+            this.userRepository.save(entity);
+        } catch (DataAccessException e) {
+            throw new InternalServerErrorException(e.getMessage());
+        }
+
+        this.verificationQueueService.add(entity);
     }
 
     @Override
-    public void updateUser(UserEntity entity, UUID id) {
+    @Transactional
+    public void update(UserEntity entity, UUID id, LocalDateTime dtUpdate) {
         Optional<UserEntity> optional = findById(id);
         UserEntity user = convertToEntity(optional);
-        user.setDtUpdate(entity.getDtUpdate());
+        user.setDtUpdate(dtUpdate);
         user.setMail(entity.getMail());
         user.setFio(entity.getFio());
         user.setUserRole(entity.getUserRole());
         user.setUserStatus(entity.getUserStatus());
         user.setPassword(passwordEncoder.encode(entity.getPassword()));
-        this.userRepository.save(user);
+
+        try {
+            this.userRepository.save(user);
+        } catch (DataAccessException e) {
+            throw new InternalServerErrorException(e.getMessage());
+        }
     }
 
     @Override
-    public UserEntity findInfo() {
+    public UserEntity find() {
         UserEntity userDetails = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<UserEntity> userEntity = userRepository.findById(userDetails.getId());
         return convertToEntity(userEntity);
-    }
-
-    @Override
-    public String login(UserLoginDTO user) {
-        Optional<UserEntity> optional = userRepository.findByMail(user.getMail());
-        UserEntity userEntity = convertToEntity(optional);
-        return jwtTokenHandler.generateAccessToken(user);
     }
 
     private UserEntity convertToEntity(Optional<UserEntity> entity) {

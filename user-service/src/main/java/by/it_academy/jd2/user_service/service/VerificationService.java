@@ -2,6 +2,8 @@ package by.it_academy.jd2.user_service.service;
 
 import by.it_academy.jd2.user_service.core.dto.VerificationDTO;
 import by.it_academy.jd2.user_service.core.entity.VerificationEntity;
+import by.it_academy.jd2.user_service.core.exceptions.ValidationException;
+import by.it_academy.jd2.user_service.core.exceptions.body.ErrorResponse;
 import by.it_academy.jd2.user_service.repository.VerificationRepository;
 import by.it_academy.jd2.user_service.service.api.IVerificationService;
 import org.springframework.stereotype.Service;
@@ -18,5 +20,9 @@ public class VerificationService implements IVerificationService {
     @Override
     public void verify(VerificationDTO verificationDTO) {
         Optional<VerificationEntity> verificationEntity = repository.findVerificationEntitiesByCode(verificationDTO.getCode());
+
+        if(verificationEntity.isEmpty()) {
+            throw new ValidationException();
+        }
         }
     }

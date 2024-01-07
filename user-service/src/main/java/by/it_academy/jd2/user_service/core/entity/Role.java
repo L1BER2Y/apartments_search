@@ -1,4 +1,4 @@
-package by.it_academy.jd2.user_service.core.dto;
+package by.it_academy.jd2.user_service.core.entity;
 
 public enum Role {
     ADMIN("ADMIN"),
