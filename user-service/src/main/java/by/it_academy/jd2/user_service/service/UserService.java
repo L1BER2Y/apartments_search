@@ -1,5 +1,6 @@
 package by.it_academy.jd2.user_service.service;
 
+import by.it_academy.jd2.user_service.aop.Audited;
 import by.it_academy.jd2.user_service.core.dto.*;
 import by.it_academy.jd2.user_service.core.entity.Role;
 import by.it_academy.jd2.user_service.core.exceptions.InternalServerErrorException;
@@ -19,6 +20,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+import static by.it_academy.jd2.user_service.core.entity.AuditedAction.*;
+import static by.it_academy.jd2.user_service.core.entity.EssenceType.USER;
+
 @Service
 public class UserService implements IUserService {
     private final UserRepository userRepository;
@@ -37,17 +41,20 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Audited(auditedAction = INFO_ABOUT_ALL_USERS, essenceType = USER)
     public Page<UserEntity> getPage(PageDTO page) {
         return this.userRepository.findAll(PageRequest.of(page.getNumber(), page.getSize()));
     }
 
     @Override
+    @Audited(auditedAction = INFO_ABOUT_USER_BY_ID, essenceType = USER)
     public Optional<UserEntity> findById(UUID uuid) {
         return this.userRepository.findById(uuid);
     }
 
     @Override
     @Transactional
+    @Audited(auditedAction = SAVE_USER, essenceType = USER)
     public void save(UserEntity user) {
         UserEntity entity = new UserEntity();
         entity.setId(UUID.randomUUID());
@@ -55,8 +62,8 @@ public class UserService implements IUserService {
         entity.setDtUpdate(entity.getDtCreate());
         entity.setMail(user.getMail());
         entity.setFio(user.getFio());
-        entity.setUserRole(Role.USER);
-        entity.setUserStatus(user.getUserStatus());
+        entity.setRole(Role.USER);
+        entity.setStatus(user.getStatus());
         entity.setPassword(passwordEncoder.encode(user.getPassword()));
 
         try{
@@ -70,14 +77,15 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
+    @Audited(auditedAction = UPDATE_USER, essenceType = USER)
     public void update(UserEntity entity, UUID id, LocalDateTime dtUpdate) {
         Optional<UserEntity> optional = findById(id);
         UserEntity user = convertToEntity(optional);
         user.setDtUpdate(dtUpdate);
         user.setMail(entity.getMail());
         user.setFio(entity.getFio());
-        user.setUserRole(entity.getUserRole());
-        user.setUserStatus(entity.getUserStatus());
+        user.setRole(entity.getRole());
+        user.setStatus(entity.getStatus());
         user.setPassword(passwordEncoder.encode(entity.getPassword()));
 
         try {
@@ -88,6 +96,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Audited(auditedAction = INFO_ABOUT_ME, essenceType = USER)
     public UserEntity find() {
         UserEntity userDetails = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<UserEntity> userEntity = userRepository.findById(userDetails.getId());

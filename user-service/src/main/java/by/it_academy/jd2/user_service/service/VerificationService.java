@@ -1,5 +1,6 @@
 package by.it_academy.jd2.user_service.service;
 
+import by.it_academy.jd2.user_service.aop.Audited;
 import by.it_academy.jd2.user_service.core.dto.VerificationDTO;
 import by.it_academy.jd2.user_service.core.entity.VerificationEntity;
 import by.it_academy.jd2.user_service.core.exceptions.ValidationException;
@@ -8,6 +9,9 @@ import by.it_academy.jd2.user_service.repository.VerificationRepository;
 import by.it_academy.jd2.user_service.service.api.IVerificationService;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
+
+import static by.it_academy.jd2.user_service.core.entity.AuditedAction.VERIFICATION;
+import static by.it_academy.jd2.user_service.core.entity.EssenceType.USER;
 
 @Service
 public class VerificationService implements IVerificationService {
@@ -18,6 +22,7 @@ public class VerificationService implements IVerificationService {
     }
 
     @Override
+    @Audited(auditedAction = VERIFICATION, essenceType = USER)
     public void verify(VerificationDTO verificationDTO) {
         Optional<VerificationEntity> verificationEntity = repository.findVerificationEntitiesByCode(verificationDTO.getCode());
 

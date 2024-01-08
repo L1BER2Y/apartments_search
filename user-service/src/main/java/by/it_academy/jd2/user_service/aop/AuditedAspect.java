@@ -3,6 +3,7 @@ package by.it_academy.jd2.user_service.aop;
 import by.it_academy.jd2.user_service.clients.AuditFeignClient;
 import by.it_academy.jd2.user_service.controller.utils.JwtTokenHandler;
 import by.it_academy.jd2.user_service.core.dto.*;
+import by.it_academy.jd2.user_service.core.entity.Role;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import by.it_academy.jd2.user_service.core.exceptions.ValidationException;
 import by.it_academy.jd2.user_service.repository.UserRepository;
@@ -35,7 +36,7 @@ public class AuditedAspect {
         Audited annotation = signature.getMethod().getAnnotation(Audited.class);
         Object result = joinPoint.proceed();
         AuditDTO auditDto = buildAuditDto(joinPoint, annotation, result);
-        String token = "Bearer " + jwtTokenHandler.generateAccessToken(new UserLoginDTO());
+        String token = "Bearer " + jwtTokenHandler.generateAccessToken(new UserDetailsDTO().setRole(Role.SYSTEM));
         auditFeignClient.sendRequestToCreateLog(token, auditDto);
         return result;
     }
@@ -43,7 +44,7 @@ public class AuditedAspect {
     private AuditDTO buildAuditDto(ProceedingJoinPoint joinPoint, Audited annotation, Object result) {
         switch (annotation.auditedAction()) {
             case REGISTRATION, UPDATE_PASSWORD -> {
-                return createAuditDto(annotation, (UserDTO) result);
+                return createAuditDto(annotation, (UserEntity) result);
             }
             case VERIFICATION, LOGIN -> {
                 return getAuditDtoByEmail(joinPoint, annotation);
@@ -54,7 +55,7 @@ public class AuditedAspect {
             case INFO_ABOUT_USER_BY_ID, INFO_ABOUT_ME -> {
                 return getAuditDtoForUserInfo(annotation, result);
             }
-            case CREATE_USER, UPDATE_USER -> {
+            case SAVE_USER, UPDATE_USER -> {
                 return getAuditDtoForUser(annotation, result);
             }
             default -> throw new RuntimeException("Unrecognized action: " + annotation.auditedAction());
@@ -62,50 +63,50 @@ public class AuditedAspect {
     }
 
     private AuditDTO getAuditDtoForInfoAboutAllUsers(Audited annotation) {
-        UserDTO userDetailsDto = (UserDTO) SecurityContextHolder
+        UserDetailsDTO userDetailsDto = (UserDetailsDTO) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal();
         return createAuditDto(annotation, userDetailsDto, userDetailsDto.getId());
     }
 
     private AuditDTO getAuditDtoForUserInfo(Audited annotation, Object result) {
-        return createAuditDto(annotation, getUserDetailFromSecurityContext(), ((UserDTO) result).getId());
+        return createAuditDto(annotation, getUserDetailFromSecurityContext(), ((UserInfoDTO) result).getId());
     }
 
     private AuditDTO getAuditDtoForUser(Audited annotation, Object result) {
-        return createAuditDto(annotation, getUserDetailFromSecurityContext(), ((UserDTO) result).getId());
+        return createAuditDto(annotation, getUserDetailFromSecurityContext(), ((UserEntity) result).getId());
     }
 
-    private UserDTO getUserDetailFromSecurityContext() {
-        return (UserDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    private UserDetailsDTO getUserDetailFromSecurityContext() {
+        return (UserDetailsDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    private UserEntity findByEmail(String email) {
+    private UserEntity findByMail(String email) {
         return userRepository.findByMail(email).orElseThrow(ValidationException::new);
     }
 
-    private AuditDTO createAuditDto(Audited annotation, UserDTO userDTO) {
-        return new AuditDTO().setUserAuditDTO(buildUserAuditDto(userDTO))
+    private AuditDTO createAuditDto(Audited annotation, Userable userable) {
+        return new AuditDTO().setUserAuditDTO(buildUserAuditDto(userable))
                 .setAction(annotation.auditedAction())
-                .setEssenceType(annotation.essenceType())
-                .setEssenceTypeId(userable.getId().toString());
+                .setType(annotation.essenceType())
+                .setTypeId(userable.getId().toString());
     }
 
-    private AuditDTO createAuditDto(Audited annotation, UserDTO userDTO, UUID id) {
-        return new AuditDTO().setUserAuditDTO(buildUserAuditDto(userDTO))
+    private AuditDTO createAuditDto(Audited annotation, Userable userable, UUID id) {
+        return new AuditDTO().setUserAuditDTO(buildUserAuditDto(userable))
                 .setAction(annotation.auditedAction())
-                .setEssenceType(annotation.essenceType())
-                .setId(id.toString());
+                .setType(annotation.essenceType())
+                .setTypeId(id.toString());
     }
 
-    private UserAuditDTO buildUserAuditDto(UserDTO userDTO) {
-        return new UserAuditDTO().setUserId(userDTO.getId())
-                .setMail(userDTO.getMail())
-                .setFio(userDTO.getFio())
-                .setUserRole(userDTO.getRole());
+    private UserAuditDTO buildUserAuditDto(Userable userable) {
+        return new UserAuditDTO().setUserId(userable.getId())
+                .setMail(userable.getMail())
+                .setFio(userable.getFio())
+                .setRole(userable.getRole());
     }
 
     private AuditDTO getAuditDtoByEmail(ProceedingJoinPoint joinPoint, Audited annotation) {
-        Emailable dto = (Emailable) Arrays.stream(joinPoint.getArgs()).toList().get(0);
-        return createAuditDto(annotation);
+        Mailable dto = (Mailable) Arrays.stream(joinPoint.getArgs()).toList().get(0);
+        return createAuditDto(annotation, findByMail(dto.getMail()));
     }
 }

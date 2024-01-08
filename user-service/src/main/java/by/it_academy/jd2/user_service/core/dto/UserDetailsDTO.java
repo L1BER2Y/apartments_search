@@ -1,8 +1,6 @@
 package by.it_academy.jd2.user_service.core.dto;
 
 import by.it_academy.jd2.user_service.core.entity.Role;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,14 +14,14 @@ import java.util.UUID;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class UserAuditDTO {
+public class UserDetailsDTO implements Identifiable, Userable {
 
-    private UUID userId;
+    private UUID id;
 
     private String mail;
 
     private String fio;
 
-    @Enumerated(EnumType.STRING)
     private Role role;
+
 }

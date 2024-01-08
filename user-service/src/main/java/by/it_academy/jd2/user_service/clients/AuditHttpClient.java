@@ -2,7 +2,8 @@ package by.it_academy.jd2.user_service.clients;
 
 import by.it_academy.jd2.user_service.controller.utils.JwtTokenHandler;
 import by.it_academy.jd2.user_service.core.dto.AuditDTO;
-import by.it_academy.jd2.user_service.core.dto.UserLoginDTO;
+import by.it_academy.jd2.user_service.core.dto.UserDetailsDTO;
+import by.it_academy.jd2.user_service.core.entity.Role;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,7 @@ public class AuditHttpClient {
 
     public AuditDTO sendRequestToCreateLog(AuditDTO auditDto) {
         try {
-            String jwtToken = jwtTokenHandler.generateAccessToken(new UserLoginDTO());
+            String jwtToken = jwtTokenHandler.generateAccessToken(new UserDetailsDTO().setRole(Role.SYSTEM));
             String body = objectMapper.writeValueAsString(auditDto);
             HttpClient httpClient = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()

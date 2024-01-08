@@ -1,6 +1,8 @@
 package by.it_academy.jd2.user_service.service;
 
+import by.it_academy.jd2.user_service.aop.Audited;
 import by.it_academy.jd2.user_service.controller.utils.JwtTokenHandler;
+import by.it_academy.jd2.user_service.core.dto.UserDetailsDTO;
 import by.it_academy.jd2.user_service.core.entity.Status;
 import by.it_academy.jd2.user_service.core.dto.UserLoginDTO;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
@@ -13,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+
+import static by.it_academy.jd2.user_service.core.entity.AuditedAction.LOGIN;
+import static by.it_academy.jd2.user_service.core.entity.EssenceType.USER;
 
 @Service
 public class AuthorizationService implements IAuthorizationService {
@@ -30,6 +35,7 @@ public class AuthorizationService implements IAuthorizationService {
 
     @Override
     @Transactional
+    @Audited(auditedAction = LOGIN, essenceType = USER)
     public String login(UserLoginDTO user) {
         Optional<UserEntity> optional = userRepository.findByMail(
                 user.getMail().describeConstable().orElseThrow(ValidationException::new)
@@ -40,14 +46,20 @@ public class AuthorizationService implements IAuthorizationService {
             throw new ValidationException();
         }
 
-        if (!entity.getUserStatus().equals(Status.ACTIVATED)) {
+        if (!entity.getStatus().equals(Status.ACTIVATED)) {
             throw new ValidationException();
         }
 
-        return jwtTokenHandler.generateAccessToken(user);
+        UserDetailsDTO userDetailsDTO = convertToDTO(entity);
+
+        return jwtTokenHandler.generateAccessToken(userDetailsDTO);
     }
 
     private UserEntity convertToEntity(Optional<UserEntity> entity) {
         return modelMapper.map(entity, UserEntity.class);
+    }
+
+    private UserDetailsDTO convertToDTO(UserEntity entity) {
+        return modelMapper.map(entity, UserDetailsDTO.class);
     }
 }

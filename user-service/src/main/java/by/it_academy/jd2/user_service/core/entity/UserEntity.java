@@ -1,5 +1,6 @@
 package by.it_academy.jd2.user_service.core.entity;
 
+import by.it_academy.jd2.user_service.core.dto.Userable;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(schema = "users", name = "users")
-public class UserEntity {
+public class UserEntity implements Userable {
     @Id
     @Column(name = "id")
     private UUID id;
@@ -26,10 +27,10 @@ public class UserEntity {
     private String fio;
     @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
-    private Role UserRole;
+    private Role role;
     @Column(name = "user_status")
     @Enumerated(EnumType.STRING)
-    private Status UserStatus;
+    private Status status;
     @Column(name = "password")
     private String password;
 
@@ -76,20 +77,20 @@ public class UserEntity {
         this.fio = fio;
     }
 
-    public Role getUserRole() {
-        return UserRole;
+    public Role getRole() {
+        return role;
     }
 
-    public void setUserRole(Role userRole) {
-        UserRole = userRole;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
-    public Status getUserStatus() {
-        return UserStatus;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setUserStatus(Status userStatus) {
-        UserStatus = userStatus;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public String getPassword() {
@@ -105,24 +106,24 @@ public class UserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(dtCreate, that.dtCreate) && Objects.equals(dtUpdate, that.dtUpdate) && Objects.equals(mail, that.mail) && Objects.equals(fio, that.fio) && UserRole == that.UserRole && UserStatus == that.UserStatus && Objects.equals(password, that.password);
+        return Objects.equals(id, that.id) && Objects.equals(dtCreate, that.dtCreate) && Objects.equals(dtUpdate, that.dtUpdate) && Objects.equals(mail, that.mail) && Objects.equals(fio, that.fio) && role == that.role && status == that.status && Objects.equals(password, that.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dtCreate, dtUpdate, mail, fio, UserRole, UserStatus, password);
+        return Objects.hash(id, dtCreate, dtUpdate, mail, fio, role, status, password);
     }
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserEntity{" +
                 "id=" + id +
                 ", dtCreate=" + dtCreate +
                 ", dtUpdate=" + dtUpdate +
                 ", mail='" + mail + '\'' +
                 ", fio='" + fio + '\'' +
-                ", UserRole=" + UserRole +
-                ", UserStatus=" + UserStatus +
+                ", role=" + role +
+                ", status=" + status +
                 ", password='" + password + '\'' +
                 '}';
     }

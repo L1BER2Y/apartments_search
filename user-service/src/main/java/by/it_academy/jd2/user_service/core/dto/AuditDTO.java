@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,14 +20,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@Accessors(chain = true)
 public class AuditDTO {
 
-    private UUID uuid;
+    private UUID uuid = UUID.randomUUID();
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime dtCreate;
+    private LocalDateTime dtCreate = LocalDateTime.now();
 
     private UserAuditDTO userAuditDTO;
 
@@ -34,6 +36,6 @@ public class AuditDTO {
 
     private EssenceType type;
 
-    private String id;
+    private String typeId;
 
 }

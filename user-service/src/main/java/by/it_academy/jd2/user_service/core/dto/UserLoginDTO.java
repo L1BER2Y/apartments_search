@@ -1,12 +1,13 @@
 package by.it_academy.jd2.user_service.core.dto;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Accessors(chain = true)
 public class UserLoginDTO {
     private String mail;
     private String password;

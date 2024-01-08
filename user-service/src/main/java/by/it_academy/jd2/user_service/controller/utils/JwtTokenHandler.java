@@ -1,15 +1,16 @@
 package by.it_academy.jd2.user_service.controller.utils;
 
 import by.it_academy.jd2.user_service.config.property.JWTProperty;
-import by.it_academy.jd2.user_service.core.dto.UserLoginDTO;
+import by.it_academy.jd2.user_service.core.dto.UserDetailsDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
+@Slf4j
 @Component
 public class JwtTokenHandler {
     private final JWTProperty property;
@@ -20,17 +21,17 @@ public class JwtTokenHandler {
         this.objectMapper = objectMapper;
     }
 
-    public String generateAccessToken(UserLoginDTO user) {
+    public String generateAccessToken(UserDetailsDTO userDetailsDTO) {
         return Jwts.builder()
-                .setSubject(convertToJson(user))
+                .setSubject(convertToJson(userDetailsDTO))
                 .setIssuer(property.getIssuer())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7))) // 1 week
+                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)))
                 .signWith(SignatureAlgorithm.HS512, property.getSecret())
                 .compact();
     }
 
-    public UserLoginDTO getUsername(String token) {
+    public UserDetailsDTO getUserDetailsDtoFromJwt(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(property.getSecret())
                 .parseClaimsJws(token)
@@ -39,34 +40,25 @@ public class JwtTokenHandler {
         return convertToDto(claims.getSubject());
     }
 
-    public Date getExpirationDate(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(property.getSecret())
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.getExpiration();
-    }
-
     public boolean validate(String token) {
         try {
             Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token);
             return true;
         } catch (SignatureException ex) {
-            //logger.error("Invalid JWT signature - {}", ex.getMessage());
+            log.error("Invalid JWT signature - {}", ex.getMessage());
         } catch (MalformedJwtException ex) {
-            //logger.error("Invalid JWT token - {}", ex.getMessage());
+            log.error("Invalid JWT token - {}", ex.getMessage());
         } catch (ExpiredJwtException ex) {
-            //logger.error("Expired JWT token - {}", ex.getMessage());
+            log.error("Expired JWT token - {}", ex.getMessage());
         } catch (UnsupportedJwtException ex) {
-            //logger.error("Unsupported JWT token - {}", ex.getMessage());
+            log.error("Unsupported JWT token - {}", ex.getMessage());
         } catch (IllegalArgumentException ex) {
-            //logger.error("JWT claims string is empty - {}", ex.getMessage());
+            log.error("JWT claims string is empty - {}", ex.getMessage());
         }
         return false;
     }
 
-    private String convertToJson(UserLoginDTO dto) {
+    private String convertToJson(UserDetailsDTO dto) {
         try {
             return objectMapper.writeValueAsString(dto);
         } catch (JsonProcessingException e) {
@@ -74,9 +66,9 @@ public class JwtTokenHandler {
         }
     }
 
-    private UserLoginDTO convertToDto(String json) {
+    private UserDetailsDTO convertToDto(String json) {
         try {
-            return objectMapper.readValue(json, UserLoginDTO.class);
+            return objectMapper.readValue(json, UserDetailsDTO.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
