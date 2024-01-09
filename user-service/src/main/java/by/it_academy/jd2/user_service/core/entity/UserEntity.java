@@ -20,6 +20,7 @@ public class UserEntity implements Userable {
     private LocalDateTime dtCreate;
     @Column(name = "dt_update")
     @UpdateTimestamp
+    @Version
     private LocalDateTime dtUpdate;
     @Column(name = "mail")
     private String mail;

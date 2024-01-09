@@ -17,9 +17,9 @@ public class FlatDTO {
 
     private UUID uuid;
 
-    private LocalDateTime creationDate;
+    private LocalDateTime dtCreate;
 
-    private LocalDateTime updatedDate;
+    private LocalDateTime dtUpdate;
 
     private OfferType offerType;
 

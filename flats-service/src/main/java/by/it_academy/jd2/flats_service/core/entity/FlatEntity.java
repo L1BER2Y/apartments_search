@@ -1,8 +1,12 @@
 package by.it_academy.jd2.flats_service.core.entity;
 
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.Type;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -29,7 +33,10 @@ public class FlatEntity {
 
     private int floor;
 
+    @Type(StringArrayType.class)
+    @Column(name = "photo_urls", columnDefinition = "text[]")
     private String[] photoUrls;
 
     private String originalUrl;
+
 }
