@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@Accessors(chain = true)
 public class FlatDTO {
 
     private UUID uuid;
@@ -25,13 +27,13 @@ public class FlatDTO {
 
     private String description;
 
-    private int bedrooms;
+    private Integer bedrooms;
 
-    private int area;
+    private Integer area;
 
-    private int price;
+    private Integer price;
 
-    private int floor;
+    private Integer floor;
 
     private String[] photoUrls;
 

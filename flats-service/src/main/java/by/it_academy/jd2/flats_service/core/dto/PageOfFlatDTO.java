@@ -1,37 +1,41 @@
 package by.it_academy.jd2.flats_service.core.dto;
 
+import by.it_academy.jd2.flats_service.core.entity.FlatEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Accessors(chain = true)
 public class PageOfFlatDTO {
 
-    private int number;
-    private int size;
+    private Integer number;
+    private Integer size;
 
     @JsonProperty("total_pages")
-    private int totalPages;
+    private Integer totalPages;
 
     @JsonProperty("total_elements")
-    private long totalElements;
+    private Long totalElements;
 
-    private boolean first;
+    private Boolean first;
 
     @JsonProperty("number_of_elements")
-    private int numberOfElements;
+    private Integer numberOfElements;
 
-    private boolean last;
+    private Boolean last;
 
-    private List<FlatDTO> content;
+    private List<FlatEntity> content;
 
-    public PageOfFlatDTO(int number, int size) {
+    public PageOfFlatDTO(Integer number, Integer size) {
         this.number = number;
         this.size = size;
     }

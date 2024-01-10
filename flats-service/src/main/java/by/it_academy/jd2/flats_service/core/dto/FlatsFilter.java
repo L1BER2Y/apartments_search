@@ -4,26 +4,28 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Accessors(chain = true)
 public class FlatsFilter {
 
-    private int priceFrom;
+    private String priceFrom;
 
-    private int priceTo;
+    private String priceTo;
 
-    private int bedroomsFrom;
+    private String bedroomsFrom;
 
-    private int bedroomsTo;
+    private String bedroomsTo;
 
-    private int areaFrom;
+    private String areaFrom;
 
-    private int areaTo;
+    private String areaTo;
 
-    private int[] floors;
+    private String floors;
 
-    private boolean photo;
+    private String photo;
 }
