@@ -30,7 +30,7 @@ public class AuditHttpClient {
             String body = objectMapper.writeValueAsString(auditDto);
             HttpClient httpClient = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:80/realty/api/audit"))
+                    .uri(new URI("http://localhost:8080/audit"))
                     .headers(
                             "Authorization", "Bearer " + jwtToken,
                             "Content-Type", APPLICATION_JSON_VALUE

@@ -38,6 +38,17 @@ public class UserEntity implements Userable {
     public UserEntity() {
     }
 
+    public UserEntity(UUID id, LocalDateTime dtCreate, LocalDateTime dtUpdate, String mail, String fio, Role role, Status status, String password) {
+        this.id = id;
+        this.dtCreate = dtCreate;
+        this.dtUpdate = dtUpdate;
+        this.mail = mail;
+        this.fio = fio;
+        this.role = role;
+        this.status = status;
+        this.password = password;
+    }
+
     public UUID getId() {
         return id;
     }

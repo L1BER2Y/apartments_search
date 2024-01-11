@@ -8,6 +8,8 @@ import by.it_academy.jd2.report_service.core.entity.Type;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.UUID;
+
 public interface IReportService {
 
     void createReport(Type type, UserActionAuditParamDTO params);
@@ -15,4 +17,6 @@ public interface IReportService {
     Page<ReportEntity> getAllReports(PageOfReportDTO reportDTO);
 
     Status getStatusById(String id);
+
+    String save(UUID uuid);
 }

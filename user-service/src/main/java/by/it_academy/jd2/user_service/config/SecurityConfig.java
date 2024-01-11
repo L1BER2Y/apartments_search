@@ -50,16 +50,15 @@ public class SecurityConfig {
         // Set permissions on endpoints
         http
                 .authorizeHttpRequests(requests -> requests
-                // Our public endpoints
-                .requestMatchers("/users/registration", "/users/verification", "/users/login")
-                        .permitAll()
-                //Следующие два пример делают одно и тоже
-                .requestMatchers(HttpMethod.GET,"/users", "/users/{uuid}").hasAnyRole("ADMIN")
-                .requestMatchers(HttpMethod.POST,"/users").hasAnyRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT,"/users").hasAnyRole("ADMIN")
-                .requestMatchers(HttpMethod.GET,"/users/me").authenticated()
-                // Our private endpoints
-                .anyRequest().authenticated()
+                    .requestMatchers(HttpMethod.POST,"/users/registration" ).permitAll()
+                    .requestMatchers(HttpMethod.POST,"/users/login").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/users/verification").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/users").hasAnyRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET,"/users/{uuid}").hasAnyRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST,"/users").hasAnyRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT,"/users").hasAnyRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET,"/users/me").authenticated()
+                    .anyRequest().authenticated()
         );
 
         // Add JWT token filter

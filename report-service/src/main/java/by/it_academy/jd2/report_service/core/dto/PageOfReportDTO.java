@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@Accessors(chain = true)
 public class PageOfReportDTO {
     private int number;
     private int size;
@@ -30,7 +32,7 @@ public class PageOfReportDTO {
 
     private boolean last;
 
-    private List<ReportDTO> content;
+    private List<ReportEntity> content;
 
     public PageOfReportDTO(int number, int size) {
         this.number = number;
