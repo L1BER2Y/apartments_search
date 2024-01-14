@@ -1,6 +1,8 @@
-package by.it_academy.jd2.report_service.service.api;
+package by.it_academy.jd2.report_service.service;
 
+import by.it_academy.jd2.report_service.core.entity.AuditEntity;
 import by.it_academy.jd2.report_service.core.entity.ReportEntity;
+import by.it_academy.jd2.report_service.service.api.IReportGenerator;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -12,7 +14,7 @@ import java.util.UUID;
 
 @Component
 @Qualifier("excel-file-generator")
-public class ReportGeneratorService implements IReportGenerator{
+public class ReportGeneratorService implements IReportGenerator {
 
     private final String[] headers = {
             "id",
@@ -45,17 +47,13 @@ public class ReportGeneratorService implements IReportGenerator{
         }
     }
 
-    private Object[] convertToArray(ReportEntity report) {
+    private Object[] convertToArray(AuditEntity audit) {
         return new Object[] {
-                report.getId().toString(),
-                report.getActionDate().toString(),
-                report.getUserId().toString(),
-                report.getUserEmail(),
-                report.getUserFio(),
-                report.getUserRole().toString(),
-                report.getAction().toString(),
-                report.getEssenceType().toString(),
-                report.getEssenceTypeId()
+                audit.getId().toString(),
+                audit.getMail(),
+                audit.getFio(),
+                audit.getRole().toString(),
+                audit.getEssenceType().toString()
         };
     }
 }

@@ -32,7 +32,7 @@ public class UserRestController {
     @ResponseBody
     public ResponseEntity<String> registration(@RequestBody UserRegDTO userRegDTO) {
         UserEntity userEntity = convertToEntity(userRegDTO);
-        this.userService.save(userEntity);
+        this.userService.register(userEntity);
         return new ResponseEntity<>("Пользователь зарегистрирован", HttpStatus.CREATED);
     }
 

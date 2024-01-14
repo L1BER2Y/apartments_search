@@ -1,6 +1,5 @@
 package by.it_academy.jd2.user_service.service.api;
 
-import by.it_academy.jd2.user_service.core.dto.UserLoginDTO;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import by.it_academy.jd2.user_service.core.dto.PageDTO;
 import org.springframework.data.domain.Page;
@@ -15,4 +14,6 @@ public interface IUserService {
     Optional<UserEntity> findById(UUID id);
     void save(UserEntity user);
     void update(UserEntity entity, UUID id, LocalDateTime dtUpdate);
+
+    void register(UserEntity entity);
 }

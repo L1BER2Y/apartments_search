@@ -43,7 +43,7 @@ public class AuditedAspect {
 
     private AuditDTO buildAuditDto(ProceedingJoinPoint joinPoint, Audited annotation, Object result) {
         switch (annotation.auditedAction()) {
-            case REGISTRATION, UPDATE_PASSWORD -> {
+            case REGISTRATION -> {
                 return createAuditDto(annotation, (UserEntity) result);
             }
             case VERIFICATION, LOGIN -> {

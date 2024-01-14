@@ -41,6 +41,13 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
+    @Audited(auditedAction = REGISTRATION, essenceType = USER)
+    public void register(UserEntity entity) {
+        save(entity);
+    }
+
+    @Override
     @Audited(auditedAction = INFO_ABOUT_ALL_USERS, essenceType = USER)
     public Page<UserEntity> getPage(PageDTO page) {
         return this.userRepository.findAll(PageRequest.of(page.getNumber(), page.getSize()));

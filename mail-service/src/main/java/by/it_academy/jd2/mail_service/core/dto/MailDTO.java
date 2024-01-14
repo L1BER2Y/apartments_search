@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class MailDTO {
+
     private String code;
+
     private String mail;
 }
