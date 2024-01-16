@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
 @RequestMapping("/audit")
 public class AuditRestController {
@@ -41,7 +43,17 @@ public class AuditRestController {
         return convertToDto(auditById);
     }
 
+    @PostMapping(produces = APPLICATION_JSON_VALUE)
+    public AuditDTO acceptReq(@RequestHeader String Authorization,
+                              @RequestBody AuditDTO auditDTO){
+        AuditEntity saveAudit = this.service.saveAudit(auditDTO);
+        return convertToDto(saveAudit);
+    }
+
     private AuditDTO convertToDto(Optional<AuditEntity> entity) {
+        return mapper.map(entity, AuditDTO.class);
+    }
+    private AuditDTO convertToDto(AuditEntity entity) {
         return mapper.map(entity, AuditDTO.class);
     }
 }

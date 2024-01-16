@@ -1,6 +1,7 @@
 package by.it_academy.jd2.audit_service.controller.utils;
 
 import by.it_academy.jd2.audit_service.config.properties.JWTProperty;
+import by.it_academy.jd2.audit_service.core.dto.UserDetailsDTO;
 import by.it_academy.jd2.audit_service.core.dto.UserLoginDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +20,7 @@ public class JwtTokenHandler {
         this.objectMapper = objectMapper;
     }
 
-    public String generateAccessToken(UserLoginDTO user) {
+    public String generateAccessToken(UserDetailsDTO user) {
         return Jwts.builder()
                 .setSubject(convertToJson(user))
                 .setIssuer(property.getIssuer())
@@ -29,7 +30,7 @@ public class JwtTokenHandler {
                 .compact();
     }
 
-    public UserLoginDTO getUsername(String token) {
+    public UserDetailsDTO getUsername(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(property.getSecret())
                 .parseClaimsJws(token)
@@ -65,7 +66,7 @@ public class JwtTokenHandler {
         return false;
     }
 
-    private String convertToJson(UserLoginDTO dto) {
+    private String convertToJson(UserDetailsDTO dto) {
         try {
             return objectMapper.writeValueAsString(dto);
         } catch (JsonProcessingException e) {
@@ -73,9 +74,9 @@ public class JwtTokenHandler {
         }
     }
 
-    private UserLoginDTO convertToDto(String json) {
+    private UserDetailsDTO convertToDto(String json) {
         try {
-            return objectMapper.readValue(json, UserLoginDTO.class);
+            return objectMapper.readValue(json, UserDetailsDTO.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

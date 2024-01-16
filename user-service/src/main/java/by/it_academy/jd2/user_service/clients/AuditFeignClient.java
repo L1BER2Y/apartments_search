@@ -12,7 +12,7 @@ public interface AuditFeignClient {
 
     @PostMapping(produces = APPLICATION_JSON_VALUE)
     AuditDTO sendRequestToCreateLog(
-            @RequestHeader String AUTHORIZATION,
+            @RequestHeader String Authorization,
             @RequestBody AuditDTO auditDTO
     );
 }

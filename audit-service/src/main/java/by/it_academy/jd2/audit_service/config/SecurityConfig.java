@@ -52,7 +52,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(requests -> requests
                 .requestMatchers(HttpMethod.GET,"/audit", "/audit/{uuid}").hasAnyRole("ADMIN")
-                .anyRequest().authenticated()
+                .requestMatchers(HttpMethod.GET,"/audit/{uuid}").hasAnyRole("ADMIN")
+                .requestMatchers(HttpMethod.POST,"/audit").hasAnyRole("SYSTEM")
         );
 
         // Add JWT token filter

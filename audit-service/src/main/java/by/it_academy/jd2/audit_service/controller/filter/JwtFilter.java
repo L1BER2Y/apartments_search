@@ -1,6 +1,7 @@
 package by.it_academy.jd2.audit_service.controller.filter;
 
 import by.it_academy.jd2.audit_service.controller.utils.JwtTokenHandler;
+import by.it_academy.jd2.audit_service.core.dto.UserDetailsDTO;
 import by.it_academy.jd2.audit_service.core.dto.UserLoginDTO;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -8,12 +9,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
 
@@ -32,6 +36,10 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (request.getRequestURI().contains("actuator")) {
+            chain.doFilter(request, response);
+            return;
+        }
         if (isEmpty(header) || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
@@ -45,16 +53,16 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // Get user identity and set it on the spring security context
-        UserLoginDTO userDetails = jwtHandler.getUsername(token);
+        UserDetailsDTO userDetails = jwtHandler.getUsername(token);
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + userDetails.getRole()));
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, null
+                userDetails, null,
+                authorities
                 );
 
-        authentication.setDetails(
-                new WebAuthenticationDetailsSource().buildDetails(request)
-        );
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);

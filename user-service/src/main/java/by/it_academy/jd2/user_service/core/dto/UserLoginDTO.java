@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class UserLoginDTO {
+public class UserLoginDTO implements Mailable{
     private String mail;
     private String password;
 }

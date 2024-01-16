@@ -38,19 +38,19 @@ public class AuthorizationService implements IAuthorizationService {
     @Audited(auditedAction = LOGIN, essenceType = USER)
     public String login(UserLoginDTO user) {
         Optional<UserEntity> optional = userRepository.findByMail(
-                user.getMail().describeConstable().orElseThrow(ValidationException::new)
+                user.getMail()
         );
         UserEntity entity = convertToEntity(optional);
-
-        if (!passwordEncoder.matches(user.getPassword(), entity.getPassword())) {
-            throw new ValidationException();
-        }
-
-        if (!entity.getStatus().equals(Status.ACTIVATED)) {
-            throw new ValidationException();
-        }
-
-        UserDetailsDTO userDetailsDTO = convertToDTO(entity);
+//
+//        if (!passwordEncoder.matches(user.getPassword(), entity.getPassword())) {
+//            throw new ValidationException();
+//        }
+//
+//        if (!entity.getStatus().equals(Status.ACTIVATED)) {
+//            throw new ValidationException();
+//        }
+        Optional<UserDetailsDTO> idFioAndRoleByEmail = this.userRepository.findIdFioAndRoleByEmail(user.getMail());
+        UserDetailsDTO userDetailsDTO = convertToDTO(idFioAndRoleByEmail);
 
         return jwtTokenHandler.generateAccessToken(userDetailsDTO);
     }
@@ -59,7 +59,7 @@ public class AuthorizationService implements IAuthorizationService {
         return modelMapper.map(entity, UserEntity.class);
     }
 
-    private UserDetailsDTO convertToDTO(UserEntity entity) {
+    private UserDetailsDTO convertToDTO(Optional<UserDetailsDTO> entity) {
         return modelMapper.map(entity, UserDetailsDTO.class);
     }
 }
