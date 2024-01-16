@@ -12,8 +12,8 @@ public interface IUserService {
     UserEntity find();
     Page<UserEntity> getPage(PageDTO page);
     Optional<UserEntity> findById(UUID id);
-    void save(UserEntity user);
+    UserEntity save(UserEntity user);
     void update(UserEntity entity, UUID id, LocalDateTime dtUpdate);
 
-    void register(UserEntity entity);
+    UserEntity register(UserEntity entity);
 }

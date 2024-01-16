@@ -43,8 +43,8 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     @Audited(auditedAction = REGISTRATION, essenceType = USER)
-    public void register(UserEntity entity) {
-        save(entity);
+    public UserEntity register(UserEntity entity) {
+        return save(entity);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     @Audited(auditedAction = SAVE_USER, essenceType = USER)
-    public void save(UserEntity user) {
+    public UserEntity save(UserEntity user) {
         UserEntity entity = new UserEntity();
         entity.setId(UUID.randomUUID());
         entity.setDtCreate(LocalDateTime.now());
@@ -74,12 +74,13 @@ public class UserService implements IUserService {
         entity.setPassword(passwordEncoder.encode(user.getPassword()));
 
         try{
-            this.userRepository.save(entity);
+            this.userRepository.saveAndFlush(entity);
         } catch (DataAccessException e) {
             throw new InternalServerErrorException(e.getMessage());
         }
 
         this.verificationQueueService.add(entity);
+        return entity;
     }
 
     @Override
@@ -96,7 +97,7 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(entity.getPassword()));
 
         try {
-            this.userRepository.save(user);
+            this.userRepository.saveAndFlush(user);
         } catch (DataAccessException e) {
             throw new InternalServerErrorException(e.getMessage());
         }

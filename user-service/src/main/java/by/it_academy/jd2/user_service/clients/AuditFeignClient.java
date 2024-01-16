@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-@FeignClient(name = "audit-logs", url = "http://localhost:8080/audit")
+@FeignClient(name = "audit-logs", url = "http://localhost:8084/audit")
 public interface AuditFeignClient {
 
     @PostMapping(produces = APPLICATION_JSON_VALUE)

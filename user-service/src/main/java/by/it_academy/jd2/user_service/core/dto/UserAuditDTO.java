@@ -1,6 +1,7 @@
 package by.it_academy.jd2.user_service.core.dto;
 
 import by.it_academy.jd2.user_service.core.entity.Role;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
