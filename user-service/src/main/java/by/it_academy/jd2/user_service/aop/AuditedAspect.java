@@ -1,6 +1,7 @@
 package by.it_academy.jd2.user_service.aop;
 
 import by.it_academy.jd2.user_service.clients.AuditFeignClient;
+import by.it_academy.jd2.user_service.clients.AuditHttpClient;
 import by.it_academy.jd2.user_service.controller.utils.JwtTokenHandler;
 import by.it_academy.jd2.user_service.core.dto.*;
 import by.it_academy.jd2.user_service.core.entity.Role;
@@ -21,12 +22,12 @@ import java.util.UUID;
 @Component
 public class AuditedAspect {
     private final UserRepository userRepository;
-    private final AuditFeignClient auditFeignClient;
+    private final AuditHttpClient httpClient;
     private final JwtTokenHandler jwtTokenHandler;
 
-    public AuditedAspect(UserRepository userRepository, AuditFeignClient auditFeignClient, JwtTokenHandler jwtTokenHandler) {
+    public AuditedAspect(UserRepository userRepository, AuditHttpClient httpClient, JwtTokenHandler jwtTokenHandler) {
         this.userRepository = userRepository;
-        this.auditFeignClient = auditFeignClient;
+        this.httpClient = httpClient;
         this.jwtTokenHandler = jwtTokenHandler;
     }
 
@@ -37,7 +38,7 @@ public class AuditedAspect {
         Object result = joinPoint.proceed();
         AuditDTO auditDto = buildAuditDto(joinPoint, annotation, result);
         String token = "Bearer " + jwtTokenHandler.generateAccessToken(new UserDetailsDTO().setRole(Role.SYSTEM));
-        auditFeignClient.sendRequestToCreateLog(token, auditDto);
+        httpClient.sendRequestToCreateLog(token, auditDto);
         return result;
     }
 

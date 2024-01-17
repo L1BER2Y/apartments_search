@@ -15,7 +15,7 @@ import java.net.http.HttpResponse;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
-public class AuditHttpClient {
+public class AuditHttpClient implements AuditFeignClient{
     private final JwtTokenHandler jwtTokenHandler;
     private final ObjectMapper objectMapper;
 
@@ -24,7 +24,8 @@ public class AuditHttpClient {
         this.objectMapper = objectMapper;
     }
 
-    public AuditDTO sendRequestToCreateLog(AuditDTO auditDto) {
+    @Override
+    public AuditDTO sendRequestToCreateLog(String authorization, AuditDTO auditDto) {
         try {
             String jwtToken = jwtTokenHandler.generateAccessToken(new UserDetailsDTO().setRole(Role.SYSTEM));
             String body = objectMapper.writeValueAsString(auditDto);
