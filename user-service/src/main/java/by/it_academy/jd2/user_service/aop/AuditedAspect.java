@@ -22,12 +22,12 @@ import java.util.UUID;
 @Component
 public class AuditedAspect {
     private final UserRepository userRepository;
-    private final AuditHttpClient httpClient;
+    private final AuditFeignClient auditFeignClient;
     private final JwtTokenHandler jwtTokenHandler;
 
-    public AuditedAspect(UserRepository userRepository, AuditHttpClient httpClient, JwtTokenHandler jwtTokenHandler) {
+    public AuditedAspect(UserRepository userRepository, AuditFeignClient auditFeignClient, JwtTokenHandler jwtTokenHandler) {
         this.userRepository = userRepository;
-        this.httpClient = httpClient;
+        this.auditFeignClient = auditFeignClient;
         this.jwtTokenHandler = jwtTokenHandler;
     }
 
@@ -38,7 +38,7 @@ public class AuditedAspect {
         Object result = joinPoint.proceed();
         AuditDTO auditDto = buildAuditDto(joinPoint, annotation, result);
         String token = "Bearer " + jwtTokenHandler.generateAccessToken(new UserDetailsDTO().setRole(Role.SYSTEM));
-        httpClient.sendRequestToCreateLog(token, auditDto);
+        auditFeignClient.sendRequestToCreateLog(token, auditDto);
         return result;
     }
 

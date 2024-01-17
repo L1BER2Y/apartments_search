@@ -4,6 +4,3 @@ spring:
     password: root
     username: root
 
-app:
-  user:
-    storage: JDBC #MEMORY or JDBC

@@ -2,15 +2,13 @@ package by.it_academy.jd2.user_service.clients;
 
 import by.it_academy.jd2.user_service.core.dto.AuditDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
-@FeignClient(value = "audit-logs", url = "${app.feign.audit-logs.url}")
+@FeignClient(name = "audit-logs", url = "${app.feign.audit-logs.url}")
 public interface AuditFeignClient {
 
-    @RequestMapping(method = RequestMethod.POST, produces = "application/json")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     AuditDTO sendRequestToCreateLog(
             @RequestHeader String Authorization,
             @RequestBody AuditDTO auditDTO

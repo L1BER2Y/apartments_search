@@ -22,17 +22,17 @@ public class SecurityConfig {
         // Enable CORS and disable CSRF
         http
                 .cors(withDefaults())
-                        .csrf(AbstractHttpConfigurer::disable);
+                        .csrf(AbstractHttpConfigurer::disable)
 
         // Set session management to stateless
-        http
+
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                                 httpSecuritySessionManagementConfigurer
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                )
 
         // Set unauthorized requests exception handler
-        http
+
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
                                 httpSecurityExceptionHandlingConfigurer
                     .authenticationEntryPoint(
@@ -45,10 +45,10 @@ public class SecurityConfig {
                             HttpServletResponse.SC_FORBIDDEN
                         )
                     )
-                );
+                )
 
         // Set permissions on endpoints
-        http
+
                 .authorizeHttpRequests(requests -> requests
                     .requestMatchers(HttpMethod.POST,"/users/registration" ).permitAll()
                     .requestMatchers(HttpMethod.POST,"/users/login").permitAll()
@@ -59,10 +59,10 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.PUT,"/users").hasAnyRole("ADMIN")
                     .requestMatchers(HttpMethod.GET,"/users/me").authenticated()
                     .anyRequest().authenticated()
-        );
+        )
 
         // Add JWT token filter
-        http
+
                 .addFilterBefore(filter,
                     UsernamePasswordAuthenticationFilter.class
         );

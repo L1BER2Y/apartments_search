@@ -4,6 +4,3 @@ spring:
     password: 4712vs5988gh
     username: postgres
 
-app:
-  user:
-    storage: MEMORY #MEMORY or JDBC
