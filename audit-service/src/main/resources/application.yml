@@ -6,6 +6,3 @@ app:
   jwt:
     secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
     issuer: ITAcademy
-  feign:
-    audit-logs:
-      url: http://localhost:8084

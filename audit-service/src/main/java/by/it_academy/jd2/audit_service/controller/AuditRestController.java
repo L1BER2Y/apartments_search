@@ -6,12 +6,10 @@ import by.it_academy.jd2.audit_service.core.entity.AuditEntity;
 import by.it_academy.jd2.audit_service.service.api.IAuditService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 import java.util.UUID;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/audit")
@@ -43,8 +41,9 @@ public class AuditRestController {
         return convertToDto(auditById);
     }
 
-    @PostMapping(produces = APPLICATION_JSON_VALUE)
-    public AuditDTO acceptReq(@RequestHeader String Authorization,
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public AuditDTO acceptReq(@RequestHeader("Authorization") String AUTHORIZATION,
                               @RequestBody AuditDTO auditDTO){
         AuditEntity saveAudit = this.service.saveAudit(auditDTO);
         return convertToDto(saveAudit);

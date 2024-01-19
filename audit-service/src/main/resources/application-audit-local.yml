@@ -4,11 +4,6 @@ spring:
     password: 4712vs5988gh
     username: postgres
 
-app:
-    jwt:
-      secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
-      issuer: ITAcademy
-
 user:
   storage: MEMORY #MEMORY or JDBC
 

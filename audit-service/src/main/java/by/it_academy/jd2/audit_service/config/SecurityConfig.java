@@ -51,7 +51,7 @@ public class SecurityConfig {
         // Set permissions on endpoints
         http
                 .authorizeHttpRequests(requests -> requests
-                .requestMatchers(HttpMethod.GET,"/audit", "/audit/{uuid}").hasAnyRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/audit").hasAnyRole("ADMIN")
                 .requestMatchers(HttpMethod.GET,"/audit/{uuid}").hasAnyRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/audit").hasAnyRole("SYSTEM")
         );
