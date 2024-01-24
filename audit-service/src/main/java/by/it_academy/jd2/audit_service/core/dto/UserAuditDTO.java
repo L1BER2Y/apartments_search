@@ -17,13 +17,14 @@ import java.util.UUID;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class UserDTO {
+public class UserAuditDTO {
     @JsonProperty("uuid")
     private UUID uuid;
 
     @JsonProperty("mail")
     private String mail;
 
+    @JsonProperty("fio")
     private String fio;
 
     @JsonProperty("role")

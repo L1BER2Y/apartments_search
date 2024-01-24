@@ -19,7 +19,7 @@ public class ExceptionHandlerResolver {
     public ErrorResponse handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException exception) {
         log.error(exception.getMessage());
         return new ErrorResponse("error",
-                "Запрос некорректен. Сервер не может обработать запрос");
+                "Запрос некорректен. Попробуйте заново.");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -100,7 +100,7 @@ public class AuditedAspect {
     }
 
     private UserAuditDTO buildUserAuditDto(Userable userable) {
-        return new UserAuditDTO().setUserId(userable.getId())
+        return new UserAuditDTO().setUuid(userable.getId())
                 .setMail(userable.getMail())
                 .setFio(userable.getFio())
                 .setRole(userable.getRole());

@@ -27,11 +27,11 @@ public class AuditDTO {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime dtCreate;
 
-    private UserDTO user;
+    private UserAuditDTO userAuditDTO;
 
     private Action action;
 
     private EssenceType type;
 
-    private String id;
+    private String typeId;
 }

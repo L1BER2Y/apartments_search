@@ -19,7 +19,7 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class UserAuditDTO {
 
-    private UUID userId;
+    private UUID uuid;
 
     private String mail;
 
