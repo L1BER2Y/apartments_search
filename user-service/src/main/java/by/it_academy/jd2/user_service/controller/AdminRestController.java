@@ -1,12 +1,13 @@
 package by.it_academy.jd2.user_service.controller;
 
-import by.it_academy.jd2.user_service.core.dto.PageDTO;
 import by.it_academy.jd2.user_service.core.dto.UserCreateDTO;
 import by.it_academy.jd2.user_service.core.dto.UserDTO;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,14 +37,12 @@ public class AdminRestController {
 
     @GetMapping
     @ResponseBody
-    public PageDTO getPage(@RequestParam(defaultValue =  "0") Integer page,
-                           @RequestParam(defaultValue = "20") Integer size
+    public Page<UserDTO> getUsers(@RequestParam(defaultValue =  "0") Integer number,
+                            @RequestParam(defaultValue = "20") Integer size
     ) {
-        PageDTO pageable = new PageDTO(page, size);
-        Page<UserEntity> userPage = this.service.getPage(pageable);
-        return new PageDTO(userPage.getNumber(), userPage.getSize(),
-                userPage.getTotalPages(), userPage.getTotalElements(), userPage.isFirst(),
-                userPage.getNumberOfElements(), userPage.isLast(), userPage.getContent());
+        Pageable pageable = PageRequest.of(number, size);
+        Page<UserEntity> page = this.service.getPage(pageable);
+        return page.map(AdminRestController::apply);
     }
 
     @GetMapping("/{uuid}")
@@ -62,11 +61,23 @@ public class AdminRestController {
         return ResponseEntity.ok("Пользователь обновлен");
     }
 
-    private UserDTO convertToDto(Optional<UserEntity> entity) {
+    private UserDTO convertToDto(UserEntity entity) {
         return modelMapper.map(entity, UserDTO.class);
     }
 
     private UserEntity convertToEntity(UserCreateDTO userDTO) {
         return modelMapper.map(userDTO, UserEntity.class);
+    }
+
+    private static UserDTO apply(UserEntity user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setDtCreate(user.getDtCreate());
+        userDTO.setDtUpdate(user.getDtUpdate());
+        userDTO.setMail(user.getMail());
+        userDTO.setFio(user.getFio());
+        userDTO.setRole(user.getRole());
+        userDTO.setStatus(user.getStatus());
+        return userDTO;
     }
 }

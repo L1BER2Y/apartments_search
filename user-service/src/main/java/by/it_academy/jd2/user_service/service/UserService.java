@@ -2,7 +2,6 @@ package by.it_academy.jd2.user_service.service;
 
 import by.it_academy.jd2.user_service.aop.Audited;
 import by.it_academy.jd2.user_service.core.dto.*;
-import by.it_academy.jd2.user_service.core.entity.Role;
 import by.it_academy.jd2.user_service.core.exceptions.InternalServerErrorException;
 import by.it_academy.jd2.user_service.repository.UserRepository;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
@@ -11,7 +10,7 @@ import by.it_academy.jd2.user_service.service.api.IVerificationQueueService;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,14 +48,14 @@ public class UserService implements IUserService {
 
     @Override
     @Audited(auditedAction = INFO_ABOUT_ALL_USERS, essenceType = USER)
-    public Page<UserEntity> getPage(PageDTO page) {
-        return this.userRepository.findAll(PageRequest.of(page.getNumber(), page.getSize()));
+    public Page<UserEntity> getPage(Pageable pageable) {
+        return this.userRepository.findAll(pageable);
     }
 
     @Override
     @Audited(auditedAction = INFO_ABOUT_USER_BY_ID, essenceType = USER)
-    public Optional<UserEntity> findById(UUID uuid) {
-        return this.userRepository.findById(uuid);
+    public UserEntity findById(UUID uuid) {
+        return convertFromOptionalToEntity(this.userRepository.findById(uuid));
     }
 
     @Override
@@ -69,7 +68,7 @@ public class UserService implements IUserService {
         entity.setDtUpdate(entity.getDtCreate());
         entity.setMail(user.getMail());
         entity.setFio(user.getFio());
-        entity.setRole(Role.USER);
+        entity.setRole(user.getRole());
         entity.setStatus(user.getStatus());
         entity.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -86,9 +85,8 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     @Audited(auditedAction = UPDATE_USER, essenceType = USER)
-    public void update(UserEntity entity, UUID id, LocalDateTime dtUpdate) {
-        Optional<UserEntity> optional = findById(id);
-        UserEntity user = convertToEntity(optional);
+    public UserEntity update(UserEntity entity, UUID id, LocalDateTime dtUpdate) {
+        UserEntity user = findById(id);
         user.setDtUpdate(dtUpdate);
         user.setMail(entity.getMail());
         user.setFio(entity.getFio());
@@ -101,17 +99,22 @@ public class UserService implements IUserService {
         } catch (DataAccessException e) {
             throw new InternalServerErrorException(e.getMessage());
         }
+        return user;
     }
 
     @Override
     @Audited(auditedAction = INFO_ABOUT_ME, essenceType = USER)
     public UserEntity find() {
-        UserEntity userDetails = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetailsDTO userDetails = (UserDetailsDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<UserEntity> userEntity = userRepository.findById(userDetails.getId());
         return convertToEntity(userEntity);
     }
 
     private UserEntity convertToEntity(Optional<UserEntity> entity) {
+        return modelMapper.map(entity, UserEntity.class);
+    }
+
+    private UserEntity convertFromOptionalToEntity(Optional<UserEntity> entity) {
         return modelMapper.map(entity, UserEntity.class);
     }
 }

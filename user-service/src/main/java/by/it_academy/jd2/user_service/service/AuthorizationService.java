@@ -37,14 +37,13 @@ public class AuthorizationService implements IAuthorizationService {
     @Transactional
     @Audited(auditedAction = LOGIN, essenceType = USER)
     public String login(UserLoginDTO user) {
-//        Optional<UserDetailsDTO> optional =
-//                userRepository.findIdFioAndRoleByEmail(user.getMail()
-//        );
-//        UserEntity entity = convertToEntity(optional);
-//
-//        if (!passwordEncoder.matches(user.getPassword(), entity.getPassword())) {
-//            throw new ValidationException();
-//        }
+        Optional<UserEntity> byMail = userRepository.findByMail(user.getMail()
+        );
+        UserEntity entity = convertToEntity(byMail);
+
+        if (!passwordEncoder.matches(user.getPassword(), entity.getPassword())) {
+            throw new ValidationException();
+        }
 
         Optional<UserDetailsDTO> idFioAndRoleByEmail = this.userRepository.findIdFioAndRoleByEmail(user.getMail());
         UserDetailsDTO userDetailsDTO = convertToDTO(idFioAndRoleByEmail);
@@ -52,7 +51,7 @@ public class AuthorizationService implements IAuthorizationService {
         return jwtTokenHandler.generateAccessToken(userDetailsDTO);
     }
 
-    private UserEntity convertToEntity(Optional<UserDetailsDTO> entity) {
+    private UserEntity convertToEntity(Optional<UserEntity> entity) {
         return modelMapper.map(entity, UserEntity.class);
     }
 

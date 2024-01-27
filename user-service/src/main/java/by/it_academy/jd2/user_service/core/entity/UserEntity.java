@@ -16,11 +16,8 @@ public class UserEntity implements Userable {
     @Column(name = "id")
     private UUID id;
     @Column(name = "dt_create")
-    @CreationTimestamp()
     private LocalDateTime dtCreate;
     @Column(name = "dt_update")
-    @UpdateTimestamp
-    @Version
     private LocalDateTime dtUpdate;
     @Column(name = "mail")
     private String mail;

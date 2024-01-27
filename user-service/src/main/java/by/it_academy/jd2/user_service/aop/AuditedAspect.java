@@ -70,7 +70,7 @@ public class AuditedAspect {
     }
 
     private AuditDTO getAuditDtoForUserInfo(Audited annotation, Object result) {
-        return createAuditDto(annotation, getUserDetailFromSecurityContext(), ((UserInfoDTO) result).getId());
+        return createAuditDto(annotation, getUserDetailFromSecurityContext(), ((UserEntity) result).getId());
     }
 
     private AuditDTO getAuditDtoForUser(Audited annotation, Object result) {

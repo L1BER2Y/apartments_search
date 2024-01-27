@@ -55,7 +55,7 @@ public class UserRestController {
     @GetMapping("/me")
     @ResponseBody
     public UserDTO me(){
-        return convertToDto(userService.find());
+        return convertToDto(this.userService.find());
     }
 
     private UserDTO convertToDto(UserEntity entity) {

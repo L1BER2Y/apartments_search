@@ -6,9 +6,8 @@ public enum Action {
     VERIFICATION,
     LOGIN,
     INFO_ABOUT_ME,
-    UPDATE_PASSWORD,
     INFO_ABOUT_ALL_USERS,
     INFO_ABOUT_USER_BY_ID,
-    CREATE_USER,
+    SAVE_USER,
     UPDATE_USER
 }

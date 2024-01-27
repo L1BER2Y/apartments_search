@@ -2,16 +2,30 @@ package by.it_academy.jd2.user_service.core.dto;
 
 import by.it_academy.jd2.user_service.core.entity.Role;
 import by.it_academy.jd2.user_service.core.entity.Status;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import lombok.experimental.Accessors;
 
-@Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Accessors(chain = true)
 public class UserCreateDTO {
+
+    @JsonProperty("mail")
     private String mail;
+
+    @JsonProperty("fio")
     private String fio;
+
+    @JsonProperty("role")
     private Role role;
+
+    @JsonProperty("status")
     private Status status;
+
+    @JsonProperty("password")
     private String password;
 
 }
