@@ -1,11 +1,14 @@
 package by.it_academy.jd2.user_service.core.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.Accessors;
 
-@Data
+@NoArgsConstructor
 @AllArgsConstructor
-public class VerificationDTO {
+@Getter
+@Setter
+@Accessors(chain = true)
+public class VerificationDTO implements Mailable{
     private String code;
     private String mail;
 }

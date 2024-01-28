@@ -13,24 +13,23 @@ import java.util.Properties;
 @Data
 @ConfigurationProperties(prefix = "app.mail")
 public class EmailProperty {
-    private String host;
 
-    private int port;
     private String userName;
     private String password;
 
     @Bean
     public JavaMailSender javamailSender() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost(host);
+        javaMailSender.setHost("smtp.mail.ru");
         javaMailSender.setPort(465);
-        javaMailSender.setUsername(userName);
-        javaMailSender.setPassword(password);
+        javaMailSender.setUsername("phantomlkill@mail.ru");
+        javaMailSender.setPassword("ZThQF9VmFFuDiksRm3tV");
 
         Properties properties = new Properties();
         properties.put("mail.transport.protocol", "smtp");
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.debug", "true");
 
         javaMailSender.setJavaMailProperties(properties);
 

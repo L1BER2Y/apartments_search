@@ -3,4 +3,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/user_service?currentSchema=users
     password: 4712vs5988gh
     username: postgres
+  task:
+    scheduling:
+      pool:
+        size: 1
 

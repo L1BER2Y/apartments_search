@@ -9,6 +9,7 @@ import by.it_academy.jd2.user_service.service.api.ISendVerificationService;
 import by.it_academy.jd2.user_service.service.api.IVerificationQueueService;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,7 @@ public class SendVerificationService implements IVerificationQueueService {
     }
 
     @Scheduled(fixedRate = 10000)
-    private void sendCode() {
+    public void sendCode() {
         Optional<VerificationEntity> verificationEntity = verificationRepository.findFirstBySendCodeFalse();
 
         if(verificationEntity.isPresent()) {

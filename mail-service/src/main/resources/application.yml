@@ -1,0 +1,15 @@
+spring:
+  mail:
+    host: smtp.mail.ru
+    port: 465
+    username: phantomlkill@mail.ru
+    password: ZThQF9VmFFuDiksRm3tV
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
+

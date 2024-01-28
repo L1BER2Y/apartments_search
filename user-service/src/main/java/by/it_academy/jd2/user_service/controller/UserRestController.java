@@ -38,8 +38,8 @@ public class UserRestController {
 
     @GetMapping("/verification")
     @ResponseBody
-    public ResponseEntity<String> verification(@RequestParam("code") String code,
-                                               @RequestParam("mail") String mail) {
+    public ResponseEntity<String> verification(@RequestParam(value = "code") String code,
+                                               @RequestParam(value = "mail") String mail) {
         VerificationDTO dto = new VerificationDTO(code, mail);
         verificationService.verify(dto);
         return new ResponseEntity<>("Пользователь верифицирован", HttpStatus.OK);

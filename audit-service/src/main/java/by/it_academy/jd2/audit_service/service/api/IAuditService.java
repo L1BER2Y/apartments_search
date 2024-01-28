@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface IAuditService {
     Page<AuditEntity> getAudit(PageOfAuditDTO pageOfAuditDTO);
     Optional<AuditEntity> getAuditById(UUID id);
-    AuditEntity saveAudit(AuditDTO entity);
+    AuditEntity saveAudit(AuditDTO auditDTO);
 }
