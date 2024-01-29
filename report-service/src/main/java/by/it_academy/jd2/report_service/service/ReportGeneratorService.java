@@ -1,14 +1,16 @@
 package by.it_academy.jd2.report_service.service;
 
 import by.it_academy.jd2.report_service.core.entity.AuditEntity;
-import by.it_academy.jd2.report_service.core.entity.ReportEntity;
 import by.it_academy.jd2.report_service.service.api.IReportGenerator;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,8 +19,8 @@ import java.util.UUID;
 public class ReportGeneratorService implements IReportGenerator {
 
     private final String[] headers = {
-            "id",
-            "action_date",
+            "uuid",
+            "dt_create",
             "user_id",
             "user_email",
             "user_fio",
@@ -29,8 +31,20 @@ public class ReportGeneratorService implements IReportGenerator {
     };
 
     @Override
-    public void generate(List<ReportEntity> reports, UUID name) {
+    public void generate(List<AuditEntity> audits, UUID name) throws IOException {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet spreadsheet = workbook.createSheet("Report Data");
+        createHeader(spreadsheet);
 
+        int rowId = 1;
+        for (AuditEntity audit : audits) {
+            Object[] objectArray = convertToArray(audit);
+            createRow(spreadsheet, rowId, objectArray);
+            rowId++;
+        }
+        FileOutputStream out = new FileOutputStream(name + ".xlsx");
+        workbook.write(out);
+        out.close();
     }
 
     private void createHeader(XSSFSheet spreadsheet) {
@@ -49,11 +63,15 @@ public class ReportGeneratorService implements IReportGenerator {
 
     private Object[] convertToArray(AuditEntity audit) {
         return new Object[] {
+                audit.getUuid().toString(),
+                audit.getDtCreate().toString(),
                 audit.getId().toString(),
                 audit.getMail(),
                 audit.getFio(),
                 audit.getRole().toString(),
-                audit.getEssenceType().toString()
+                audit.getText().toString(),
+                audit.getEssenceType().toString(),
+                audit.getEssenceId()
         };
     }
 }

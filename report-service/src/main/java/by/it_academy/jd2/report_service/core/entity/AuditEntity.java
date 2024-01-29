@@ -8,7 +8,6 @@ import java.util.UUID;
 @Entity
 @Table(schema = "users", name = "audits")
 public class AuditEntity {
-
     @Id
     private UUID id;
 
@@ -24,7 +23,8 @@ public class AuditEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String text;
+    @Enumerated(EnumType.STRING)
+    private Action text;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "essence_type")
@@ -36,7 +36,7 @@ public class AuditEntity {
     public AuditEntity() {
     }
 
-    public AuditEntity(UUID id, LocalDateTime dtCreate, UUID uuid, String mail, String fio, Role role, String text, EssenceType essenceType, String essenceId) {
+    public AuditEntity(UUID id, LocalDateTime dtCreate, UUID uuid, String mail, String fio, Role role, Action text, EssenceType essenceType, String essenceId) {
         this.id = id;
         this.dtCreate = dtCreate;
         this.uuid = uuid;
@@ -96,11 +96,11 @@ public class AuditEntity {
         this.role = role;
     }
 
-    public String getText() {
+    public Action getText() {
         return text;
     }
 
-    public void setText(String text) {
+    public void setText(Action text) {
         this.text = text;
     }
 

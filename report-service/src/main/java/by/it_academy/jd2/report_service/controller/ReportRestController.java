@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -23,9 +24,9 @@ public class ReportRestController {
         this.reportService = reportService;
     }
 
-    @PostMapping("{type}")
+    @PostMapping("/{type}")
     public ResponseEntity<String> start(@PathVariable("type") Type type,
-                                        @RequestBody UserActionAuditParamDTO dto) {
+                                        @RequestBody UserActionAuditParamDTO dto) throws IOException {
         this.reportService.createReport(type, dto);
         return new ResponseEntity<>("Отчёт запущен", HttpStatus.CREATED);
     }
@@ -41,7 +42,7 @@ public class ReportRestController {
     }
 
     @GetMapping("/{uuid}/export")
-    public String save(@PathVariable("uuid") UUID uuid){
+    public ResponseEntity<String> save(@PathVariable("uuid") UUID uuid) throws IOException {
         return reportService.save(uuid);
     }
 

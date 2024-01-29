@@ -1,13 +1,12 @@
 package by.it_academy.jd2.audit_service.service;
 
 import by.it_academy.jd2.audit_service.core.dto.AuditDTO;
-import by.it_academy.jd2.audit_service.core.dto.PageOfAuditDTO;
 import by.it_academy.jd2.audit_service.core.entity.AuditEntity;
 import by.it_academy.jd2.audit_service.repository.AuditRepository;
 import by.it_academy.jd2.audit_service.service.api.IAuditService;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,8 +21,8 @@ public class AuditService implements IAuditService {
     }
 
     @Override
-    public Page<AuditEntity> getAudit(PageOfAuditDTO page) {
-        return this.repository.findAll(PageRequest.of(page.getNumber(), page.getSize()));
+    public Page<AuditEntity> getAudit(Pageable pageable) {
+        return this.repository.findAll(pageable);
     }
 
     @Override

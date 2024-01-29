@@ -38,7 +38,7 @@ public class AdminRestController {
     @GetMapping
     @ResponseBody
     public Page<UserDTO> getUsers(@RequestParam(defaultValue =  "0") Integer number,
-                            @RequestParam(defaultValue = "20") Integer size
+                                  @RequestParam(defaultValue = "20") Integer size
     ) {
         Pageable pageable = PageRequest.of(number, size);
         Page<UserEntity> page = this.service.getPage(pageable);
