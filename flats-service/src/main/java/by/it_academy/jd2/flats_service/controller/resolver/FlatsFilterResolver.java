@@ -36,17 +36,15 @@ public class FlatsFilterResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest req,
                                   WebDataBinderFactory binderFactory) throws Exception {
 
-        String areaFrom = req.getParameter(AREA_FROM_PARAM);
-        String areaTo = req.getParameter(AREA_TO_PARAM);
-        String bedroomsFrom = req.getParameter(BEDROOMS_FROM_PARAM);
-        String bedroomsTo = req.getParameter(BEDROOMS_TO_PARAM);
-        String floors = req.getParameter(FLOORS_PARAM);
-        String priceFrom = req.getParameter(PRICE_FROM_PARAM);
-        String priceTo = req.getParameter(PRICE_TO_PARAM);
-        String photo = req.getParameter(PHOTO_PARAM);
+        Integer areaFrom = Integer.valueOf(req.getParameter(AREA_FROM_PARAM));
+        Integer areaTo = Integer.valueOf(req.getParameter(AREA_TO_PARAM));
+        Integer bedroomsFrom = Integer.valueOf(req.getParameter(BEDROOMS_FROM_PARAM));
+        Integer bedroomsTo = Integer.valueOf(req.getParameter(BEDROOMS_TO_PARAM));
+        Integer floors = Integer.valueOf(req.getParameter(FLOORS_PARAM));
+        Integer priceFrom = Integer.valueOf(req.getParameter(PRICE_FROM_PARAM));
+        Integer priceTo = Integer.valueOf(req.getParameter(PRICE_TO_PARAM));
+        Boolean photo = Boolean.valueOf(req.getParameter(PHOTO_PARAM));
 
-        FlatsFilter filter = new FlatsFilter(priceFrom, priceTo, bedroomsFrom, bedroomsTo, areaFrom, areaTo, floors, photo);
-
-        return filter;
+        return new FlatsFilter(priceFrom, priceTo, bedroomsFrom, bedroomsTo, areaFrom, areaTo, floors, photo);
     }
 }

@@ -36,7 +36,6 @@ public class AuditService implements IAuditService {
         return this.repository.save(entity);
     }
 
-
     private static AuditEntity apply(AuditDTO dto) {
         AuditEntity entity = new AuditEntity();
         entity.setId(dto.getUuid());
