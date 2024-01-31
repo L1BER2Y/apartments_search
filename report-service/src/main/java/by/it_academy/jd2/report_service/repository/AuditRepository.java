@@ -12,6 +12,6 @@ import java.util.UUID;
 
 @Repository
 public interface AuditRepository extends JpaRepository<AuditEntity, UUID> {
-    @Query("SELECT a FROM AuditEntity AS a WHERE a.uuid = :id AND a.dtCreate BETWEEN :from AND :to")
+    @Query("SELECT a FROM AuditEntity AS a WHERE a.id = :uuid AND a.dtCreate BETWEEN :from AND :to")
     List<AuditEntity> findAllByParam(UUID uuid, LocalDateTime from, LocalDateTime to);
 }

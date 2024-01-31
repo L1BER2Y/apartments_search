@@ -22,28 +22,11 @@ public class FlatRestController {
 
     @GetMapping
     @ResponseBody
-    public Page<FlatDTO> getAllFlatByFilter(@RequestParam(name = "price_from", required = false) Integer priceFrom,
-                                            @RequestParam(name = "price_to", required = false) Integer priceTo,
-                                            @RequestParam(name = "bedrooms_from", required = false) Integer bedroomsFrom,
-                                            @RequestParam(name = "bedrooms_to", required = false) Integer bedroomsTo,
-                                            @RequestParam(name = "area_from", required = false) Integer areaFrom,
-                                            @RequestParam(name = "area_to", required = false) Integer areaTo,
-                                            @RequestParam(name = "floors", required = false) Integer floors,
-                                            @RequestParam(name = "photo", required = false) Boolean photo,
+    public Page<FlatDTO> getAllFlatByFilter(FlatsFilter flatsFilter,
                                             @RequestParam(name = "page", defaultValue = "1") Integer page,
                                             @RequestParam(name = "size", defaultValue = "20") Integer size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-
-        FlatsFilter flatsFilter = new FlatsFilter()
-                .setPriceFrom(priceFrom)
-                .setPriceFrom(priceTo)
-                .setBedroomsFrom(bedroomsFrom)
-                .setBedroomsTo(bedroomsTo)
-                .setAreaFrom(areaFrom)
-                .setAreaTo(areaTo)
-                .setFloors(floors)
-                .setPhoto(photo);
 
         return this.service.getPage(flatsFilter, pageable);
     }
