@@ -40,13 +40,11 @@ public class ReportService implements IReportService {
     private static final String FILE_DIRECTORY = ".";
     private final ReportRepository reportRepository;
     private final AuditRepository auditRepository;
-    private final ModelMapper mapper;
     private final IReportGenerator reportGenerator;
 
-    public ReportService(ReportRepository reportRepository, AuditRepository auditRepository, ModelMapper mapper, @Qualifier("excel-file-generator") IReportGenerator reportGenerator) {
+    public ReportService(ReportRepository reportRepository, AuditRepository auditRepository, IReportGenerator reportGenerator) {
         this.reportRepository = reportRepository;
         this.auditRepository = auditRepository;
-        this.mapper = mapper;
         this.reportGenerator = reportGenerator;
     }
 
