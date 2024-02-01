@@ -19,29 +19,29 @@ public class FlatSpecification {
             public Predicate toPredicate(Root<FlatEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> predicates = new ArrayList<>();
 
-                if(filter.getAreaFrom() != null){
-                    predicates.add(cb.equal(root.get("areaFrom"), filter.getAreaFrom()));
-                }
-                if(filter.getAreaTo() != null){
-                    predicates.add(cb.equal(root.get("areaTo"), filter.getAreaTo()));
-                }
-                if(filter.getBedroomsFrom() != null){
-                    predicates.add(cb.equal(root.get("bedroomsFrom"), filter.getBedroomsFrom()));
-                }
-                if(filter.getBedroomsTo() != null){
-                    predicates.add(cb.equal(root.get("bedroomsTo"), filter.getBedroomsTo()));
-                }
-                if(filter.getFloors() != null){
-                    predicates.add(cb.equal(root.get("floors"), filter.getFloors()));
-                }
                 if(filter.getPriceFrom() != null){
-                    predicates.add(cb.equal(root.get("priceFrom"), filter.getPriceFrom()));
+                    predicates.add(cb.greaterThanOrEqualTo(root.get("price"), filter.getPriceFrom()));
                 }
                 if(filter.getPriceTo() != null){
-                    predicates.add(cb.equal(root.get("priceTo"), filter.getPriceTo()));
+                    predicates.add(cb.lessThanOrEqualTo(root.get("price"), filter.getPriceTo()));
                 }
-                if(filter.getPhoto() != null){
-                    predicates.add(cb.equal(root.get("photo"), filter.getPhoto()));
+                if(filter.getBedroomsFrom() != null){
+                    predicates.add(cb.greaterThanOrEqualTo(root.get("bedrooms"), filter.getBedroomsFrom()));
+                }
+                if(filter.getBedroomsTo() != null){
+                    predicates.add(cb.lessThanOrEqualTo(root.get("bedrooms"), filter.getBedroomsTo()));
+                }
+                if(filter.getAreaFrom() != null){
+                    predicates.add(cb.greaterThanOrEqualTo(root.get("area"), filter.getAreaFrom()));
+                }
+                if(filter.getAreaTo() != null){
+                    predicates.add(cb.lessThanOrEqualTo(root.get("area"), filter.getAreaTo()));
+                }
+                if(filter.getFloors() != null && filter.getFloors().length != 0){
+                    predicates.add(root.<Integer>get("floor").in(List.of(filter.getFloors())));
+                }
+                if(filter.getPhoto() != null && filter.getPhoto()){
+                    predicates.add(root.get("photoUrls").isNotNull());
                 }
                 return cb.and(predicates.toArray(Predicate[]::new));
             }

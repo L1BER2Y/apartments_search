@@ -13,19 +13,19 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class FlatsFilter {
 
-    private String priceFrom;
+    private Integer priceFrom;
 
-    private String priceTo;
+    private Integer priceTo;
 
-    private String bedroomsFrom;
+    private Integer bedroomsFrom;
 
-    private String bedroomsTo;
+    private Integer bedroomsTo;
 
-    private String areaFrom;
+    private Integer areaFrom;
 
-    private String areaTo;
+    private Integer areaTo;
 
-    private String floors;
+    private Integer[] floors;
 
-    private String photo;
+    private Boolean photo;
 }

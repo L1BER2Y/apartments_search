@@ -1,10 +1,7 @@
 package by.it_academy.jd2.flats_service.core.entity;
 
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
@@ -26,6 +23,7 @@ public class FlatEntity {
     private LocalDateTime dtUpdate;
 
     @Column(name = "offer_type")
+    @Enumerated(EnumType.STRING)
     private OfferType offerType;
 
     private String description;
@@ -48,7 +46,17 @@ public class FlatEntity {
     public FlatEntity() {
     }
 
-    public FlatEntity(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, OfferType offerType, String description, Integer bedrooms, Integer area, Integer price, Integer floor, String[] photoUrls, String originalUrl) {
+    public FlatEntity(UUID uuid,
+                      LocalDateTime dtCreate,
+                      LocalDateTime dtUpdate,
+                      OfferType offerType,
+                      String description,
+                      Integer bedrooms,
+                      Integer area,
+                      Integer price,
+                      Integer floor,
+                      String[] photoUrls,
+                      String originalUrl) {
         this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
@@ -148,37 +156,5 @@ public class FlatEntity {
 
     public void setOriginalUrl(String originalUrl) {
         this.originalUrl = originalUrl;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FlatEntity that = (FlatEntity) o;
-        return Objects.equals(uuid, that.uuid) && Objects.equals(dtCreate, that.dtCreate) && Objects.equals(dtUpdate, that.dtUpdate) && offerType == that.offerType && Objects.equals(description, that.description) && Objects.equals(bedrooms, that.bedrooms) && Objects.equals(area, that.area) && Objects.equals(price, that.price) && Objects.equals(floor, that.floor) && Arrays.equals(photoUrls, that.photoUrls) && Objects.equals(originalUrl, that.originalUrl);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(uuid, dtCreate, dtUpdate, offerType, description, bedrooms, area, price, floor, originalUrl);
-        result = 31 * result + Arrays.hashCode(photoUrls);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "FlatEntity{" +
-                "uuid=" + uuid +
-                ", dtCreate=" + dtCreate +
-                ", dtUpdate=" + dtUpdate +
-                ", offerType=" + offerType +
-                ", description='" + description + '\'' +
-                ", bedrooms=" + bedrooms +
-                ", area=" + area +
-                ", price=" + price +
-                ", floor=" + floor +
-                ", photoUrls=" + Arrays.toString(photoUrls) +
-                ", originalUrl='" + originalUrl + '\'' +
-                '}';
     }
 }

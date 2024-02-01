@@ -8,7 +8,6 @@ import by.it_academy.jd2.flats_service.repository.FlatsRepository;
 import by.it_academy.jd2.flats_service.service.api.IFlatsService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
