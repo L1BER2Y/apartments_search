@@ -16,5 +16,6 @@
         <module>mail-service</module>
         <module>report-service</module>
         <module>flats-service</module>
+        <module>parser-service</module>
     </modules>
 </project>

@@ -1,5 +1,12 @@
 package by.it_academy.jd2.report_service.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -14,9 +21,15 @@ public class ReportEntity {
     private UUID id;
 
     @Column(name = "dt_create")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime dtCreate;
 
     @Column(name = "dt_update")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime dtUpdate;
 
     @Enumerated(EnumType.STRING)
@@ -30,8 +43,16 @@ public class ReportEntity {
     @Column(name = "user_id")
     private String userId;
 
+    @Column(name = "from_date")
+    @JsonFormat(pattern = "yyyy.MM.dd")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate from;
 
+    @Column(name = "to_date")
+    @JsonFormat(pattern = "yyyy.MM.dd")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate to;
 
     public ReportEntity() {
@@ -119,33 +140,5 @@ public class ReportEntity {
 
     public void setTo(LocalDate to) {
         this.to = to;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ReportEntity that = (ReportEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(dtCreate, that.dtCreate) && Objects.equals(dtUpdate, that.dtUpdate) && status == that.status && type == that.type && Objects.equals(description, that.description) && Objects.equals(userId, that.userId) && Objects.equals(from, that.from) && Objects.equals(to, that.to);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, dtCreate, dtUpdate, status, type, description, userId, from, to);
-    }
-
-    @Override
-    public String toString() {
-        return "ReportEntity{" +
-                "id=" + id +
-                ", dtCreate=" + dtCreate +
-                ", dtUpdate=" + dtUpdate +
-                ", status=" + status +
-                ", type=" + type +
-                ", description='" + description + '\'' +
-                ", userId='" + userId + '\'' +
-                ", from=" + from +
-                ", to=" + to +
-                '}';
     }
 }

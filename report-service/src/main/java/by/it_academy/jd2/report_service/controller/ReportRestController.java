@@ -7,6 +7,8 @@ import by.it_academy.jd2.report_service.core.entity.Status;
 import by.it_academy.jd2.report_service.core.entity.Type;
 import by.it_academy.jd2.report_service.service.api.IReportService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,20 +27,17 @@ public class ReportRestController {
     }
 
     @PostMapping("/{type}")
-    public ResponseEntity<String> start(@PathVariable("type") Type type,
-                                        @RequestBody UserActionAuditParamDTO dto) throws IOException {
-        this.reportService.createReport(type, dto);
+    public ResponseEntity<String> create(@PathVariable("type") Type type,
+                                         @RequestBody UserActionAuditParamDTO dto) {
+        this.reportService.create(type, dto);
         return new ResponseEntity<>("Отчёт запущен", HttpStatus.CREATED);
     }
 
     @GetMapping
-    public PageOfReportDTO getPage(@RequestParam(defaultValue =  "0") Integer page,
-                                   @RequestParam(defaultValue = "20") Integer size) {
-        PageOfReportDTO pageable = new PageOfReportDTO(page, size);
-        Page<ReportEntity> reportsPage = this.reportService.getAllReports(pageable);
-        return new PageOfReportDTO(reportsPage.getNumber(), reportsPage.getSize(),
-                reportsPage.getTotalPages(), reportsPage.getTotalElements(), reportsPage.isFirst(),
-                reportsPage.getNumberOfElements(), reportsPage.isLast(), reportsPage.getContent());
+    public Page<ReportEntity> getPage(@RequestParam(defaultValue =  "1") Integer page,
+                                      @RequestParam(defaultValue = "20") Integer size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return this.reportService.getAllReports(pageable);
     }
 
     @GetMapping("/{uuid}/export")
