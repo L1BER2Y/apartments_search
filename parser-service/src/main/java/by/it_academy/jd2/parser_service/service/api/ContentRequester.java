@@ -1,8 +1,8 @@
 package by.it_academy.jd2.parser_service.service.api;
 
-import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 public interface ContentRequester {
 
-    Document getHtmlDocument(String url);
+    Element getHtmlDocument(String url);
 }

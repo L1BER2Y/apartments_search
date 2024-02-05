@@ -1,3 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
+
+  url:
+    base-sale: https://realt.by/belarus/sale/flats
+    base-rent: https://realt.by/belarus/rent/flat-for-long
