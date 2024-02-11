@@ -14,6 +14,8 @@ import by.it_academy.jd2.user_service.service.api.IVerificationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 import static by.it_academy.jd2.user_service.core.entity.AuditedAction.VERIFICATION;
@@ -32,6 +34,7 @@ public class VerificationService implements IVerificationService {
     }
 
     @Override
+    @Transactional
     @Audited(auditedAction = VERIFICATION, essenceType = USER)
     public void verify(VerificationDTO verificationDTO) {
         Optional<VerificationEntity> verificationEntity = verificationRepository.findVerificationEntitiesByCode(verificationDTO.getCode());
