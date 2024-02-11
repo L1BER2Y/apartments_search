@@ -24,10 +24,9 @@ public class ExceptionHandlerResolver {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
-    public ErrorResponse validationError(ValidationException exception) {
+    public String validationError(ValidationException exception) {
         log.error(exception.getMessage());
-        return new ErrorResponse("error",
-                "Запрос некорректен. Сервер не может обработать запрос");
+        return exception.getMessage();
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)

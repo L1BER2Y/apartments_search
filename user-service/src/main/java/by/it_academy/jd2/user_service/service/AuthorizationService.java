@@ -41,8 +41,11 @@ public class AuthorizationService implements IAuthorizationService {
         );
         UserEntity entity = convertToEntity(byMail);
 
+        if (!entity.getStatus().equals(Status.ACTIVATED)) {
+            throw new ValidationException("Вы не прошли верификацию. Пожалуйста, проверьте свою почту.");
+        }
         if (!passwordEncoder.matches(user.getPassword(), entity.getPassword())) {
-            throw new ValidationException();
+            throw new ValidationException("Неправильный логин или пароль");
         }
 
         Optional<UserDetailsDTO> idFioAndRoleByEmail = this.userRepository.findIdFioAndRoleByEmail(user.getMail());

@@ -6,9 +6,9 @@ import org.jsoup.nodes.Element;
 @Slf4j
 public class PaginationParser {
 
-    public static String parseNextPage(Element content) {
-        return "https://realt.by" +
-                content.getElementsByAttributeValue("data-testid", "nextBtn")
+    public static String parseNextPageLink(Element content) {
+        return "https://re.kufar.by" +
+                content.getElementsByAttributeValue("data-testid", "realty-pagination-next-link")
                         .attr("href");
     }
 }

@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
 
     @Query("SELECT new by.it_academy.jd2.user_service.core.dto.UserDetailsDTO(u.id, u.mail, u.fio, u.role) FROM UserEntity AS u WHERE u.mail = :email")
     Optional<UserDetailsDTO> findIdFioAndRoleByEmail(String email);
+
+    Boolean existsByMail(String mail);
 }

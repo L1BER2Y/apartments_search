@@ -1,15 +1,17 @@
 package by.it_academy.jd2.parser_service.service;
 
-import by.it_academy.jd2.parser_service.service.api.ContentRequester;
+import by.it_academy.jd2.parser_service.service.api.IRentContentRequester;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import static by.it_academy.jd2.parser_service.service.utils.Requester.requestHtmlDoc;
 @Slf4j
-public class RentContentRequester implements ContentRequester {
+@Component
+public class RentContentRequester implements IRentContentRequester {
 
-    @Value("${url.base-rent}")
+    @Value("${app.url.base-rent}")
     private String baseUrl;
 
     @Override

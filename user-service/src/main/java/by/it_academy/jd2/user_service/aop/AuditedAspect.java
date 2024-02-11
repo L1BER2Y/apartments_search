@@ -82,7 +82,7 @@ public class AuditedAspect {
     }
 
     private UserEntity findByMail(String email) {
-        return userRepository.findByMail(email).orElseThrow(ValidationException::new);
+        return userRepository.findByMail(email).orElseThrow(VerifyError::new);
     }
 
     private AuditDTO createAuditDto(Audited annotation, Userable userable) {

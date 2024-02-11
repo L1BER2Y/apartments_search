@@ -2,7 +2,10 @@ package by.it_academy.jd2.user_service.service;
 
 import by.it_academy.jd2.user_service.aop.Audited;
 import by.it_academy.jd2.user_service.core.dto.*;
+import by.it_academy.jd2.user_service.core.entity.Role;
+import by.it_academy.jd2.user_service.core.entity.Status;
 import by.it_academy.jd2.user_service.core.exceptions.InternalServerErrorException;
+import by.it_academy.jd2.user_service.core.exceptions.ValidationException;
 import by.it_academy.jd2.user_service.repository.UserRepository;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
@@ -42,8 +45,26 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     @Audited(auditedAction = REGISTRATION, essenceType = USER)
-    public UserEntity register(UserEntity entity) {
-        return save(entity);
+    public UserEntity register(UserEntity user) {
+        validateMail(user.getMail());
+        UserEntity entity = new UserEntity();
+        entity.setId(UUID.randomUUID());
+        entity.setDtCreate(LocalDateTime.now());
+        entity.setDtUpdate(entity.getDtCreate());
+        entity.setMail(user.getMail());
+        entity.setFio(user.getFio());
+        entity.setRole(Role.USER);
+        entity.setStatus(Status.WAITING_ACTIVATION);
+        entity.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        try{
+            this.userRepository.saveAndFlush(entity);
+        } catch (DataAccessException e) {
+            throw new InternalServerErrorException(e.getMessage());
+        }
+
+        this.verificationQueueService.add(entity);
+        return entity;
     }
 
     @Override
@@ -78,7 +99,6 @@ public class UserService implements IUserService {
             throw new InternalServerErrorException(e.getMessage());
         }
 
-        this.verificationQueueService.add(entity);
         return entity;
     }
 
@@ -93,7 +113,6 @@ public class UserService implements IUserService {
         user.setRole(entity.getRole());
         user.setStatus(entity.getStatus());
         user.setPassword(passwordEncoder.encode(entity.getPassword()));
-
         try {
             this.userRepository.saveAndFlush(user);
         } catch (DataAccessException e) {
@@ -116,5 +135,11 @@ public class UserService implements IUserService {
 
     private UserEntity convertFromOptionalToEntity(Optional<UserEntity> entity) {
         return modelMapper.map(entity, UserEntity.class);
+    }
+
+    private void validateMail(String mail) {
+        if (userRepository.existsByMail(mail)) {
+            throw new ValidationException("Такой логин уже используется");
+        }
     }
 }

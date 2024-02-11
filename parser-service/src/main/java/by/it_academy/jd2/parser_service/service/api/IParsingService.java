@@ -4,5 +4,5 @@ public interface IParsingService {
 
     void saveRentParsing();
     void saveSaleParsing();
-    void requestAndSave(ContentRequester requester, Parser parser);
+    void requestAndSaveFlats(ContentRequester requester, Parser parser);
 }
