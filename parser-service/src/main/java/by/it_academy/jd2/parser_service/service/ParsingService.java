@@ -20,6 +20,16 @@ public class ParsingService implements IParsingService {
     }
 
     @Override
+    public void saveRentParsing() {
+
+    }
+
+    @Override
+    public void saveSaleParsing() {
+
+    }
+
+    @Override
     public void requestAndSave(ContentRequester requester, Parser parser) {
         String nextPageUrl = null;
         for (int j = 0; j < 10; j++) {

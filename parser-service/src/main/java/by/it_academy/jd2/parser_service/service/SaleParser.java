@@ -4,12 +4,10 @@ import by.it_academy.jd2.parser_service.core.entity.FlatEntity;
 import by.it_academy.jd2.parser_service.service.api.Parser;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Slf4j
-@Component
 public class SaleParser implements Parser {
 
     @Override
