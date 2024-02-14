@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -47,6 +48,7 @@ public class ReportService implements IReportService {
     }
 
     @Override
+    @Transactional
     public void create(Type type, UserActionAuditParamDTO params) {
         ReportEntity entity = new ReportEntity();
         entity.setId(UUID.randomUUID());
