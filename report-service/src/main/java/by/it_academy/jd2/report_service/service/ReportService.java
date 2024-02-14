@@ -65,8 +65,8 @@ public class ReportService implements IReportService {
 
         List<AuditEntity> audits = auditRepository.findAllByParam(
                 UUID.fromString(params.getUserId()),
-                LocalDateTime.of(params.getFrom(), LocalTime.of(0, 0)),
-                LocalDateTime.of(params.getTo(), LocalTime.of(0, 0))
+                LocalDateTime.of(params.getFrom(), LocalTime.MIN),
+                LocalDateTime.of(params.getTo(), LocalTime.MAX)
         );
 
         try {
