@@ -3,7 +3,6 @@ package by.it_academy.jd2.user_service.core.exceptions;
 import by.it_academy.jd2.user_service.core.exceptions.body.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,14 +18,14 @@ public class ExceptionHandlerResolver {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ErrorResponse handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException exception) {
         log.error(exception.getMessage());
-        return new ErrorResponse("error",
-                "Запрос некорректен. Попробуйте заново.");
+        return new ErrorResponse("error", "Запрос некорректен. Попробуйте заново.");
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ErrorResponse> validationError(ValidationException exception) {
+    public ErrorResponse validationError(ValidationException exception) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(new ErrorResponse("error", exception.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ErrorResponse("error", exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
