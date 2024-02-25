@@ -1,8 +1,9 @@
 package by.it_academy.jd2.report_service.controller;
 
+import by.it_academy.jd2.report_service.core.converters.api.IPageConverter;
 import by.it_academy.jd2.report_service.core.dto.PageOfReportDTO;
+import by.it_academy.jd2.report_service.core.dto.ReportDTO;
 import by.it_academy.jd2.report_service.core.dto.UserActionAuditParamDTO;
-import by.it_academy.jd2.report_service.core.entity.ReportEntity;
 import by.it_academy.jd2.report_service.core.entity.Status;
 import by.it_academy.jd2.report_service.core.entity.Type;
 import by.it_academy.jd2.report_service.service.api.IReportService;
@@ -21,9 +22,11 @@ import java.util.UUID;
 public class ReportRestController {
 
     private final IReportService reportService;
+    private final IPageConverter pageConverter;
 
-    public ReportRestController(IReportService reportService) {
+    public ReportRestController(IReportService reportService, IPageConverter pageConverter) {
         this.reportService = reportService;
+        this.pageConverter = pageConverter;
     }
 
     @PostMapping("/{type}")
@@ -34,10 +37,11 @@ public class ReportRestController {
     }
 
     @GetMapping
-    public Page<ReportEntity> getPage(@RequestParam(defaultValue =  "1") Integer page,
-                                      @RequestParam(defaultValue = "20") Integer size) {
+    public PageOfReportDTO<ReportDTO> getPage(@RequestParam(defaultValue =  "1") Integer page,
+                                              @RequestParam(defaultValue = "20") Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        return this.reportService.getAllReports(pageable);
+        Page<ReportDTO> reportPage = this.reportService.getAllReports(pageable);
+        return pageConverter.convertPageToPageOfReportDTO(reportPage);
     }
 
     @GetMapping("/{uuid}/export")

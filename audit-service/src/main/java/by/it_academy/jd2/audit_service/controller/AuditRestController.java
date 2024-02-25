@@ -1,5 +1,6 @@
 package by.it_academy.jd2.audit_service.controller;
 
+import by.it_academy.jd2.audit_service.core.converters.api.IPageConverter;
 import by.it_academy.jd2.audit_service.core.dto.AuditDTO;
 import by.it_academy.jd2.audit_service.core.dto.PageOfAuditDTO;
 import by.it_academy.jd2.audit_service.core.dto.UserAuditDTO;
@@ -19,20 +20,22 @@ import java.util.UUID;
 public class AuditRestController {
     private final IAuditService service;
     private final ModelMapper mapper;
+    private final IPageConverter pageConverter;
 
-    public AuditRestController(IAuditService service, ModelMapper mapper) {
+    public AuditRestController(IAuditService service, ModelMapper mapper, IPageConverter pageConverter) {
         this.service = service;
         this.mapper = mapper;
+        this.pageConverter = pageConverter;
     }
 
     @GetMapping
     @ResponseBody
-    public Page<AuditDTO> getAudit(@RequestParam(defaultValue =  "0") Integer page,
-                                   @RequestParam(defaultValue = "20") Integer size
+    public PageOfAuditDTO<AuditDTO> getAudit(@RequestParam(name = "page", defaultValue =  "1") Integer page,
+                                             @RequestParam(name = "size", defaultValue = "20") Integer size
     ) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<AuditEntity> audit = this.service.getAudit(pageable);
-        return audit.map(AuditRestController::apply);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<AuditDTO> audit = this.service.getAudit(pageable);
+        return pageConverter.convertPageToPageOfAuditDTO(audit);
     }
 
     @GetMapping("/{uuid}")

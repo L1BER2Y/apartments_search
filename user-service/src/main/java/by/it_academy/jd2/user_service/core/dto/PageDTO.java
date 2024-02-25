@@ -1,4 +1,4 @@
-package by.it_academy.jd2.flats_service.core.dto;
+package by.it_academy.jd2.user_service.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -14,12 +14,10 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class PageOfFlatDTO<FlatDTO> {
+public class PageDTO<UserDTO> {
 
-    @JsonProperty("number")
     private Integer number;
 
-    @JsonProperty("size")
     private Integer size;
 
     @JsonProperty("total_pages")
@@ -28,16 +26,13 @@ public class PageOfFlatDTO<FlatDTO> {
     @JsonProperty("total_elements")
     private Long totalElements;
 
-    @JsonProperty("first")
     private Boolean first;
 
     @JsonProperty("number_of_elements")
     private Integer numberOfElements;
 
-    @JsonProperty("last")
     private Boolean last;
 
     @JsonProperty("content")
-    private List<FlatDTO> content;
-
+    private List<UserDTO> content;
 }

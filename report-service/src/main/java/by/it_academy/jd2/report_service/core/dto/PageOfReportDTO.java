@@ -15,28 +15,30 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class PageOfReportDTO {
-    private int number;
-    private int size;
+public class PageOfReportDTO<ReportDTO> {
+
+    @JsonProperty("number")
+    private Integer number;
+
+    @JsonProperty("size")
+    private Integer size;
 
     @JsonProperty("total_pages")
-    private int totalPages;
+    private Integer totalPages;
 
     @JsonProperty("total_elements")
-    private long totalElements;
+    private Long totalElements;
 
-    private boolean first;
+    @JsonProperty("first")
+    private Boolean first;
 
     @JsonProperty("number_of_elements")
-    private int numberOfElements;
+    private Integer numberOfElements;
 
-    private boolean last;
+    @JsonProperty("last")
+    private Boolean last;
 
-    private List<ReportEntity> content;
-
-    public PageOfReportDTO(int number, int size) {
-        this.number = number;
-        this.size = size;
-    }
+    @JsonProperty("content")
+    private List<ReportDTO> content;
 
 }

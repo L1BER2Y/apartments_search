@@ -1,5 +1,7 @@
 package by.it_academy.jd2.report_service.service;
 
+import by.it_academy.jd2.report_service.core.converters.api.IReportConverter;
+import by.it_academy.jd2.report_service.core.dto.ReportDTO;
 import by.it_academy.jd2.report_service.core.dto.UserActionAuditParamDTO;
 import by.it_academy.jd2.report_service.core.entity.AuditEntity;
 import by.it_academy.jd2.report_service.core.entity.ReportEntity;
@@ -13,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -40,11 +42,13 @@ public class ReportService implements IReportService {
     private final ReportRepository reportRepository;
     private final AuditRepository auditRepository;
     private final IReportGenerator reportGenerator;
+    private final IReportConverter reportConverter;
 
-    public ReportService(ReportRepository reportRepository, AuditRepository auditRepository, IReportGenerator reportGenerator) {
+    public ReportService(ReportRepository reportRepository, AuditRepository auditRepository, IReportGenerator reportGenerator, IReportConverter reportConverter) {
         this.reportRepository = reportRepository;
         this.auditRepository = auditRepository;
         this.reportGenerator = reportGenerator;
+        this.reportConverter = reportConverter;
     }
 
     @Override
@@ -83,8 +87,12 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public Page<ReportEntity> getAllReports(Pageable pageable) {
-        return this.reportRepository.findAll(pageable);
+    public Page<ReportDTO> getAllReports(Pageable pageable) {
+        Page<ReportEntity> entityPage = this.reportRepository.findAll(pageable);
+        List<ReportDTO> reportDTOList = entityPage.stream()
+                .map(reportConverter::convertReportEntityToDTO)
+                .toList();
+        return new PageImpl<ReportDTO>(reportDTOList, entityPage.getPageable(), entityPage.getTotalElements());
     }
 
     @Override

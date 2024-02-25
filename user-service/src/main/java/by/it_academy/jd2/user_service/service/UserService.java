@@ -13,12 +13,15 @@ import by.it_academy.jd2.user_service.service.api.IVerificationQueueService;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -69,8 +72,12 @@ public class UserService implements IUserService {
 
     @Override
     @Audited(auditedAction = INFO_ABOUT_ALL_USERS, essenceType = USER)
-    public Page<UserEntity> getPage(Pageable pageable) {
-        return this.userRepository.findAll(pageable);
+    public Page<UserDTO> getPage(Pageable pageable) {
+        Page<UserEntity> entityPage = this.userRepository.findAll(pageable);
+        List<UserDTO> dtoList = entityPage.stream()
+                .map(UserService::apply)
+                .toList();
+        return new PageImpl<UserDTO>(dtoList, entityPage.getPageable(), entityPage.getTotalElements());
     }
 
     @Override
@@ -107,12 +114,16 @@ public class UserService implements IUserService {
     @Audited(auditedAction = UPDATE_USER, essenceType = USER)
     public UserEntity update(UserEntity entity, UUID id, LocalDateTime dtUpdate) {
         UserEntity user = findById(id);
-        user.setDtUpdate(dtUpdate);
-        user.setMail(entity.getMail());
-        user.setFio(entity.getFio());
-        user.setRole(entity.getRole());
-        user.setStatus(entity.getStatus());
-        user.setPassword(passwordEncoder.encode(entity.getPassword()));
+        if(user.getDtUpdate().truncatedTo(ChronoUnit.MILLIS).isEqual(dtUpdate.truncatedTo(ChronoUnit.MILLIS))) {
+            throw new ValidationException("Недопустимый dt_update - " + dtUpdate);
+        } else {
+            user.setDtUpdate(dtUpdate);
+            user.setMail(entity.getMail());
+            user.setFio(entity.getFio());
+            user.setRole(entity.getRole());
+            user.setStatus(entity.getStatus());
+            user.setPassword(passwordEncoder.encode(entity.getPassword()));
+        }
         try {
             this.userRepository.saveAndFlush(user);
         } catch (DataAccessException e) {
@@ -127,6 +138,18 @@ public class UserService implements IUserService {
         UserDetailsDTO userDetails = (UserDetailsDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<UserEntity> userEntity = userRepository.findById(userDetails.getId());
         return convertToEntity(userEntity);
+    }
+
+    private static UserDTO apply(UserEntity user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setDtCreate(user.getDtCreate());
+        userDTO.setDtUpdate(user.getDtUpdate());
+        userDTO.setMail(user.getMail());
+        userDTO.setFio(user.getFio());
+        userDTO.setRole(user.getRole());
+        userDTO.setStatus(user.getStatus());
+        return userDTO;
     }
 
     private UserEntity convertToEntity(Optional<UserEntity> entity) {

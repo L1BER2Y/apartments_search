@@ -23,7 +23,7 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class UserDTO {
 
-    @JsonProperty("id")
+    @JsonProperty("uuid")
     private UUID id;
 
     @JsonProperty("dt_create")

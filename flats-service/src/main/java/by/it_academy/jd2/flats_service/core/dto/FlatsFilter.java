@@ -1,15 +1,11 @@
 package by.it_academy.jd2.flats_service.core.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 public class FlatsFilter {
 

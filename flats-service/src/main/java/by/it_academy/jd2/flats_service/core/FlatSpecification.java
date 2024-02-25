@@ -40,8 +40,8 @@ public class FlatSpecification {
                 if(filter.getFloors() != null && filter.getFloors().length != 0){
                     predicates.add(root.<Integer>get("floor").in(List.of(filter.getFloors())));
                 }
-                if(filter.getPhoto() != null && filter.getPhoto()){
-                    predicates.add(root.get("photoUrls").isNotNull());
+                if(filter.getPhoto()){
+                    predicates.add(cb.isNotNull(root.get("photoUrls")));
                 }
                 return cb.and(predicates.toArray(Predicate[]::new));
             }

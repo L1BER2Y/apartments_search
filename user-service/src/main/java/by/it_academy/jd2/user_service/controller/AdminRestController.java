@@ -1,5 +1,7 @@
 package by.it_academy.jd2.user_service.controller;
 
+import by.it_academy.jd2.user_service.core.converters.api.IPageConverter;
+import by.it_academy.jd2.user_service.core.dto.PageDTO;
 import by.it_academy.jd2.user_service.core.dto.UserCreateDTO;
 import by.it_academy.jd2.user_service.core.dto.UserDTO;
 import by.it_academy.jd2.user_service.core.entity.UserEntity;
@@ -20,10 +22,12 @@ import java.util.UUID;
 public class AdminRestController {
     private final IUserService service;
     private final ModelMapper modelMapper;
+    private final IPageConverter pageConverter;
 
-    public AdminRestController(IUserService service, ModelMapper modelMapper) {
+    public AdminRestController(IUserService service, ModelMapper modelMapper, IPageConverter pageConverter) {
         this.service = service;
         this.modelMapper = modelMapper;
+        this.pageConverter = pageConverter;
     }
 
     @PostMapping
@@ -36,17 +40,17 @@ public class AdminRestController {
 
     @GetMapping
     @ResponseBody
-    public Page<UserDTO> getUsers(@RequestParam(defaultValue =  "0") Integer number,
-                                  @RequestParam(defaultValue = "20") Integer size
+    public PageDTO<UserDTO> getPage(@RequestParam(name = "page", defaultValue =  "1") Integer number,
+                                    @RequestParam(name = "size", defaultValue = "20") Integer size
     ) {
-        Pageable pageable = PageRequest.of(number, size);
-        Page<UserEntity> page = this.service.getPage(pageable);
-        return page.map(AdminRestController::apply);
+        Pageable pageable = PageRequest.of(number - 1, size);
+        Page<UserDTO> page = this.service.getPage(pageable);
+        return pageConverter.convertPageDtoFromPage(page);
     }
 
     @GetMapping("/{uuid}")
     @ResponseBody
-    public UserDTO get(@PathVariable("uuid") UUID id) {
+    public UserDTO findBy(@PathVariable("uuid") UUID id) {
         return convertToDto(this.service.findById(id));
     }
 
@@ -68,15 +72,4 @@ public class AdminRestController {
         return modelMapper.map(userDTO, UserEntity.class);
     }
 
-    private static UserDTO apply(UserEntity user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setDtCreate(user.getDtCreate());
-        userDTO.setDtUpdate(user.getDtUpdate());
-        userDTO.setMail(user.getMail());
-        userDTO.setFio(user.getFio());
-        userDTO.setRole(user.getRole());
-        userDTO.setStatus(user.getStatus());
-        return userDTO;
-    }
 }

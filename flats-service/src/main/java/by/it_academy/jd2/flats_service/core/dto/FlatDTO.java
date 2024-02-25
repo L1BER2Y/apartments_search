@@ -33,9 +33,6 @@ public class FlatDTO {
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("bedrooms")
-    private Integer bedrooms;
-
     @JsonProperty("area")
     private Integer area;
 
@@ -44,6 +41,9 @@ public class FlatDTO {
 
     @JsonProperty("floor")
     private Integer floor;
+
+    @JsonProperty("bedrooms")
+    private Integer bedrooms;
 
     @JsonProperty("photo_urls")
     private String[] photoUrls;
