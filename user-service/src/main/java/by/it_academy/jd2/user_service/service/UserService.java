@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -134,17 +135,18 @@ public class UserService implements IUserService {
 
     @Override
     @Audited(auditedAction = INFO_ABOUT_ME, essenceType = USER)
-    public UserEntity find() {
+    public UserDTO find() {
         UserDetailsDTO userDetails = (UserDetailsDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<UserEntity> userEntity = userRepository.findById(userDetails.getId());
-        return convertToEntity(userEntity);
+        UserEntity entity = convertToEntity(userEntity);
+        return apply(entity);
     }
 
     private static UserDTO apply(UserEntity user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
-        userDTO.setDtCreate(user.getDtCreate());
-        userDTO.setDtUpdate(user.getDtUpdate());
+        userDTO.setDtCreate(user.getDtCreate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        userDTO.setDtUpdate(user.getDtUpdate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         userDTO.setMail(user.getMail());
         userDTO.setFio(user.getFio());
         userDTO.setRole(user.getRole());

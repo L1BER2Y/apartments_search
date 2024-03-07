@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface IUserService {
-    UserEntity find();
+    UserDTO find();
     Page<UserDTO> getPage(Pageable pageable);
     UserEntity findById(UUID id);
     UserEntity save(UserEntity user);

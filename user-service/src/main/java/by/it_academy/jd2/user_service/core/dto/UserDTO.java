@@ -27,16 +27,10 @@ public class UserDTO {
     private UUID id;
 
     @JsonProperty("dt_create")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime dtCreate;
+    private Long dtCreate;
 
     @JsonProperty("dt_update")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime dtUpdate;
+    private Long dtUpdate;
 
     @JsonProperty("mail")
     private String mail;
