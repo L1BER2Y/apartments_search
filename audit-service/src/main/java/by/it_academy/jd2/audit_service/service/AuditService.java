@@ -2,9 +2,11 @@ package by.it_academy.jd2.audit_service.service;
 
 import by.it_academy.jd2.audit_service.core.converters.api.IAuditConverter;
 import by.it_academy.jd2.audit_service.core.dto.AuditDTO;
+import by.it_academy.jd2.audit_service.core.dto.AuditInfoDTO;
 import by.it_academy.jd2.audit_service.core.entity.AuditEntity;
 import by.it_academy.jd2.audit_service.repository.AuditRepository;
 import by.it_academy.jd2.audit_service.service.api.IAuditService;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,24 +20,28 @@ import java.util.UUID;
 public class AuditService implements IAuditService {
     private final AuditRepository repository;
     private final IAuditConverter auditConverter;
+    private final ModelMapper modelMapper;
 
-    public AuditService(AuditRepository repository, IAuditConverter auditConverter) {
+    public AuditService(AuditRepository repository, IAuditConverter auditConverter, ModelMapper modelMapper) {
         this.repository = repository;
         this.auditConverter = auditConverter;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public Page<AuditDTO> getAudit(Pageable pageable) {
+    public Page<AuditInfoDTO> getAudit(Pageable pageable) {
         Page<AuditEntity> entityPage = this.repository.findAll(pageable);
-        List<AuditDTO> auditDTOList = entityPage.stream()
+        List<AuditInfoDTO> auditInfoDTOList = entityPage.stream()
                 .map(auditConverter::convertAuditEntityToDTO)
                 .toList();
-        return new PageImpl<AuditDTO>(auditDTOList, entityPage.getPageable(), entityPage.getTotalElements());
+        return new PageImpl<AuditInfoDTO>(auditInfoDTOList, entityPage.getPageable(), entityPage.getTotalElements());
     }
 
     @Override
-    public Optional<AuditEntity> getAuditById(UUID id) {
-        return this.repository.findById(id);
+    public AuditInfoDTO getAuditById(UUID id) {
+        Optional<AuditEntity> entityOptional = this.repository.findById(id);
+        AuditEntity entity = convertOptionalToEntity(entityOptional);
+        return auditConverter.convertAuditEntityToDTO(entity);
     }
 
     @Override
@@ -57,4 +63,8 @@ public class AuditService implements IAuditService {
         entity.setEssenceId(dto.getTypeId());
         return entity;
     }
+    private AuditEntity convertOptionalToEntity(Optional<AuditEntity> entity) {
+        return modelMapper.map(entity, AuditEntity.class);
+    }
+
 }

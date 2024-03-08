@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -22,10 +21,10 @@ public class FlatDTO {
     private UUID uuid;
 
     @JsonProperty("dt_create")
-    private LocalDateTime dtCreate;
+    private Long dtCreate;
 
     @JsonProperty("dt_update")
-    private LocalDateTime dtUpdate;
+    private Long dtUpdate;
 
     @JsonProperty("offer_type")
     private OfferType offerType;

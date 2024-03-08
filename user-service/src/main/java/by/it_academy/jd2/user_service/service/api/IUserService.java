@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface IUserService {
     UserDTO find();
     Page<UserDTO> getPage(Pageable pageable);
-    UserEntity findById(UUID id);
+    UserDTO findById(UUID id);
     UserEntity save(UserEntity user);
     UserEntity update(UserEntity entity, UUID id, LocalDateTime dtUpdate);
 

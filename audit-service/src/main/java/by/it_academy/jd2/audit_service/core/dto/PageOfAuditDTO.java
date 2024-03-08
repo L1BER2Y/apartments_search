@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class PageOfAuditDTO<AuditDTO> {
+public class PageOfAuditDTO<AuditInfoDTO> {
 
     @JsonProperty("number")
     private Integer number;
@@ -38,6 +38,6 @@ public class PageOfAuditDTO<AuditDTO> {
     private Boolean last;
 
     @JsonProperty("content")
-    private List<AuditDTO> content;
+    private List<AuditInfoDTO> content;
 
 }

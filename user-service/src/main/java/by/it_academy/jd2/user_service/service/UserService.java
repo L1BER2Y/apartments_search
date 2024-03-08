@@ -83,8 +83,9 @@ public class UserService implements IUserService {
 
     @Override
     @Audited(auditedAction = INFO_ABOUT_USER_BY_ID, essenceType = USER)
-    public UserEntity findById(UUID uuid) {
-        return convertFromOptionalToEntity(this.userRepository.findById(uuid));
+    public UserDTO findById(UUID uuid) {
+        UserEntity entity = convertFromOptionalToEntity(this.userRepository.findById(uuid));
+        return apply(entity);
     }
 
     @Override
@@ -114,7 +115,8 @@ public class UserService implements IUserService {
     @Transactional
     @Audited(auditedAction = UPDATE_USER, essenceType = USER)
     public UserEntity update(UserEntity entity, UUID id, LocalDateTime dtUpdate) {
-        UserEntity user = findById(id);
+        Optional<UserEntity> optional = this.userRepository.findById(id);
+        UserEntity user = convertFromOptionalToEntity(optional);
         if(user.getDtUpdate().truncatedTo(ChronoUnit.MILLIS).isEqual(dtUpdate.truncatedTo(ChronoUnit.MILLIS))) {
             throw new ValidationException("Недопустимый dt_update - " + dtUpdate);
         } else {

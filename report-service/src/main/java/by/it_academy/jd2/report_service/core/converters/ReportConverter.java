@@ -6,6 +6,8 @@ import by.it_academy.jd2.report_service.core.dto.UserActionAuditParamDTO;
 import by.it_academy.jd2.report_service.core.entity.ReportEntity;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
+
 @Component
 public class ReportConverter implements IReportConverter {
 
@@ -13,8 +15,8 @@ public class ReportConverter implements IReportConverter {
     public ReportDTO convertReportEntityToDTO(ReportEntity entity) {
         ReportDTO dto = new ReportDTO();
         dto.setUuid(entity.getId());
-        dto.setDtCreate(entity.getDtCreate());
-        dto.setDtUpdate(entity.getDtUpdate());
+        dto.setDtCreate(entity.getDtCreate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        dto.setDtUpdate(entity.getDtUpdate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         dto.setStatus(entity.getStatus());
         dto.setType(entity.getType());
         dto.setDescription(entity.getDescription());

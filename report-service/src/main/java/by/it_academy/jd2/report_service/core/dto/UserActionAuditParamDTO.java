@@ -22,13 +22,13 @@ public class UserActionAuditParamDTO {
     private String userId;
 
     @JsonProperty("from")
-    @JsonFormat(pattern = "yyyy.MM.dd")
+    @JsonFormat(pattern = "dd.MM.yyyy")
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate from;
 
     @JsonProperty("to")
-    @JsonFormat(pattern = "yyyy.MM.dd")
+    @JsonFormat(pattern = "dd.MM.yyyy")
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate to;

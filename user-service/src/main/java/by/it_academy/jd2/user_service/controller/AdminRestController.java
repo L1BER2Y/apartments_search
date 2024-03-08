@@ -51,7 +51,7 @@ public class AdminRestController {
     @GetMapping("/{uuid}")
     @ResponseBody
     public UserDTO findBy(@PathVariable("uuid") UUID id) {
-        return convertToDto(this.service.findById(id));
+        return this.service.findById(id);
     }
 
     @PutMapping("/{uuid}/dt_update/{dt_update}")
