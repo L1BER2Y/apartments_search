@@ -12,16 +12,16 @@ Was studied on the course:
     - Differences between **DDL** and **DML**
     - **Transactions**
     - Differences in development approaches when using **JDBC** and **ORM**
-- Работа с применением MVC что подразумевает разделение на слои:
-    - **Controller** - слой доступа в котором была реализована работа по протоколу **HTTP** через использование библиотеки **Spring Web MVC** внутри которого работает **DispatcherServlet**
-    - **Service** - слой сервиса в котором была реализована бизнес логика и конвертации из **DTO** в **Entity**
-    - **Dao** - слой доступа к данным в котором была реализована работа с **PostgreSQL** через использование библиотеки **Spring Data JPA**
-- Работа с **Maven**
-    - **pom.xml** - как файл с метаинформацией о проекте
-    - Использование тэга **property** для создания переменных которые можно использовать в pom.xml
-    - Автоматизированный запуск **JUnit** тестов через **maven-surefire-plugin**
-    - Автоматический деплой **WAR** файла с использованием плагина tomcat7-maven-plugin и команды mvn clean package tomcat7:deploy
-    - Использование **parent pom** для сборки нескольких Maven проектов подряд
+- Working using MVC, which means dividing into layers:
+    - **Controller** - access layer in which work was implemented using the **HTTP** protocol through the use of the **Spring Web MVC** library within which **DispatcherServlet** works
+    - **Service** - service layer in which business logic and conversion from **DTO** to **Entity** were implemented
+    - **Dao** - data access layer in which work with **PostgreSQL** was implemented through the use of the **Spring Data JPA** library
+- Working with **Maven**
+     - **pom.xml** - as a file with meta information about the project
+     - Using the **property** tag to create variables that can be used in pom.xml
+     - Automated launch of **JUnit** tests via **maven-surefire-plugin**
+     - Automatic deployment of **WAR** file using the tomcat7-maven-plugin plugin and the mvn clean package **tomcat7:deploy command**
+     - Using **parent pom** to build several Maven projects in a row
 - Git
 - Docker
 - OpenAPI
