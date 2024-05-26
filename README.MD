@@ -22,7 +22,11 @@ Was studied on the course:
      - Automated launch of **JUnit** tests via **maven-surefire-plugin**
      - Automatic deployment of **WAR** file using the tomcat7-maven-plugin plugin and the mvn clean package **tomcat7:deploy command**
      - Using **parent pom** to build several Maven projects in a row
-- Git
+- Working with **Git**
+    - **.gitignore** - is a file in the root directory of a Git repository that specifies which files and directories should be ignored by version control. This is useful for excluding temporary files, build artifacts, development environment settings, and other files from the repository that should not be tracked by version control.
+    - **Branch** - Branches allow you to isolate work on new features, bug fixes, or experiments without affecting the main code base. The main branch is usually called main or master, but additional branches can be created for other tasks.
+    - **Pull Request** - is a request to push changes from one branch to another within a version control system, usually in a repository host such as GitHub, GitLab or Bitbucket. Pull Request allows project members to discuss changes, conduct code reviews, and test code before merging it into the main branch.
+    - **Merge Conflict** - Occurs when Git is unable to automatically merge changes from different branches due to conflicting changes on the same lines in the same file. In such cases, you must manually resolve the conflict by choosing which changes to keep.
 - Docker
 - OpenAPI
 - Spring framework
