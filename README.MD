@@ -64,4 +64,4 @@ Was studied on the course:
 - [Docker](https://www.docker.com/)
 
 # Future plans:
-Unit-testing, NoSQL database, Message service(RabbitMQ)
+Unit-testing, NoSQL database, Message broker(RabbitMQ)
