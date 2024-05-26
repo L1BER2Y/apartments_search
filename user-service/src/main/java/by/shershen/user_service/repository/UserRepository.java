@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     Optional<UserEntity> findByMail(String mail);
 
-    @Query("SELECT new by.it_academy.jd2.user_service.core.dto.UserDetailsDTO(u.id, u.mail, u.fio, u.role) FROM UserEntity AS u WHERE u.mail = :email")
+    @Query("SELECT new by.shershen.user_service.core.dto.UserDetailsDTO(u.id, u.mail, u.fio, u.role) FROM UserEntity AS u WHERE u.mail = :email")
     Optional<UserDetailsDTO> findIdFioAndRoleByEmail(String email);
 
     Boolean existsByMail(String mail);
