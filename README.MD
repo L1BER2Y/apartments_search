@@ -27,10 +27,31 @@ Was studied on the course:
     - **Branch** - Branches allow you to isolate work on new features, bug fixes, or experiments without affecting the main code base. The main branch is usually called main or master, but additional branches can be created for other tasks.
     - **Pull Request** - is a request to push changes from one branch to another within a version control system, usually in a repository host such as GitHub, GitLab or Bitbucket. Pull Request allows project members to discuss changes, conduct code reviews, and test code before merging it into the main branch.
     - **Merge Conflict** - Occurs when Git is unable to automatically merge changes from different branches due to conflicting changes on the same lines in the same file. In such cases, you must manually resolve the conflict by choosing which changes to keep.
-- Docker
-- OpenAPI
-- Spring framework
-- Async
+- Working with **Docker**
+    - **Dockerfile** - As a file containing a set of instructions for creating a Docker image. It determines what steps need to be followed to install the desired software and its configuration. Basic instructions:
+        - **FROM** - Specifies the base image on which the new image will be built. This is a mandatory instruction that starts any Dockerfile.
+        - **RUN** - Executes commands during the image build process. Typically used to install packages and perform other configuration operations.
+        - **CMD** - Specifies the command that will be executed when the container starts. Unlike RUN, it is not executed during image build, but only when the container is started.
+        - **COPY** - Copies files and directories from the computer where the image is assembled into the container file system.
+        - **ADD** - Similar to COPY but has additional features such as unzipping local files and loading files from a URL.
+        - **WORKDIR** - Specifies the working directory for subsequent RUN, CMD, ENTRYPOINT, COPY and ADD instructions.
+        - **ENV** - Sets environment variables that will be available in the container.
+    - **Image** is an immutable template that contains everything you need to run the application: the assembled application and settings. The image is created based on the instructions from the Dockerfile. Images can be stored in an image registry (e.g. Docker Hub) and reused to build containers.
+        - To create an image from a Dockerfile, while in the folder with the file, run the command in the console:
+        `docker build -t %specify the desired name of the image%`
+    - **Container** is an image instance running in an isolated environment. Containers use host resources (CPU, memory, file system) and provide isolation of applications from each other. Containers make it easy to deploy, scale, and move applications between different environments.
+        - To create a container from a previously created image, run the command in the console
+        `docker run %name of the image created at the previous stage%`
+        - The following options are often specified:
+            - `--name` - specify the name of the image. For example: `app_name:version`
+            - `-p`- indicate the access port to the container. For example: `80:8080`
+            - `-e` - indicate values for environment variables. For example: `VARIABLE_NAME=VARIABLE VALUE`
+    - **Compose** is a tool for defining and running multi-container Docker applications. Using the docker-compose.yml file, you can describe the configuration of all the services that will work together (for example, web server, database, cache). Docker Compose makes it easy to manage and run complex applications.
+- Working with **OpenAPI**
+    - **paths** - Describes the paths (endpoints) and operations (HTTP methods) for interacting with the API. This is a key part of the specification that defines how clients can interact with the server.
+    - **components** - Contains reusable parts of the specification, such as data schemas, parameters, responses, etc.
+    - **security** - Describes the security schemes used to protect the API. May include mechanisms such as OAuth2, API keys and basic authentication.
+    - **tags** - A list of tags to simplify navigation and grouping of operations in the API documentation.
 
 # Used technologies and frameworks:
 - [Java 17](https://docs.oracle.com/en/java/javase/17/docs/api/)
