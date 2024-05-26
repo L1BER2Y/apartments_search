@@ -68,3 +68,4 @@ Was studied on the course:
 Description
 
 # Future plans:
+Unit-testing, NoSQL database, Message service(RabbitMQ)
