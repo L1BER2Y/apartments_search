@@ -63,9 +63,5 @@ Was studied on the course:
 - [PostgreSQL](https://www.postgresql.org/)
 - [Docker](https://www.docker.com/)
 
-# Project description: Housing search aggregator
-
-Description
-
 # Future plans:
 Unit-testing, NoSQL database, Message service(RabbitMQ)
