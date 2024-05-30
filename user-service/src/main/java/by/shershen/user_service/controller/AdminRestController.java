@@ -35,7 +35,7 @@ public class AdminRestController {
     public ResponseEntity<String> create(@RequestBody UserCreateDTO user) {
         UserEntity userEntity = convertToEntity(user);
         this.service.save(userEntity);
-        return new ResponseEntity<>("Пользователь добавлен", HttpStatus.CREATED);
+        return new ResponseEntity<>("User created", HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -61,7 +61,7 @@ public class AdminRestController {
     ) {
         UserEntity userEntity = convertToEntity(userCreateDTO);
         this.service.update(userEntity, uuid, dtUpdate);
-        return ResponseEntity.ok("Пользователь обновлен");
+        return ResponseEntity.ok("User updated");
     }
 
     private UserDTO convertToDto(UserEntity entity) {

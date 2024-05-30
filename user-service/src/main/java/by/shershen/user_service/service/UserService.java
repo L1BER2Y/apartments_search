@@ -1,7 +1,6 @@
 package by.shershen.user_service.service;
 
 import by.shershen.user_service.aop.Audited;
-import by.it_academy.jd2.user_service.core.dto.*;
 import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.dto.UserDetailsDTO;
 import by.shershen.user_service.core.entity.Role;
@@ -94,6 +93,7 @@ public class UserService implements IUserService {
     @Transactional
     @Audited(auditedAction = SAVE_USER, essenceType = USER)
     public UserEntity save(UserEntity user) {
+        validateMail(user.getMail());
         UserEntity entity = new UserEntity();
         entity.setId(UUID.randomUUID());
         entity.setDtCreate(LocalDateTime.now());

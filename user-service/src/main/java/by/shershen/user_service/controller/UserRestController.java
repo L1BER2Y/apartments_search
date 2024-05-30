@@ -33,7 +33,7 @@ public class UserRestController {
     public ResponseEntity<String> registration(@RequestBody UserRegDTO userRegDTO) {
         UserEntity userEntity = convertToEntity(userRegDTO);
         this.userService.register(userEntity);
-        return new ResponseEntity<>("Пользователь зарегистрирован", HttpStatus.CREATED);
+        return new ResponseEntity<>("User registered", HttpStatus.CREATED);
     }
 
     @GetMapping("/verification")
@@ -42,14 +42,14 @@ public class UserRestController {
                                                @RequestParam(value = "mail") String mail) {
         VerificationDTO dto = new VerificationDTO(code, mail);
         verificationService.verify(dto);
-        return new ResponseEntity<>("Пользователь верифицирован", HttpStatus.OK);
+        return new ResponseEntity<>("User verified", HttpStatus.OK);
     }
 
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<String> login(@RequestBody UserLoginDTO userLoginDTO) {
         String token = authorizationService.login(userLoginDTO);
-        return new ResponseEntity<>("Токен для авторизации " + token, HttpStatus.OK);
+        return new ResponseEntity<>("Authorization token " + token, HttpStatus.OK);
     }
 
     @GetMapping("/me")
