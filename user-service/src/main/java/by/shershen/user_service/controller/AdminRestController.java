@@ -6,6 +6,7 @@ import by.shershen.user_service.core.dto.UserCreateDTO;
 import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.service.api.IUserService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,16 +20,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class AdminRestController {
     private final IUserService service;
     private final ModelMapper modelMapper;
     private final IPageConverter pageConverter;
-
-    public AdminRestController(IUserService service, ModelMapper modelMapper, IPageConverter pageConverter) {
-        this.service = service;
-        this.modelMapper = modelMapper;
-        this.pageConverter = pageConverter;
-    }
 
     @PostMapping
     @ResponseBody

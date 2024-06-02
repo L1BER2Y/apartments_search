@@ -17,35 +17,35 @@ public class ExceptionHandlerResolver {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ErrorResponse handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException exception) {
-        log.error(exception.getMessage());
-        return new ErrorResponse("error", "Запрос некорректен. Попробуйте заново.");
+        log.error(exception.getMessage(), exception);
+        return new ErrorResponse("error", "Incorrect request. Try again.");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
     public ErrorResponse validationError(ValidationException exception) {
-        log.error(exception.getMessage());
+        log.error(exception.getMessage(), exception);
         return new ErrorResponse("error", exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthorizedException.class)
     public ErrorResponse unauthorized(UnauthorizedException exception) {
-        log.error(exception.getMessage());
+        log.error(exception.getMessage(), exception);
         return new ErrorResponse("error", exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
     public ErrorResponse accessDenied(AccessDeniedException exception) {
-        log.error(exception.getMessage());
+        log.error(exception.getMessage(), exception);
         return new ErrorResponse("error", exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(InternalServerErrorException.class)
     public ErrorResponse serverError(InternalServerErrorException exception) {
-        log.error(exception.getMessage());
+        log.error(exception.getMessage(), exception);
         return new ErrorResponse("error", exception.getMessage());
     }
 

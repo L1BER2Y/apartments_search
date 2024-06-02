@@ -168,7 +168,7 @@ public class UserService implements IUserService {
 
     private void validateMail(String mail) {
         if (userRepository.existsByMail(mail)) {
-            throw new ValidationException("Такой логин уже используется");
+            throw new ValidationException("This login has already been used");
         }
     }
 }
