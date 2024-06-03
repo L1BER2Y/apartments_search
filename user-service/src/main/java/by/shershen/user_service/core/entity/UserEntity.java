@@ -2,11 +2,13 @@ package by.shershen.user_service.core.entity;
 
 import by.shershen.user_service.core.dto.Userable;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+@Builder
 @Entity
 @Table(schema = "users", name = "users")
 public class UserEntity implements Userable {
