@@ -11,6 +11,7 @@ import by.shershen.user_service.repository.UserRepository;
 import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.service.api.IUserService;
 import by.shershen.user_service.service.api.IVerificationQueueService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -31,21 +32,13 @@ import static by.shershen.user_service.core.entity.AuditedAction.*;
 import static by.shershen.user_service.core.entity.EssenceType.USER;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final IVerificationQueueService verificationQueueService;
     private final PasswordEncoder passwordEncoder;
 
-
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, IVerificationQueueService verificationQueueService,
-                       PasswordEncoder passwordEncoder
-    ) {
-        this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
-        this.verificationQueueService = verificationQueueService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     @Transactional
@@ -120,7 +113,7 @@ public class UserService implements IUserService {
         Optional<UserEntity> optional = this.userRepository.findById(id);
         UserEntity user = convertFromOptionalToEntity(optional);
         if(user.getDtUpdate().truncatedTo(ChronoUnit.MILLIS).isEqual(dtUpdate.truncatedTo(ChronoUnit.MILLIS))) {
-            throw new ValidationException("Недопустимый dt_update - " + dtUpdate);
+            throw new ValidationException("Unacceptable dt_update - " + dtUpdate);
         } else {
             user.setDtUpdate(dtUpdate);
             user.setMail(entity.getMail());
