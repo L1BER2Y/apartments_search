@@ -72,8 +72,8 @@ public class AdminRestControllerTest {
     private IVerificationService verificationService;
 
     @Test
-    @DisplayName("Test create developer")
-    public void givenUserCreateDto_whenCreateUser_thenCreateUser() throws Exception {
+    @DisplayName("Test createUser developer")
+    public void givenUserCreateDto_whenCreateUser_thenCreateUserUser() throws Exception {
         //given
         UserCreateDTO dto = UserCreateDTO.builder()
                 .fio("Test")
@@ -108,9 +108,9 @@ public class AdminRestControllerTest {
     }
 
     @Test
-    @DisplayName("Test create developer with existing id")
+    @DisplayName("Test createUser developer with existing id")
     @Disabled
-    public void givenUserCreateDto_whenCreateUser_thenErrorResponse() throws Exception {
+    public void givenUserCreateDto_whenCreateUserUser_thenErrorResponse() throws Exception {
         //given
         UserCreateDTO dto = UserCreateDTO.builder()
                 .fio("Test")

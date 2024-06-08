@@ -1,10 +1,12 @@
 package by.shershen.user_service.util;
 
+import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.entity.Role;
 import by.shershen.user_service.core.entity.Status;
 import by.shershen.user_service.core.entity.UserEntity;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 public class DataUtils {
@@ -84,6 +86,18 @@ public class DataUtils {
                 .role(Role.USER)
                 .status(Status.ACTIVATED)
                 .password("test")
+                .build();
+    }
+
+    public static UserDTO getUserDTOPersisted() {
+        return UserDTO.builder()
+                .id(UUID.fromString("eaf4ca36-e201-43c9-9276-3e273ec93f27"))
+                .dtCreate(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .dtUpdate(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .mail("test@mail.com")
+                .fio("Test")
+                .role(Role.USER)
+                .status(Status.ACTIVATED)
                 .build();
     }
 }

@@ -28,7 +28,7 @@ public class AdminRestController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<String> create(@RequestBody UserCreateDTO user) {
+    public ResponseEntity<String> createUser(@RequestBody UserCreateDTO user) {
         UserEntity userEntity = convertToEntity(user);
         this.service.save(userEntity);
         return new ResponseEntity<>("User created", HttpStatus.CREATED);

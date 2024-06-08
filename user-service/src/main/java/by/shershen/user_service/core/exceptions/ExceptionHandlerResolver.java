@@ -15,6 +15,13 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 public class ExceptionHandlerResolver {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ErrorResponse handleEntityNotFoundException(EntityNotFoundException exception) {
+        log.error(exception.getMessage());
+        return new ErrorResponse("error", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ErrorResponse handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException exception) {
         log.error(exception.getMessage(), exception);
