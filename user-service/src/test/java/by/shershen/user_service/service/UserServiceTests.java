@@ -191,14 +191,20 @@ public class UserServiceTests {
     public void givenUserDetails_whenFindInfo_thenRepositoryIsCalled() {
         //given
         UserDetailsDTO userDetails = new UserDetailsDTO(UUID.randomUUID(), "test@mail.com", "Test", Role.USER);
+
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + userDetails.getRole()));
+
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         BDDMockito.given(userRepository.findById(userDetails.getId()))
                 .willReturn(Optional.of(DataUtils.getUserPersisted()));
+
         Mockito.when(userConverter.convertFromOptionalToEntity(any()))
                 .thenReturn(DataUtils.getUserPersisted());
+
         Mockito.when(userConverter.convertFromEntityToDTO(any()))
                 .thenReturn(DataUtils.getUserDTOPersisted());
         //when

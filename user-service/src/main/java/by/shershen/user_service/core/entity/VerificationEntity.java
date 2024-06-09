@@ -4,9 +4,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
+
 import java.util.Objects;
 import java.util.UUID;
 
+@Builder
 @Entity
 @Table(schema = "users", name = "codes")
 public class VerificationEntity {
@@ -18,6 +21,13 @@ public class VerificationEntity {
     private boolean sendCode;
 
     public VerificationEntity() {
+    }
+
+    public VerificationEntity(UUID id, String code, String mail, boolean sendCode) {
+        this.id = id;
+        this.code = code;
+        this.mail = mail;
+        this.sendCode = sendCode;
     }
 
     public UUID getId() {

@@ -1,9 +1,11 @@
 package by.shershen.user_service.util;
 
 import by.shershen.user_service.core.dto.UserDTO;
+import by.shershen.user_service.core.dto.UserLoginDTO;
 import by.shershen.user_service.core.entity.Role;
 import by.shershen.user_service.core.entity.Status;
 import by.shershen.user_service.core.entity.UserEntity;
+import by.shershen.user_service.core.entity.VerificationEntity;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -98,6 +100,22 @@ public class DataUtils {
                 .fio("Test")
                 .role(Role.USER)
                 .status(Status.ACTIVATED)
+                .build();
+    }
+
+    public static UserLoginDTO getUserLoginDTOTransient() {
+        return UserLoginDTO.builder()
+                .mail("test@mail.com")
+                .password("test")
+                .build();
+    }
+
+    public static VerificationEntity getVerificationEntityTransient() {
+        return VerificationEntity.builder()
+                .code("code")
+                .id(UUID.randomUUID())
+                .mail("test@mail.com")
+                .sendCode(true)
                 .build();
     }
 }

@@ -7,6 +7,7 @@ import by.shershen.user_service.core.exceptions.InternalServerErrorException;
 import by.shershen.user_service.repository.VerificationRepository;
 import by.shershen.user_service.service.api.ISendVerificationService;
 import by.shershen.user_service.service.api.IVerificationQueueService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,16 +17,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class SendVerificationService implements IVerificationQueueService {
     private final VerificationRepository verificationRepository;
     private final ISendVerificationService sendVerificationService;
     private final ModelMapper modelMapper;
-
-    public SendVerificationService(VerificationRepository verificationRepository, ISendVerificationService sendVerificationService, ModelMapper modelMapper) {
-        this.verificationRepository = verificationRepository;
-        this.sendVerificationService = sendVerificationService;
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public void add(UserEntity userEntity) {
