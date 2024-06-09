@@ -3,6 +3,7 @@ package by.shershen.user_service.core.dto;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

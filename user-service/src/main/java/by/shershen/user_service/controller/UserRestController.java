@@ -1,5 +1,6 @@
 package by.shershen.user_service.controller;
 
+import by.shershen.user_service.core.converters.api.IUserConverter;
 import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.dto.UserLoginDTO;
 import by.shershen.user_service.core.dto.UserRegDTO;
@@ -8,30 +9,24 @@ import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.service.api.IAuthorizationService;
 import by.shershen.user_service.service.api.IUserService;
 import by.shershen.user_service.service.api.IVerificationService;
-import org.modelmapper.ModelMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserRestController {
     private final IUserService userService;
     private final IAuthorizationService authorizationService;
     private final IVerificationService verificationService;
-    private final ModelMapper modelMapper;
-
-    public UserRestController(IUserService userService, IAuthorizationService authorizationService, IVerificationService verificationService, ModelMapper modelMapper) {
-        this.userService = userService;
-        this.authorizationService = authorizationService;
-        this.verificationService = verificationService;
-        this.modelMapper = modelMapper;
-    }
+    private final IUserConverter userConverter;
 
     @PostMapping("/registration")
     @ResponseBody
     public ResponseEntity<String> registration(@RequestBody UserRegDTO userRegDTO) {
-        UserEntity userEntity = convertToEntity(userRegDTO);
+        UserEntity userEntity = userConverter.convertFromRegDTOToEntity(userRegDTO);
         this.userService.register(userEntity);
         return new ResponseEntity<>("User registered", HttpStatus.CREATED);
     }
@@ -58,7 +53,4 @@ public class UserRestController {
         return this.userService.findInfo();
     }
 
-    private UserEntity convertToEntity(UserRegDTO userDTO) {
-        return modelMapper.map(userDTO, UserEntity.class);
-    }
 }

@@ -2,6 +2,7 @@ package by.shershen.user_service.util;
 
 import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.dto.UserLoginDTO;
+import by.shershen.user_service.core.dto.UserRegDTO;
 import by.shershen.user_service.core.entity.Role;
 import by.shershen.user_service.core.entity.Status;
 import by.shershen.user_service.core.entity.UserEntity;
@@ -116,6 +117,14 @@ public class DataUtils {
                 .id(UUID.randomUUID())
                 .mail("test@mail.com")
                 .sendCode(true)
+                .build();
+    }
+
+    public static UserRegDTO getUserRegDTOTransient() {
+        return UserRegDTO.builder()
+                .mail("test@mail.com")
+                .fio("Test")
+                .password("test")
                 .build();
     }
 }

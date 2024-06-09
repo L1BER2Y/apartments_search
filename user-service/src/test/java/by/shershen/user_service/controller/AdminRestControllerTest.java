@@ -73,7 +73,7 @@ public class AdminRestControllerTest {
 
     @Test
     @DisplayName("Test createUser developer")
-    public void givenUserCreateDto_whenCreateUser_thenCreateUserUser() throws Exception {
+    public void givenUserCreateDto_whenCreateUser_thenReturnStatusIsCreated() throws Exception {
         //given
         UserCreateDTO dto = UserCreateDTO.builder()
                 .fio("Test")

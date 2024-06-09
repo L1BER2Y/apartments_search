@@ -1,5 +1,6 @@
 package by.shershen.user_service.service;
 
+import by.shershen.user_service.core.converters.api.IVerificationConverter;
 import by.shershen.user_service.core.dto.VerificationDTO;
 import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.core.entity.VerificationEntity;
@@ -21,7 +22,7 @@ import java.util.UUID;
 public class SendVerificationService implements IVerificationQueueService {
     private final VerificationRepository verificationRepository;
     private final ISendVerificationService sendVerificationService;
-    private final ModelMapper modelMapper;
+    private final IVerificationConverter verificationConverter;
 
     @Override
     public void add(UserEntity userEntity) {
@@ -44,7 +45,7 @@ public class SendVerificationService implements IVerificationQueueService {
         Optional<VerificationEntity> verificationEntity = verificationRepository.findFirstBySendCodeFalse();
 
         if(verificationEntity.isPresent()) {
-            VerificationDTO verificationDTO = convertToDto(verificationEntity.get());
+            VerificationDTO verificationDTO = verificationConverter.convertFromEntityToDTO(verificationEntity.get());
             sendVerificationService.send(verificationDTO);
             verificationEntity.get().setSendCode(true);
 
@@ -53,10 +54,6 @@ public class SendVerificationService implements IVerificationQueueService {
             } catch (DataAccessException e) {
                 throw new InternalServerErrorException(e.getMessage());
             }
-        }
-    }
-
-    private VerificationDTO convertToDto(VerificationEntity verificationEntity) {
-        return modelMapper.map(verificationEntity, VerificationDTO.class);
+        } else throw new InternalServerErrorException("No verification found");
     }
 }

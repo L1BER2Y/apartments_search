@@ -3,6 +3,7 @@ package by.shershen.user_service.core.converters;
 import by.shershen.user_service.core.converters.api.IUserConverter;
 import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.dto.UserDetailsDTO;
+import by.shershen.user_service.core.dto.UserRegDTO;
 import by.shershen.user_service.core.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
@@ -33,5 +34,14 @@ public class UserConverter implements IUserConverter {
     @Override
     public UserDetailsDTO convertFromOptionalToDTO(Optional<UserDetailsDTO> userDetails) {
         return userDetails.orElse(null);
+    }
+
+    @Override
+    public UserEntity convertFromRegDTOToEntity(UserRegDTO userRegDTO) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setMail(userRegDTO.getMail());
+        userEntity.setFio(userRegDTO.getFio());
+        userEntity.setPassword(userRegDTO.getPassword());
+        return userEntity;
     }
 }
