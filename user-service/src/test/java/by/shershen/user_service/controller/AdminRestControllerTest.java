@@ -162,7 +162,7 @@ public class AdminRestControllerTest {
     }
 
     @Test
-    @DisplayName("Test find user by id")
+    @DisplayName("Test findInfo user by id")
     public void givenUserId_whenFindUserById_thenReturnUser() throws Exception {
         //given
         UUID id = UUID.randomUUID();
@@ -182,7 +182,7 @@ public class AdminRestControllerTest {
     }
 
     @Test
-    @DisplayName("Test find user with incorrect id")
+    @DisplayName("Test findInfo user with incorrect id")
     public void givenWrongUserId_whenFindUserById_thenReturnError() throws Exception {
         //given
         UUID id = UUID.randomUUID();

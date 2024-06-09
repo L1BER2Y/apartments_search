@@ -80,9 +80,7 @@ public class UserService implements IUserService {
     @Audited(auditedAction = INFO_ABOUT_USER_BY_ID, essenceType = USER)
     public UserDTO findById(UUID uuid) {
         UserEntity entity = userConverter.convertFromOptionalToEntity(this.userRepository.findById(uuid));
-        if (entity == null) {
-            throw new EntityNotFoundException("No user found by this id");
-        }
+        emptyCheck(entity);
         return userConverter.convertFromEntityToDTO(entity);
     }
 
@@ -136,7 +134,7 @@ public class UserService implements IUserService {
 
     @Override
     @Audited(auditedAction = INFO_ABOUT_ME, essenceType = USER)
-    public UserDTO find() {
+    public UserDTO findInfo() {
         UserDetailsDTO userDetails = (UserDetailsDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<UserEntity> userEntity = userRepository.findById(userDetails.getId());
         UserEntity entity = userConverter.convertFromOptionalToEntity(userEntity);
@@ -158,6 +156,12 @@ public class UserService implements IUserService {
     private void validateMail(String mail) {
         if (userRepository.existsByMail(mail)) {
             throw new ValidationException("This login has already been used");
+        }
+    }
+
+    private void emptyCheck(UserEntity entity) {
+        if (entity == null) {
+            throw new EntityNotFoundException("No user found by this id");
         }
     }
 }
