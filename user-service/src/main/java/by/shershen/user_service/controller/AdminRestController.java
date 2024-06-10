@@ -1,6 +1,7 @@
 package by.shershen.user_service.controller;
 
 import by.shershen.user_service.core.converters.api.IPageConverter;
+import by.shershen.user_service.core.converters.api.IUserConverter;
 import by.shershen.user_service.core.dto.PageDTO;
 import by.shershen.user_service.core.dto.UserCreateDTO;
 import by.shershen.user_service.core.dto.UserDTO;
@@ -23,13 +24,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AdminRestController {
     private final IUserService service;
-    private final ModelMapper modelMapper;
+    private final IUserConverter userConverter;
     private final IPageConverter pageConverter;
 
     @PostMapping
     @ResponseBody
     public ResponseEntity<String> createUser(@RequestBody UserCreateDTO user) {
-        UserEntity userEntity = convertToEntity(user);
+        UserEntity userEntity = userConverter.convertFromCreateDTOToEntity(user);
         this.service.save(userEntity);
         return new ResponseEntity<>("User created", HttpStatus.CREATED);
     }
@@ -55,17 +56,10 @@ public class AdminRestController {
                                          @PathVariable("dt_update") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dtUpdate,
                                          @RequestBody UserCreateDTO userCreateDTO
     ) {
-        UserEntity userEntity = convertToEntity(userCreateDTO);
+        UserEntity userEntity = userConverter.convertFromCreateDTOToEntity(userCreateDTO);
         this.service.update(userEntity, uuid, dtUpdate);
         return ResponseEntity.ok("User updated");
     }
 
-    private UserDTO convertToDto(UserEntity entity) {
-        return modelMapper.map(entity, UserDTO.class);
-    }
-
-    private UserEntity convertToEntity(UserCreateDTO userDTO) {
-        return modelMapper.map(userDTO, UserEntity.class);
-    }
 
 }

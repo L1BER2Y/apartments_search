@@ -2,6 +2,7 @@ package by.shershen.user_service.controller;
 
 import by.shershen.user_service.controller.utils.JwtTokenHandler;
 import by.shershen.user_service.core.converters.api.IPageConverter;
+import by.shershen.user_service.core.converters.api.IUserConverter;
 import by.shershen.user_service.core.dto.UserCreateDTO;
 import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.entity.Role;
@@ -11,6 +12,7 @@ import by.shershen.user_service.core.exceptions.ValidationException;
 import by.shershen.user_service.service.api.IAuthorizationService;
 import by.shershen.user_service.service.api.IUserService;
 import by.shershen.user_service.service.api.IVerificationService;
+import by.shershen.user_service.util.DataUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Disabled;
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -57,7 +60,7 @@ public class AdminRestControllerTest {
     private IUserService userService;
 
     @MockBean
-    private ModelMapper modelMapper;
+    private IUserConverter userConverter;
 
     @MockBean
     private IPageConverter pageConverter;
@@ -83,15 +86,7 @@ public class AdminRestControllerTest {
                 .status(Status.WAITING_ACTIVATION)
                 .build();
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setDtCreate(LocalDateTime.now());
-        userEntity.setDtUpdate(LocalDateTime.now());
-        userEntity.setRole(dto.getRole());
-        userEntity.setPassword(dto.getPassword());
-        userEntity.setStatus(dto.getStatus());
-        userEntity.setId(UUID.randomUUID());
-        userEntity.setFio(dto.getFio());
-        userEntity.setMail(dto.getMail());
+        UserEntity userEntity = DataUtils.getUserPersisted();
 
         BDDMockito.given(userService.save(any(UserEntity.class)))
                 .willReturn(userEntity);
@@ -109,7 +104,6 @@ public class AdminRestControllerTest {
 
     @Test
     @DisplayName("Test createUser developer with existing id")
-    @Disabled
     public void givenUserCreateDto_whenCreateUserUser_thenErrorResponse() throws Exception {
         //given
         UserCreateDTO dto = UserCreateDTO.builder()
@@ -119,9 +113,13 @@ public class AdminRestControllerTest {
                 .password("test")
                 .status(Status.WAITING_ACTIVATION)
                 .build();
+        UserEntity userEntity = DataUtils.getUserPersisted();
+
+        BDDMockito.given(userConverter.convertFromCreateDTOToEntity(any(UserCreateDTO.class)))
+                        .willReturn(userEntity);
 
         BDDMockito.given(userService.save(any(UserEntity.class)))
-                .willThrow(new ValidationException("Validation Exception"));
+                .willThrow(ValidationException.class);
         //when
         ResultActions result = mockMvc.perform(post("/users")
                 .with(csrf())

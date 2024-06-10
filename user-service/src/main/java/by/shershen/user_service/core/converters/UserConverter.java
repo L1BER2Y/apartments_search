@@ -1,6 +1,7 @@
 package by.shershen.user_service.core.converters;
 
 import by.shershen.user_service.core.converters.api.IUserConverter;
+import by.shershen.user_service.core.dto.UserCreateDTO;
 import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.dto.UserDetailsDTO;
 import by.shershen.user_service.core.dto.UserRegDTO;
@@ -43,5 +44,16 @@ public class UserConverter implements IUserConverter {
         userEntity.setFio(userRegDTO.getFio());
         userEntity.setPassword(userRegDTO.getPassword());
         return userEntity;
+    }
+
+    @Override
+    public UserEntity convertFromCreateDTOToEntity(UserCreateDTO userCreateDTO) {
+        return UserEntity.builder()
+                .mail(userCreateDTO.getMail())
+                .fio(userCreateDTO.getFio())
+                .password(userCreateDTO.getPassword())
+                .role(userCreateDTO.getRole())
+                .status(userCreateDTO.getStatus())
+                .build();
     }
 }
