@@ -52,8 +52,8 @@ public class ReportRestController {
     @RequestMapping(method = RequestMethod.HEAD, value = "/{id}/export")
     public ResponseEntity<Status> status(@PathVariable("id") String id) {
         return switch (reportService.getStatusById(id)) {
-            case Status.DONE -> ResponseEntity.status(200).build();
-            case Status.ERROR, Status.LOADED, Status.PROGRESS -> ResponseEntity.status(505).build();
+            case DONE -> ResponseEntity.status(200).build();
+            case ERROR, LOADED, PROGRESS -> ResponseEntity.status(505).build();
         };
     }
 }

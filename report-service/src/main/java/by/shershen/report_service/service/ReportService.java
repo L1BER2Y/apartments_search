@@ -11,6 +11,7 @@ import by.shershen.report_service.repository.AuditRepository;
 import by.shershen.report_service.repository.ReportRepository;
 import by.shershen.report_service.service.api.IReportGenerator;
 import by.shershen.report_service.service.api.IReportService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -34,6 +35,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ReportService implements IReportService {
 
     private static final String FILE_DIRECTORY = ".";
@@ -41,13 +43,6 @@ public class ReportService implements IReportService {
     private final AuditRepository auditRepository;
     private final IReportGenerator reportGenerator;
     private final IReportConverter reportConverter;
-
-    public ReportService(ReportRepository reportRepository, AuditRepository auditRepository, IReportGenerator reportGenerator, IReportConverter reportConverter) {
-        this.reportRepository = reportRepository;
-        this.auditRepository = auditRepository;
-        this.reportGenerator = reportGenerator;
-        this.reportConverter = reportConverter;
-    }
 
     @Override
     @Transactional
@@ -76,7 +71,7 @@ public class ReportService implements IReportService {
         saveAndFlush.setStatus(Status.DONE);
 
         } catch (IOException e) {
-            log.error("Ошибка создания отчета" + e);
+            log.error("Report creation error " + e);
             saveAndFlush.setStatus(Status.ERROR);
         }
 
@@ -90,7 +85,7 @@ public class ReportService implements IReportService {
         List<ReportDTO> reportDTOList = entityPage.stream()
                 .map(reportConverter::convertReportEntityToDTO)
                 .toList();
-        return new PageImpl<ReportDTO>(reportDTOList, entityPage.getPageable(), entityPage.getTotalElements());
+        return new PageImpl<>(reportDTOList, entityPage.getPageable(), entityPage.getTotalElements());
     }
 
     @Override

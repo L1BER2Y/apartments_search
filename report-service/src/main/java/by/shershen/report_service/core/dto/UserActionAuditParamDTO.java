@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
