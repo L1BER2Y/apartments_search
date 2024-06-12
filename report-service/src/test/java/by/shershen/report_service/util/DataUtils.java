@@ -1,10 +1,7 @@
 package by.shershen.report_service.util;
 
 import by.shershen.report_service.core.dto.UserActionAuditParamDTO;
-import by.shershen.report_service.core.entity.Action;
-import by.shershen.report_service.core.entity.AuditEntity;
-import by.shershen.report_service.core.entity.EssenceType;
-import by.shershen.report_service.core.entity.Role;
+import by.shershen.report_service.core.entity.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -58,6 +55,48 @@ public class DataUtils {
         return UserActionAuditParamDTO.builder()
                 .userId(UUID.randomUUID().toString())
                 .from(LocalDate.of(2024, 1, 1))
+                .to(LocalDate.now())
+                .build();
+    }
+
+    public static ReportEntity getReportEntityTransient() {
+        return ReportEntity.builder()
+                .id(UUID.randomUUID())
+                .dtCreate(LocalDateTime.now())
+                .dtUpdate(LocalDateTime.now())
+                .status(Status.PROGRESS)
+                .type(Type.JOURNAL_AUDIT)
+                .description("Test description")
+                .userId("Test userId")
+                .from(LocalDate.of(2024, 1, 1))
+                .to(LocalDate.now())
+                .build();
+    }
+
+    public static ReportEntity getReportEntityOneTransient() {
+        return ReportEntity.builder()
+                .id(UUID.randomUUID())
+                .dtCreate(LocalDateTime.now())
+                .dtUpdate(LocalDateTime.now())
+                .status(Status.PROGRESS)
+                .type(Type.JOURNAL_AUDIT)
+                .description("Test description")
+                .userId("Test userId")
+                .from(LocalDate.of(2024, 2, 4))
+                .to(LocalDate.now())
+                .build();
+    }
+
+    public static ReportEntity getReportEntityTwoTransient() {
+        return ReportEntity.builder()
+                .id(UUID.randomUUID())
+                .dtCreate(LocalDateTime.now())
+                .dtUpdate(LocalDateTime.now())
+                .status(Status.PROGRESS)
+                .type(Type.JOURNAL_AUDIT)
+                .description("Test description")
+                .userId("Test userId")
+                .from(LocalDate.of(2024, 3, 24))
                 .to(LocalDate.now())
                 .build();
     }

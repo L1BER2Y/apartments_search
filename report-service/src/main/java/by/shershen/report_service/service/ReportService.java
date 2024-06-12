@@ -75,7 +75,7 @@ public class ReportService implements IReportService {
             saveAndFlush.setStatus(Status.ERROR);
         }
 
-        reportRepository.save(saveAndFlush);
+        reportRepository.saveAndFlush(saveAndFlush);
 
     }
 

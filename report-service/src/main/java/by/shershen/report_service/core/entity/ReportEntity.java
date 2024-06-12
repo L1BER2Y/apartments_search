@@ -8,11 +8,13 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
 @Entity
 @Table(schema = "users", name = "reports")
 public class ReportEntity {
