@@ -19,5 +19,5 @@ public interface IReportService {
 
     Status getStatusById(String id);
 
-    ResponseEntity<String> save(UUID uuid) throws IOException;
+    ResponseEntity<String> exportReport(UUID uuid) throws IOException;
 }

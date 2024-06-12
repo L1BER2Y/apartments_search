@@ -26,8 +26,8 @@ public class ReportRepositoryTests {
     }
 
     @Test
-    @DisplayName("Test save report functionality")
-    public void givenReportEntity_whenSaveReport_thenRepositoryIsCalled() {
+    @DisplayName("Test exportReport report functionality")
+    public void givenReportEntity_whenSaveReport_thenReportIsSaved() {
         //given
         ReportEntity reportEntity = DataUtils.getReportEntityTransient();
         //when
@@ -39,7 +39,7 @@ public class ReportRepositoryTests {
 
     @Test
     @DisplayName("Test find all reports functionality")
-    public void givenThreeReportEntitiesStored_whenFindAllReports_thenRepositoryIsCalled() {
+    public void givenThreeReportEntitiesStored_whenFindAllReports_thenReportsAreReturned() {
         //given
         ReportEntity entity = DataUtils.getReportEntityTransient();
         ReportEntity entity1 = DataUtils.getReportEntityOneTransient();
@@ -54,7 +54,7 @@ public class ReportRepositoryTests {
 
     @Test
     @DisplayName("Test get report status by id functionality")
-    public void givenReportId_whenGetReportStatusById_thenRepositoryIsCalled() {
+    public void givenReportId_whenGetReportStatusById_thenStatusIsReturned() {
         //given
         ReportEntity reportEntity = DataUtils.getReportEntityTransient();
         reportRepository.saveAndFlush(reportEntity);

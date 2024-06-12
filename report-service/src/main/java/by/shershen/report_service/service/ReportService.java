@@ -82,9 +82,11 @@ public class ReportService implements IReportService {
     @Override
     public Page<ReportDTO> getAllReports(Pageable pageable) {
         Page<ReportEntity> entityPage = this.reportRepository.findAll(pageable);
+
         List<ReportDTO> reportDTOList = entityPage.stream()
                 .map(reportConverter::convertReportEntityToDTO)
                 .toList();
+
         return new PageImpl<>(reportDTOList, entityPage.getPageable(), entityPage.getTotalElements());
     }
 
@@ -94,7 +96,7 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public ResponseEntity<String> save(UUID uuid) throws IOException {
+    public ResponseEntity<String> exportReport(UUID uuid) throws IOException {
         String fileName = uuid + ".xlsx";
         Path filePath = Paths.get(FILE_DIRECTORY).resolve(fileName).normalize();
         Resource resource = new UrlResource(filePath.toUri());

@@ -45,8 +45,8 @@ public class ReportRestController {
     }
 
     @GetMapping("/{uuid}/export")
-    public ResponseEntity<String> save(@PathVariable("uuid") UUID uuid) throws IOException {
-        return reportService.save(uuid);
+    public ResponseEntity<String> export(@PathVariable("uuid") UUID uuid) throws IOException {
+        return reportService.exportReport(uuid);
     }
 
     @RequestMapping(method = RequestMethod.HEAD, value = "/{id}/export")
