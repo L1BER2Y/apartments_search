@@ -11,18 +11,17 @@ import by.shershen.report_service.repository.AuditRepository;
 import by.shershen.report_service.repository.ReportRepository;
 import by.shershen.report_service.service.api.IReportGenerator;
 import by.shershen.report_service.util.DataUtils;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -130,5 +129,17 @@ public class ReportServiceTests {
         //then
         verify(reportRepository, times(1)).getStatusById(any());
         assertThat(obtainedStatus.getReportStatusId()).isEqualTo(status);
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Test export report functionality")
+    public void givenUUID_whenExportReport_thenResponseEntityIsReturned() {
+        //given
+        UUID uuid = UUID.randomUUID();
+        //when
+        ResponseEntity<String> exportedReport = serviceUnderTest.exportReport(uuid);
+        //then
+        assertThat(exportedReport).isNotNull();
     }
 }
