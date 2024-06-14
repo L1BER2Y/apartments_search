@@ -33,7 +33,7 @@ public class ReportRestController {
     public ResponseEntity<String> create(@PathVariable("type") Type type,
                                          @RequestBody UserActionAuditParamDTO dto) {
         this.reportService.create(type, dto);
-        return new ResponseEntity<>("Отчёт запущен", HttpStatus.CREATED);
+        return new ResponseEntity<>("Report started", HttpStatus.CREATED);
     }
 
     @GetMapping

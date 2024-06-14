@@ -1,10 +1,12 @@
 package by.shershen.report_service.util;
 
+import by.shershen.report_service.core.dto.ReportDTO;
 import by.shershen.report_service.core.dto.UserActionAuditParamDTO;
 import by.shershen.report_service.core.entity.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 public class DataUtils {
@@ -98,6 +100,42 @@ public class DataUtils {
                 .userId("Test userId")
                 .from(LocalDate.of(2024, 3, 24))
                 .to(LocalDate.now())
+                .build();
+    }
+
+    public static ReportDTO getReportDtoTransient() {
+        return ReportDTO.builder()
+                .uuid(UUID.randomUUID())
+                .dtCreate(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .dtUpdate(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .status(Status.PROGRESS)
+                .type(Type.JOURNAL_AUDIT)
+                .description("Test description")
+                .params(DataUtils.getUserActionAuditParamDTOTransient())
+                .build();
+    }
+
+    public static ReportDTO getReportDtoOneTransient() {
+        return ReportDTO.builder()
+                .uuid(UUID.randomUUID())
+                .dtCreate(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .dtUpdate(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .status(Status.DONE)
+                .type(Type.JOURNAL_AUDIT)
+                .description("Test description")
+                .params(DataUtils.getUserActionAuditParamDTOTransient())
+                .build();
+    }
+
+    public static ReportDTO getReportDtoTwoTransient() {
+        return ReportDTO.builder()
+                .uuid(UUID.randomUUID())
+                .dtCreate(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .dtUpdate(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .status(Status.LOADED)
+                .type(Type.JOURNAL_AUDIT)
+                .description("Test description")
+                .params(DataUtils.getUserActionAuditParamDTOTransient())
                 .build();
     }
 }
