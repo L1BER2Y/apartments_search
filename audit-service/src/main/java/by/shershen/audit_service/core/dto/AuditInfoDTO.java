@@ -3,15 +3,13 @@ package by.shershen.audit_service.core.dto;
 import by.shershen.audit_service.core.entity.Action;
 import by.shershen.audit_service.core.entity.EssenceType;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 
 import java.util.UUID;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

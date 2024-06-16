@@ -15,13 +15,10 @@ import by.shershen.user_service.service.api.IVerificationService;
 import by.shershen.user_service.util.DataUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
-import org.mockito.Mockito;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -75,7 +72,7 @@ public class AdminRestControllerTest {
     private IVerificationService verificationService;
 
     @Test
-    @DisplayName("Test createUser developer")
+    @DisplayName("Test create User developer")
     public void givenUserCreateDto_whenCreateUser_thenReturnStatusIsCreated() throws Exception {
         //given
         UserCreateDTO dto = UserCreateDTO.builder()
