@@ -3,6 +3,7 @@ package by.shershen.flats_service.core.dto;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
