@@ -12,7 +12,7 @@ import java.io.IOException;
 @EnableScheduling
 public class ParserServiceApplication {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         SpringApplication.run(ParserServiceApplication.class, args);
     }
 
