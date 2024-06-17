@@ -37,7 +37,7 @@ public class FlatEntity {
     private Integer floor;
 
     @Type(StringArrayType.class)
-    @Column(name = "photo_urls", columnDefinition = "text[]")
+    @Column(name = "photo_urls", columnDefinition = "text array")
     private String[] photoUrls;
 
     @Column(name = "original_url")

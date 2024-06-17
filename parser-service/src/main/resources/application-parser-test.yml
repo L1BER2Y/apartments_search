@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: "qaForDevs"
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  sql:
+    init:
+      mode: embedded
+      platform: h2
+      schema-locations: schema-h2.sql
+      data-locations: import.sql
+server:
+  port: 8090
