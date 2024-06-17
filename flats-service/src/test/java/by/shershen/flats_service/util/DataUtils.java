@@ -110,12 +110,12 @@ public class DataUtils {
     public static FlatsFilter getFlatsFilterTransient() {
         return FlatsFilter.builder()
                 .priceFrom(300)
-                .priceTo(600)
+                .priceTo(230000)
                 .bedroomsFrom(1)
                 .bedroomsTo(4)
                 .areaFrom(30)
-                .areaTo(100)
-                .floors(new Integer[]{2,4,6,8})
+                .areaTo(120)
+                .floors(new Integer[]{4,8,11})
                 .photo(true)
                 .build();
     }
