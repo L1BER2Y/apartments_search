@@ -13,7 +13,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class JwtTokenHandler {
+
     private final JWTProperty property;
+
     private final ObjectMapper objectMapper;
 
     public JwtTokenHandler(JWTProperty property, ObjectMapper objectMapper) {

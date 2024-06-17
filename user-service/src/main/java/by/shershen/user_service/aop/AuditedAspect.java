@@ -2,11 +2,10 @@ package by.shershen.user_service.aop;
 
 import by.shershen.user_service.clients.AuditFeignClient;
 import by.shershen.user_service.controller.utils.JwtTokenHandler;
-import by.it_academy.jd2.user_service.core.dto.*;
+import by.shershen.user_service.core.dto.*;
 import by.shershen.user_service.core.entity.Role;
 import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.repository.UserRepository;
-import by.shershen.user_service.core.dto.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

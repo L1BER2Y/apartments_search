@@ -1,10 +1,12 @@
 package by.shershen.audit_service.core.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
 @Entity
 @Table(schema = "users", name = "audits")
 public class AuditEntity {

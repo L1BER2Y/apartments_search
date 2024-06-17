@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/flats")
-public class FlatRestController {
+public class FlatsRestController {
 
     private final IFlatsService service;
     private final IPageConverter pageConverter;
 
-    public FlatRestController(IFlatsService service, IPageConverter pageConverter) {
+    public FlatsRestController(IFlatsService service, IPageConverter pageConverter) {
         this.service = service;
         this.pageConverter = pageConverter;
     }

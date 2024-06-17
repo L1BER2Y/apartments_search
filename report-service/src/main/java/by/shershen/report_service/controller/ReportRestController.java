@@ -33,7 +33,7 @@ public class ReportRestController {
     public ResponseEntity<String> create(@PathVariable("type") Type type,
                                          @RequestBody UserActionAuditParamDTO dto) {
         this.reportService.create(type, dto);
-        return new ResponseEntity<>("Отчёт запущен", HttpStatus.CREATED);
+        return new ResponseEntity<>("Report started", HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -45,15 +45,15 @@ public class ReportRestController {
     }
 
     @GetMapping("/{uuid}/export")
-    public ResponseEntity<String> save(@PathVariable("uuid") UUID uuid) throws IOException {
-        return reportService.save(uuid);
+    public ResponseEntity<String> export(@PathVariable("uuid") UUID uuid) throws IOException {
+        return reportService.exportReport(uuid);
     }
 
     @RequestMapping(method = RequestMethod.HEAD, value = "/{id}/export")
     public ResponseEntity<Status> status(@PathVariable("id") String id) {
         return switch (reportService.getStatusById(id)) {
-            case Status.DONE -> ResponseEntity.status(200).build();
-            case Status.ERROR, Status.LOADED, Status.PROGRESS -> ResponseEntity.status(505).build();
+            case DONE -> ResponseEntity.status(200).build();
+            case ERROR, LOADED, PROGRESS -> ResponseEntity.status(505).build();
         };
     }
 }

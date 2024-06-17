@@ -1,7 +1,10 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-
+  jpa:
+      show-sql: true
+  profiles:
+      default: parser-test
 app:
   url:
     base-sale: https://re.kufar.by/l/minsk/kupit/kvartiru

@@ -22,6 +22,7 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
     private final JwtTokenHandler jwtHandler;
 
     public JwtFilter(JwtTokenHandler jwtHandler) {

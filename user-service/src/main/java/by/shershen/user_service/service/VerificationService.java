@@ -1,6 +1,8 @@
 package by.shershen.user_service.service;
 
 import by.shershen.user_service.aop.Audited;
+import by.shershen.user_service.core.converters.api.IUserConverter;
+import by.shershen.user_service.core.converters.api.IVerificationConverter;
 import by.shershen.user_service.core.dto.VerificationDTO;
 import by.shershen.user_service.core.entity.Status;
 import by.shershen.user_service.core.entity.UserEntity;
@@ -10,7 +12,7 @@ import by.shershen.user_service.core.exceptions.ValidationException;
 import by.shershen.user_service.repository.UserRepository;
 import by.shershen.user_service.repository.VerificationRepository;
 import by.shershen.user_service.service.api.IVerificationService;
-import org.modelmapper.ModelMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,26 +23,22 @@ import static by.shershen.user_service.core.entity.AuditedAction.VERIFICATION;
 import static by.shershen.user_service.core.entity.EssenceType.USER;
 
 @Service
+@RequiredArgsConstructor
 public class VerificationService implements IVerificationService {
     private final VerificationRepository verificationRepository;
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
-
-    public VerificationService(VerificationRepository verificationRepository, UserRepository userRepository, ModelMapper modelMapper) {
-        this.verificationRepository = verificationRepository;
-        this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
-    }
+    private final IUserConverter userConverter;
+    private final IVerificationConverter verificationConverter;
 
     @Override
     @Transactional
     @Audited(auditedAction = VERIFICATION, essenceType = USER)
     public void verify(VerificationDTO verificationDTO) {
         Optional<VerificationEntity> verificationEntity = verificationRepository.findVerificationEntitiesByCode(verificationDTO.getCode());
-        VerificationEntity verification = convertVerToEntity(verificationEntity);
+        VerificationEntity verification = verificationConverter.convertFromOptionalToEntity(verificationEntity);
         if (verificationEntity.isPresent()) {
             Optional<UserEntity> byMail = userRepository.findByMail(verificationDTO.getMail());
-            UserEntity entity = convertToEntity(byMail);
+            UserEntity entity = userConverter.convertFromOptionalToEntity(byMail);
             entity.setStatus(Status.ACTIVATED);
             try {
             userRepository.saveAndFlush(entity);
@@ -49,15 +47,7 @@ public class VerificationService implements IVerificationService {
                 throw new InternalServerErrorException(e.getMessage());
             }
         } else {
-            throw new ValidationException("Верификация уже пройдена.");
+            throw new ValidationException("Verification already passed.");
         }
     }
-
-    private UserEntity convertToEntity(Optional<UserEntity> entity) {
-        return modelMapper.map(entity, UserEntity.class);
-    }
-
-    private VerificationEntity convertVerToEntity(Optional<VerificationEntity> entity) {
-        return modelMapper.map(entity, VerificationEntity.class);
-    }
-    }
+}

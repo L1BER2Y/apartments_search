@@ -1,18 +1,19 @@
 package by.shershen.user_service.service;
 
 import by.shershen.user_service.aop.Audited;
-import by.it_academy.jd2.user_service.core.dto.*;
+import by.shershen.user_service.core.converters.api.IUserConverter;
 import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.dto.UserDetailsDTO;
 import by.shershen.user_service.core.entity.Role;
 import by.shershen.user_service.core.entity.Status;
+import by.shershen.user_service.core.exceptions.EntityNotFoundException;
 import by.shershen.user_service.core.exceptions.InternalServerErrorException;
 import by.shershen.user_service.core.exceptions.ValidationException;
 import by.shershen.user_service.repository.UserRepository;
 import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.service.api.IUserService;
 import by.shershen.user_service.service.api.IVerificationQueueService;
-import org.modelmapper.ModelMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -32,21 +33,13 @@ import static by.shershen.user_service.core.entity.AuditedAction.*;
 import static by.shershen.user_service.core.entity.EssenceType.USER;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements IUserService {
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
+    private final IUserConverter userConverter;
     private final IVerificationQueueService verificationQueueService;
     private final PasswordEncoder passwordEncoder;
 
-
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, IVerificationQueueService verificationQueueService,
-                       PasswordEncoder passwordEncoder
-    ) {
-        this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
-        this.verificationQueueService = verificationQueueService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     @Transactional
@@ -80,20 +73,22 @@ public class UserService implements IUserService {
         List<UserDTO> dtoList = entityPage.stream()
                 .map(UserService::apply)
                 .toList();
-        return new PageImpl<UserDTO>(dtoList, entityPage.getPageable(), entityPage.getTotalElements());
+        return new PageImpl<>(dtoList, entityPage.getPageable(), entityPage.getTotalElements());
     }
 
     @Override
     @Audited(auditedAction = INFO_ABOUT_USER_BY_ID, essenceType = USER)
     public UserDTO findById(UUID uuid) {
-        UserEntity entity = convertFromOptionalToEntity(this.userRepository.findById(uuid));
-        return apply(entity);
+        UserEntity entity = userConverter.convertFromOptionalToEntity(this.userRepository.findById(uuid));
+        emptyCheck(entity);
+        return userConverter.convertFromEntityToDTO(entity);
     }
 
     @Override
     @Transactional
     @Audited(auditedAction = SAVE_USER, essenceType = USER)
     public UserEntity save(UserEntity user) {
+        validateMail(user.getMail());
         UserEntity entity = new UserEntity();
         entity.setId(UUID.randomUUID());
         entity.setDtCreate(LocalDateTime.now());
@@ -118,9 +113,9 @@ public class UserService implements IUserService {
     @Audited(auditedAction = UPDATE_USER, essenceType = USER)
     public UserEntity update(UserEntity entity, UUID id, LocalDateTime dtUpdate) {
         Optional<UserEntity> optional = this.userRepository.findById(id);
-        UserEntity user = convertFromOptionalToEntity(optional);
+        UserEntity user = userConverter.convertFromOptionalToEntity(optional);
         if(user.getDtUpdate().truncatedTo(ChronoUnit.MILLIS).isEqual(dtUpdate.truncatedTo(ChronoUnit.MILLIS))) {
-            throw new ValidationException("Недопустимый dt_update - " + dtUpdate);
+            throw new ValidationException("Unacceptable dt_update - " + dtUpdate);
         } else {
             user.setDtUpdate(dtUpdate);
             user.setMail(entity.getMail());
@@ -139,11 +134,11 @@ public class UserService implements IUserService {
 
     @Override
     @Audited(auditedAction = INFO_ABOUT_ME, essenceType = USER)
-    public UserDTO find() {
+    public UserDTO findInfo() {
         UserDetailsDTO userDetails = (UserDetailsDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<UserEntity> userEntity = userRepository.findById(userDetails.getId());
-        UserEntity entity = convertToEntity(userEntity);
-        return apply(entity);
+        UserEntity entity = userConverter.convertFromOptionalToEntity(userEntity);
+        return userConverter.convertFromEntityToDTO(entity);
     }
 
     private static UserDTO apply(UserEntity user) {
@@ -158,17 +153,15 @@ public class UserService implements IUserService {
         return userDTO;
     }
 
-    private UserEntity convertToEntity(Optional<UserEntity> entity) {
-        return modelMapper.map(entity, UserEntity.class);
-    }
-
-    private UserEntity convertFromOptionalToEntity(Optional<UserEntity> entity) {
-        return modelMapper.map(entity, UserEntity.class);
-    }
-
     private void validateMail(String mail) {
         if (userRepository.existsByMail(mail)) {
-            throw new ValidationException("Такой логин уже используется");
+            throw new ValidationException("This login has already been used");
+        }
+    }
+
+    private void emptyCheck(UserEntity entity) {
+        if (entity == null) {
+            throw new EntityNotFoundException("No user found by this id");
         }
     }
 }

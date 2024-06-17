@@ -93,6 +93,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -108,7 +113,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <finalName>${project.name}</finalName>
+                    <mainClass>by.shershen.parser_service.ParserServiceApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

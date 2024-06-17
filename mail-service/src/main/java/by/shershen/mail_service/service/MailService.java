@@ -9,11 +9,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MailService implements IMailService {
+
     private final JavaMailSender mailSender;
+
     @Value("${spring.email.message.code} ")
     private String code;
+
     @Value("${spring.email.message.link}")
     private String link;
+
     @Value("${spring.email.message.mail}")
     private String mail;
 

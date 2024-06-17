@@ -1,11 +1,13 @@
 package by.shershen.user_service.controller;
 
 import by.shershen.user_service.core.converters.api.IPageConverter;
+import by.shershen.user_service.core.converters.api.IUserConverter;
 import by.shershen.user_service.core.dto.PageDTO;
 import by.shershen.user_service.core.dto.UserCreateDTO;
 import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.service.api.IUserService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,23 +21,18 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class AdminRestController {
     private final IUserService service;
-    private final ModelMapper modelMapper;
+    private final IUserConverter userConverter;
     private final IPageConverter pageConverter;
-
-    public AdminRestController(IUserService service, ModelMapper modelMapper, IPageConverter pageConverter) {
-        this.service = service;
-        this.modelMapper = modelMapper;
-        this.pageConverter = pageConverter;
-    }
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<String> create(@RequestBody UserCreateDTO user) {
-        UserEntity userEntity = convertToEntity(user);
+    public ResponseEntity<String> createUser(@RequestBody UserCreateDTO user) {
+        UserEntity userEntity = userConverter.convertFromCreateDTOToEntity(user);
         this.service.save(userEntity);
-        return new ResponseEntity<>("Пользователь добавлен", HttpStatus.CREATED);
+        return new ResponseEntity<>("User created", HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -59,17 +56,10 @@ public class AdminRestController {
                                          @PathVariable("dt_update") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dtUpdate,
                                          @RequestBody UserCreateDTO userCreateDTO
     ) {
-        UserEntity userEntity = convertToEntity(userCreateDTO);
+        UserEntity userEntity = userConverter.convertFromCreateDTOToEntity(userCreateDTO);
         this.service.update(userEntity, uuid, dtUpdate);
-        return ResponseEntity.ok("Пользователь обновлен");
+        return ResponseEntity.ok("User updated");
     }
 
-    private UserDTO convertToDto(UserEntity entity) {
-        return modelMapper.map(entity, UserDTO.class);
-    }
-
-    private UserEntity convertToEntity(UserCreateDTO userDTO) {
-        return modelMapper.map(userDTO, UserEntity.class);
-    }
 
 }

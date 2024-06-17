@@ -2,11 +2,13 @@ package by.shershen.flats_service.core.entity;
 
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
 @Entity
 @Table(schema = "users", name = "flats")
 public class FlatEntity {
@@ -35,7 +37,7 @@ public class FlatEntity {
     private Integer floor;
 
     @Type(StringArrayType.class)
-    @Column(name = "photo_urls", columnDefinition = "text[]")
+    @Column(name = "photo_urls", columnDefinition = "text array")
     private String[] photoUrls;
 
     @Column(name = "original_url")

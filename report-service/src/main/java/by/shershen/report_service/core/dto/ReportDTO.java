@@ -3,14 +3,12 @@ package by.shershen.report_service.core.dto;
 import by.shershen.report_service.core.entity.Status;
 import by.shershen.report_service.core.entity.Type;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.UUID;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
