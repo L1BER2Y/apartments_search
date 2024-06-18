@@ -5,6 +5,6 @@ import org.springframework.dao.DataAccessException;
 public class InternalServerErrorException extends DataAccessException {
 
     public InternalServerErrorException(String msg) {
-        super("Сервер не смог корректно обработать запрос. Пожалуйста обратитесь к администратору");
+        super("The server can't handle request correctly. Please contact the administrator.");
     }
 }

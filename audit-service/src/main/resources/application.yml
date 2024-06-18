@@ -1,8 +1,6 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-  profiles:
-    default: audit-test
 
 app:
   jwt:

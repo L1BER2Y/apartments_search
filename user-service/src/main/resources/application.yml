@@ -3,9 +3,6 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
-  profiles:
-    default: test
-
 app:
   jwt:
     secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw

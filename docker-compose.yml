@@ -9,6 +9,7 @@ services:
       POSTGRES_PASSWORD: root
     networks:
       - flats_ntwrk
+
   pgadmin:
     build: pgadmin
     image: flats_pgadmin:1.0.0
@@ -20,6 +21,15 @@ services:
       - "82:80"
     networks:
       - flats_ntwrk
+
+  swagger-ui:
+    build: swagger-ui
+    image: flats_swagger-ui:1.0.3
+    ports:
+      - "81:8080"
+    networks:
+      - flats_ntwrk
+
   user-service:
     build: user-service
     image: flats_user-service:1.0.0
@@ -27,9 +37,12 @@ services:
       SPRING_PROFILES_ACTIVE: docker
     networks:
       - flats_ntwrk
+
   audit-service:
     build: audit-service
     image: flats_audit-service:1.0.0
+    environment:
+      SPRING_PROFILES_ACTIVE: audit-docker
     networks:
       - flats_ntwrk
 
@@ -40,6 +53,7 @@ services:
       - "80:80"
     networks:
       - flats_ntwrk
+
 networks:
   flats_ntwrk:
     name: flats_ntwrk
