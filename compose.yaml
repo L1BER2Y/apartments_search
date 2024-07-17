@@ -1,0 +1,74 @@
+name: apartments_search
+
+services:
+  user-service:
+    build: user-service
+    image: flats_user-service:1.0.0
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - flats
+
+  audit-service:
+    build: audit-service
+    image: flats_audit-service:1.0.0
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_PROFILES_ACTIVE: audit-docker
+    networks:
+      - flats
+
+  report-service:
+    build: report-service
+    image: flats_report-service:1.0.0
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: report-docker
+    networks:
+      - flats
+
+  db:
+    build: postgresql
+    image: flats_postgresql:1.0.0
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    networks:
+      - flats
+
+  pgadmin:
+    build: pgadmin
+    image: flats_pgadmin:1.0.0
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "82:80"
+    networks:
+      - flats
+
+  swagger-ui:
+    build: swagger-ui
+    image: flats_swagger-ui:1.0.3
+    ports:
+      - "81:8080"
+    networks:
+      - flats
+
+  proxy:
+    build: proxy
+    image: flats_proxy:1.0.1
+    ports:
+      - "80:80"
+    networks:
+      - flats
+
+networks:
+  flats:
+    driver: bridge
