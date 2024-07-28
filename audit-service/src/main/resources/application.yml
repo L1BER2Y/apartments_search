@@ -1,7 +1,8 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-
+  profiles:
+    default: local
 app:
   jwt:
     secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw

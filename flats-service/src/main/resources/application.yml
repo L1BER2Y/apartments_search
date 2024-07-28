@@ -2,4 +2,4 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
   profiles:
-    default: flats-test
+    default: local

@@ -4,8 +4,7 @@ spring:
   jpa:
     show-sql: true
   profiles:
-    default: report-test
-
+    default: local
 app:
   jwt:
     secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw

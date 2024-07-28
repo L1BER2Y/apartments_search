@@ -10,6 +10,5 @@ spring:
       mode: embedded
       platform: h2
       schema-locations: schema-h2.sql
-
 server:
   port: 8787

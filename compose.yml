@@ -1,0 +1,120 @@
+name: apartments_search
+
+services:
+
+  audit-service:
+    build: audit-service
+    image: flats_audit-service:1.0.0
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_PROFILES_ACTIVE: audit-docker
+    networks:
+      - flats-network
+    depends_on:
+      - postgresql
+
+  flats-service:
+    build: flats-service
+    image: flats_flats-service:1.0.0
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_PROFILES_ACTIVE: flats-docker
+    networks:
+      - flats-network
+    depends_on:
+      - postgresql
+
+  mail-service:
+    build: mail-service
+    image: flats_mail-service:1.0.0
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+    networks:
+      - flats-network
+
+  parser-service:
+    build: parser-service
+    image: flats_parser-service:1.0.0
+    ports:
+      - "8087:8087"
+    environment:
+      SPRING_PROFILE_ACTIVE: parser-docker
+    networks:
+      - flats-network
+    depends_on:
+      - postgresql
+
+  report-service:
+    build: report-service
+    image: flats_report-service:1.0.0
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: report-docker
+    networks:
+      - flats-network
+    depends_on:
+      - postgresql
+
+  user-service:
+    build: user-service
+    image: flats_user-service:1.0.0
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - flats-network
+    depends_on:
+      - postgresql
+
+  postgresql:
+    build: postgresql
+    image: flats_postgresql:1.0.0
+    volumes:
+      - app-db-data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - flats-network
+
+  pgadmin:
+    build: pgadmin
+    image: flats_pgadmin:1.0.0
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "82:80"
+    networks:
+      - flats-network
+
+  swagger-ui:
+    build: swagger-ui
+    image: flats_swagger-ui:1.0.3
+    ports:
+      - "81:8080"
+    networks:
+      - flats-network
+
+  proxy:
+    build: proxy
+    image: flats_proxy:1.0.1
+    ports:
+      - "80:80"
+    networks:
+      - flats-network
+
+networks:
+  flats-network:
+    driver: bridge
+
+volumes:
+  app-db-data:

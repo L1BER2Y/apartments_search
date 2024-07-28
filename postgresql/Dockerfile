@@ -1,3 +1,3 @@
-FROM postgres:16.1-alpine3.18
+FROM postgres:16.3-alpine3.18
 
-#ADD /**userService**/ddl/*.sql /docker-entrypoint-initdb.d/
+COPY init.sql /docker-entrypoint-initdb.d/init.sql

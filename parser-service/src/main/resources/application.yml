@@ -4,7 +4,7 @@ spring:
   jpa:
       show-sql: true
   profiles:
-      default: parser-test
+      default: local
 app:
   url:
     base-sale: https://re.kufar.by/l/minsk/kupit/kvartiru

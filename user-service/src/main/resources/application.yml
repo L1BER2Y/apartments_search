@@ -1,8 +1,14 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
+  task:
+    scheduling:
+      pool:
+        size: 1
   jpa:
     show-sql: true
+  profiles:
+    default: local
 app:
   jwt:
     secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
