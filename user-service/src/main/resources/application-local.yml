@@ -3,9 +3,15 @@ spring:
     url: jdbc:postgresql://localhost:5432/user_service?currentSchema=users
     password: 4712vs5988gh
     username: postgres
-  task:
-    scheduling:
-      pool:
-        size: 1
+
 server:
   port: 8080
+
+app:
+  feign:
+    audit-logs:
+      url: http://localhost:8084
+
+mail:
+  service:
+    url: http://localhost:8081/mail

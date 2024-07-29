@@ -3,3 +3,12 @@ spring:
     url: jdbc:postgresql://postgresql:5432/user_service?currentSchema=users
     password: postgres
     username: postgres
+
+app:
+  feign:
+    audit-logs:
+      url: http://audit-service:8084
+
+mail:
+  service:
+    url: http://mail-service:8081/mail

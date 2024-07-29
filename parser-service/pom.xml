@@ -25,7 +25,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -80,6 +79,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -113,9 +113,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <mainClass>by.shershen.parser_service.ParserServiceApplication</mainClass>
-                </configuration>
             </plugin>
         </plugins>
         <finalName>${project.name}-${project.version}</finalName>

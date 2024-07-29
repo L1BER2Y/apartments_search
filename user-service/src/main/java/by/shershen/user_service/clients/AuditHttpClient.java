@@ -30,7 +30,7 @@ public class AuditHttpClient{
             String body = objectMapper.writeValueAsString(auditDto);
             HttpClient httpClient = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8084/audit"))
+                    .uri(new URI("${app.feign.audit-logs.url}/audit"))
                     .headers(
                             "Authorization", "Bearer " + jwtToken,
                             "Content-Type", APPLICATION_JSON_VALUE

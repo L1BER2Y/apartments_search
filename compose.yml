@@ -32,7 +32,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_PROFILES_ACTIVE: local
+      SPRING_PROFILES_ACTIVE: mail-docker
     networks:
       - flats-network
 
@@ -71,6 +71,8 @@ services:
       - flats-network
     depends_on:
       - postgresql
+      - mail-service
+      - audit-service
 
   postgresql:
     build: postgresql

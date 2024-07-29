@@ -4,8 +4,5 @@ spring:
     password: 4712vs5988gh
     username: postgres
 
-user:
-  storage: MEMORY #MEMORY or JDBC
-
 server:
   port: 8084

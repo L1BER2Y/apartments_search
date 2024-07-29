@@ -13,7 +13,7 @@ public class Requester {
         try {
             return Jsoup.connect(url).get();
         } catch (IOException e) {
-            log.error("Не могу получить Html документ");
+            log.error("Can't get the HTML document");
             throw new RuntimeException(e);
         }
     }

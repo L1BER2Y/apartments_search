@@ -1,0 +1,13 @@
+spring:
+  email:
+    message:
+      link: |
+        or follow to the URL 
+        http://user-service:8080/users/verification?code=
+      mail: |
+        &mail=
+      code: |
+        Verification code:
+
+server:
+  port: 8081
