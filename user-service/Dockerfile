@@ -8,3 +8,5 @@ FROM eclipse-temurin:17.0.9_9-jre-alpine AS result-image
 WORKDIR /app
 COPY --from=build-image /app/target/*.jar app.jar
 CMD ["java","-jar","app.jar"]
+
+EXPOSE 8080

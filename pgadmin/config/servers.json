@@ -1,11 +1,11 @@
 {
   "Servers": {
     "1": {
-      "Name": "Flats DB",
+      "Name": "Apartments_search DB",
       "Group": "Server Group 1",
       "Port": 5432,
-      "Username": "root",
-      "Host": "db",
+      "Username": "postgres",
+      "Host": "postgresql",
       "SSLMode": "prefer",
       "MaintenanceDB": "postgres"
     }
