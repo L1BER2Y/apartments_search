@@ -4,6 +4,9 @@ spring:
     password: postgres
     username: postgres
 
+server:
+  port: 8080
+
 app:
   feign:
     audit-logs:

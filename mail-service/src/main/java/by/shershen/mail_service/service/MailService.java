@@ -29,7 +29,7 @@ public class MailService implements IMailService {
     public void send(MailDTO mailDTO) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("phantomlkill@mail.ru");
-        mailMessage.setText(code + mailDTO.getCode()
+        mailMessage.setText(code + mailDTO.getCode() + " "
                             + link + mailDTO.getCode()
                             + mail + mailDTO.getMail());
         mailMessage.setTo(mailDTO.getMail());

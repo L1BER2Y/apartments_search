@@ -3,7 +3,7 @@ spring:
     message:
       link: |
         or follow to the URL 
-        http://user-service:8080/users/verification?code=
+        http://localhost:80/api/v1/users/verification?code=
       mail: |
         &mail=
       code: |

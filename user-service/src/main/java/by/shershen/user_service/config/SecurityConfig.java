@@ -18,54 +18,46 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter filter) throws Exception  {
-        // Enable CORS and disable CSRF
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter filter) throws Exception {
         http
                 .cors(withDefaults())
-                        .csrf(AbstractHttpConfigurer::disable)
-
-        // Set session management to stateless
+                .csrf(AbstractHttpConfigurer::disable)
 
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
-                                httpSecuritySessionManagementConfigurer
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        httpSecuritySessionManagementConfigurer
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
-        // Set unauthorized requests exception handler
 
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
-                                httpSecurityExceptionHandlingConfigurer
-                    .authenticationEntryPoint(
-                        (request, response, ex) -> response.setStatus(
-                                HttpServletResponse.SC_UNAUTHORIZED
-                        )
-                    )
-                    .accessDeniedHandler(
-                        (request, response, ex) -> response.setStatus(
-                            HttpServletResponse.SC_FORBIDDEN
-                        )
-                    )
+                        httpSecurityExceptionHandlingConfigurer
+                                .authenticationEntryPoint(
+                                        (request, response, ex) -> response.setStatus(
+                                                HttpServletResponse.SC_UNAUTHORIZED
+                                        )
+                                )
+                                .accessDeniedHandler(
+                                        (request, response, ex) -> response.setStatus(
+                                                HttpServletResponse.SC_FORBIDDEN
+                                        )
+                                )
                 )
 
-        // Set permissions on endpoints
-
                 .authorizeHttpRequests(requests -> requests
-                    .requestMatchers(HttpMethod.POST,"/users/registration" ).permitAll()
-                    .requestMatchers(HttpMethod.POST,"/users/login").permitAll()
-                    .requestMatchers(HttpMethod.GET,"/users/verification").permitAll()
-                    .requestMatchers(HttpMethod.GET,"/users/me").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/users").hasAnyRole("ADMIN")
-                    .requestMatchers(HttpMethod.GET,"/users/{uuid}").hasAnyRole("ADMIN")
-                    .requestMatchers(HttpMethod.POST,"/users").hasAnyRole("ADMIN")
-                    .requestMatchers(HttpMethod.PUT,"/users").hasAnyRole("ADMIN")
-                    .anyRequest().authenticated()
-        )
+                        .requestMatchers(HttpMethod.POST, "/users/registration").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/verification").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/users").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/users/{uuid}").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/users").hasAnyRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
 
-        // Add JWT token filter
 
                 .addFilterBefore(filter,
-                    UsernamePasswordAuthenticationFilter.class
-        );
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }

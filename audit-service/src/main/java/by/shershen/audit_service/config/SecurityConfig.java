@@ -20,19 +20,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter filter) throws Exception  {
-        // Enable CORS and disable CSRF
         http
                 .cors(withDefaults())
                         .csrf(AbstractHttpConfigurer::disable);
 
-        // Set session management to stateless
         http
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                                 httpSecuritySessionManagementConfigurer
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
-        // Set unauthorized requests exception handler
         http
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
                                 httpSecurityExceptionHandlingConfigurer
@@ -48,7 +45,6 @@ public class SecurityConfig {
                     )
                 );
 
-        // Set permissions on endpoints
         http
                 .authorizeHttpRequests(requests -> requests
                 .requestMatchers(HttpMethod.GET,"/audit").hasAnyRole("ADMIN")
@@ -56,7 +52,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST,"/audit").hasAnyRole("SYSTEM")
         );
 
-        // Add JWT token filter
         http
                 .addFilterBefore(filter,
                     UsernamePasswordAuthenticationFilter.class

@@ -3,3 +3,6 @@ spring:
     url: jdbc:postgresql://postgresql:5432/user_service?currentSchema=users
     password: postgres
     username: postgres
+
+server:
+  port: 8084

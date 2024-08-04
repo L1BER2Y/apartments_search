@@ -5,8 +5,6 @@ services:
   audit-service:
     build: audit-service
     image: flats_audit-service:1.0.0
-    ports:
-      - "8084:8084"
     environment:
       SPRING_PROFILES_ACTIVE: audit-docker
     networks:
@@ -17,8 +15,6 @@ services:
   flats-service:
     build: flats-service
     image: flats_flats-service:1.0.0
-    ports:
-      - "8086:8086"
     environment:
       SPRING_PROFILES_ACTIVE: flats-docker
     networks:
@@ -29,8 +25,6 @@ services:
   mail-service:
     build: mail-service
     image: flats_mail-service:1.0.0
-    ports:
-      - "8081:8081"
     environment:
       SPRING_PROFILES_ACTIVE: mail-docker
     networks:
@@ -39,8 +33,6 @@ services:
   parser-service:
     build: parser-service
     image: flats_parser-service:1.0.0
-    ports:
-      - "8087:8087"
     environment:
       SPRING_PROFILES_ACTIVE: parser-docker
     networks:
@@ -51,8 +43,6 @@ services:
   report-service:
     build: report-service
     image: flats_report-service:1.0.0
-    ports:
-      - "8083:8083"
     environment:
       SPRING_PROFILES_ACTIVE: report-docker
     networks:
@@ -88,6 +78,8 @@ services:
   pgadmin:
     build: pgadmin
     image: flats_pgadmin:1.0.0
+    volumes:
+      - pg-admin-data:/var/lib/pgadmin
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
@@ -96,6 +88,8 @@ services:
       - "82:80"
     networks:
       - flats-network
+    depends_on:
+      - postgresql
 
   swagger-ui:
     build: swagger-ui
@@ -119,3 +113,4 @@ networks:
 
 volumes:
   app-db-data:
+  pg-admin-data:
