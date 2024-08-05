@@ -2,10 +2,9 @@
 
 Web application based on microservice architecture style. It grants information about relevant rent and sale options.
 
-## Application services:
-
+## Application microservices:
 - [User-service](https://github.com/L1BER2Y/apartments_search/tree/main/user-service)
-This microservice is responsible for admin (creating/editing users, user information, and user (registering, verification, logging, user information) functions.
+  This microservice is responsible for admin (creating/editing users, user information, and user (registering, verification, logging, user information) functions.
 
 # Used technologies and frameworks:
 - [Java 17](https://docs.oracle.com/en/java/javase/17/docs/api/)
