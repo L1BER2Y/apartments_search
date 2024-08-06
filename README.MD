@@ -36,7 +36,7 @@ Web application based on microservice architecture style. It grants information 
 - [JUnit5](https://junit.org/junit5/)
 - [H2 Database](https://www.h2database.com/html/main.html)
 - [Nginx](https://nginx.org/en/)
-- [PostgreSQL](https://www.postgresql.org/)
+- [PostgreSQL 16](https://www.postgresql.org/)
 - [Docker](https://www.docker.com/)
 
 # Future plans:
