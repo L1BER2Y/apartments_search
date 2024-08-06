@@ -28,10 +28,13 @@ Web application based on microservice architecture style. It grants information 
 
 # Used technologies and frameworks:
 - [Java 17](https://docs.oracle.com/en/java/javase/17/docs/api/)
-- [Maven](https://maven.apache.org/)
+- [Maven 3.9.6](https://maven.apache.org/)
 - [Spring Boot 3.2.0](https://spring.io/projects/spring-boot)
 - [Spring Data JPA 3.2.0](https://spring.io/projects/spring-data-jpa)
 - [Spring Security 3.2.0](https://spring.io/projects/spring-security)
+- [Spring Cloud OpenFeign 4.1.0](https://spring.io/projects/spring-cloud-openfeign)
+- [JUnit5](https://junit.org/junit5/)
+- [H2 Database](https://www.h2database.com/html/main.html)
 - [Nginx](https://nginx.org/en/)
 - [PostgreSQL](https://www.postgresql.org/)
 - [Docker](https://www.docker.com/)
