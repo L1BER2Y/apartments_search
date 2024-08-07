@@ -2,6 +2,9 @@
 
 Web application based on microservice architecture style. It grants information about relevant rent and sale options.
 
+# Architecture diagram:
+
+
 # Application microservices:
 
 **[User-service](https://github.com/L1BER2Y/apartments_search/tree/main/user-service)**
