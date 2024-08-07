@@ -30,8 +30,8 @@ Web application based on microservice architecture style. It grants information 
 # Used technologies and frameworks:
 - [Java 17](https://docs.oracle.com/en/java/javase/17/docs/api/)
 - [Nginx](https://nginx.org/en/)
-- [Docker](https://www.docker.com/)
 - [JUnit5](https://junit.org/junit5/)
+- [Docker](https://www.docker.com/)
 - [Maven 3.9.6](https://maven.apache.org/)
 - [H2 Database](https://www.h2database.com/html/main.html)
 - [PostgreSQL 16](https://www.postgresql.org/)
