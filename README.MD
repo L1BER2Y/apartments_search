@@ -41,4 +41,7 @@ Web application based on microservice architecture style. It grants information 
 - [Docker](https://www.docker.com/)
 
 # Future plans:
-Unit-testing, NoSQL database, Message broker(RabbitMQ)
+- ~~Unit-testing~~
+- Expand audit functionality 
+- NoSQL database
+- Message broker (RabbitMQ)
