@@ -5,7 +5,8 @@ Web application based on microservice architecture style. It grants information 
 # Application microservices:
 
 **[User-service](https://github.com/L1BER2Y/apartments_search/tree/main/user-service)**
-- This microservice is responsible for admin (creating/editing users, user information, and user (registering, verification, logging, user information) functions.
+- This microservice is responsible for admin (creating/editing users, user information, and user (registering, verification, logging in, user information) functions.
+- Also it has user action tracking functionality, that was implemented with the help of Aspect-oriented programming.
 
 **[Flats-service](https://github.com/L1BER2Y/apartments_search/tree/main/flats-service)**
 - Flats-service is used to display information about flats.
