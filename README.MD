@@ -3,7 +3,7 @@
 Web application based on microservice architecture style. It grants information about relevant rent and sale options.
 
 # Application diagram:
-<img src="https://raw.githubusercontent.com/L1BER2Y/apartments_search/blob/main/diagrams/Application%20diagram.png" alt="architecture-diagram" width="1000"/>
+<img src="https://raw.githubusercontent.com/L1BER2Y/apartments_search/main/diagrams/Application%20diagram.png" alt="architecture-diagram" width="1000"/>
 
 # Application microservices:
 
