@@ -1,6 +1,6 @@
 # Description
 
-Web application based on microservice architecture style. It grants information about relevant rent and sale options.
+Web application based on microservice architecture style. It grants information about relevant flat rent and sale options.
 
 # How to run
 
