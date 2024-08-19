@@ -4,6 +4,21 @@ Web application based on microservice architecture style. It grants information 
 
 # How to run
 
+To start the application, follow these steps:
+
+### 1. Clone the repository
+
+Clone project repository by this command:
+
+```bash
+git clone https://github.com/L1BER2Y/apartments_search.git
+```
+### 2. Next, go to application root directory and start application in docker by following command:
+
+```bash
+docker compose up -d
+```
+
 # Application diagram:
 <img src="https://raw.githubusercontent.com/L1BER2Y/apartments_search/main/diagrams/Application%20diagram.png" alt="architecture-diagram" width="1000"/>
 
