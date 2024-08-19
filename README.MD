@@ -14,7 +14,7 @@ Clone project repository by this command:
 git clone https://github.com/L1BER2Y/apartments_search.git
 ```
 
-### 2. Next, go to application root directory and start application in docker by following command:
+### 2. Next, go to the root directory and start application in docker by following command:
 
 ```bash
 docker compose up -d
