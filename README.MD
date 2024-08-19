@@ -13,6 +13,7 @@ Clone project repository by this command:
 ```bash
 git clone https://github.com/L1BER2Y/apartments_search.git
 ```
+
 ### 2. Next, go to application root directory and start application in docker by following command:
 
 ```bash
