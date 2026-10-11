@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://postgresql:5432/user_service?currentSchema=users
-    password: postgres
-    username: postgres
+    password: ${DB_PASSWORD}
+    username: ${DB_USERNAME}
 
 server:
   port: 8087

@@ -7,26 +7,35 @@ services:
     image: flats_audit-service:1.0.0
     environment:
       SPRING_PROFILES_ACTIVE: audit-docker
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
     networks:
       - flats-network
     depends_on:
-      - postgresql
+      postgresql:
+        condition: service_healthy
 
   flats-service:
     build: flats-service
     image: flats_flats-service:1.0.0
     environment:
       SPRING_PROFILES_ACTIVE: flats-docker
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     networks:
       - flats-network
     depends_on:
-      - postgresql
+      postgresql:
+        condition: service_healthy
 
   mail-service:
     build: mail-service
     image: flats_mail-service:1.0.0
     environment:
       SPRING_PROFILES_ACTIVE: mail-docker
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
     networks:
       - flats-network
 
@@ -35,32 +44,45 @@ services:
     image: flats_parser-service:1.0.0
     environment:
       SPRING_PROFILES_ACTIVE: parser-docker
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     networks:
       - flats-network
     depends_on:
-      - postgresql
+      postgresql:
+        condition: service_healthy
 
   report-service:
     build: report-service
     image: flats_report-service:1.0.0
     environment:
       SPRING_PROFILES_ACTIVE: report-docker
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
     networks:
       - flats-network
     depends_on:
-      - postgresql
+      postgresql:
+        condition: service_healthy
 
   user-service:
     build: user-service
     image: flats_user-service:1.0.0
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
     networks:
       - flats-network
     depends_on:
-      - postgresql
-      - mail-service
-      - audit-service
+      postgresql:
+        condition: service_healthy
+      mail-service:
+        condition: service_started
+      audit-service:
+        condition: service_started
 
   postgresql:
     build: postgresql
@@ -70,10 +92,15 @@ services:
     restart: always
     environment:
       POSTGRES_DB: user_service
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     networks:
       - flats-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -h localhost -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   pgadmin:
     build: pgadmin
@@ -82,8 +109,8 @@ services:
       - pg-admin-data:/var/lib/pgadmin
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: root
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - "82:80"
     networks:
@@ -106,6 +133,12 @@ services:
       - "80:80"
     networks:
       - flats-network
+    depends_on:
+      - user-service
+      - audit-service
+      - report-service
+      - flats-service
+    restart: on-failure
 
 networks:
   flats-network:

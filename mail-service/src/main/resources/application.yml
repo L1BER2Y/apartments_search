@@ -2,8 +2,8 @@ spring:
   mail:
     host: smtp.mail.ru
     port: 465
-    username: phantomlkill@mail.ru
-    password: ZThQF9VmFFuDiksRm3tV
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
     properties:
       mail:
         smtp:
@@ -12,4 +12,3 @@ spring:
             enable: true
           ssl:
             enable: true
-
