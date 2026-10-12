@@ -20,13 +20,6 @@ SET row_security = off;
 -- Name: user_service; Type: DATABASE; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE user_service WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'Russian_Russia.1251';
-
-
-ALTER DATABASE user_service OWNER TO postgres;
-
-\connect user_service
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -141,8 +134,6 @@ CREATE TABLE users.users (
 
 
 ALTER TABLE users.users OWNER TO postgres;
-
-INSERT INTO users.codes (id, code, mail, send_code) VALUES ('f929d818-a105-4900-a3a3-cc89ec348325', '6063', 'test@gmail.com', 'FALSE');
 
 --
 -- Name: codes codes_pkey; Type: CONSTRAINT; Schema: users; Owner: postgres
