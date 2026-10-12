@@ -1,6 +1,5 @@
 package by.shershen.user_service.service;
 
-import by.shershen.user_service.controller.utils.JwtTokenHandler;
 import by.shershen.user_service.core.converters.api.IUserConverter;
 import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.dto.UserDetailsDTO;
@@ -11,7 +10,6 @@ import by.shershen.user_service.core.exceptions.ValidationException;
 import by.shershen.user_service.repository.UserRepository;
 import by.shershen.user_service.service.api.IVerificationQueueService;
 import by.shershen.user_service.util.DataUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,10 +29,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,7 +43,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class UserServiceTests {
+class UserServiceTests {
 
     @Mock
     private IVerificationQueueService verificationQueueService;
@@ -66,7 +62,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("Test save user functionality")
-    public void givenUserToSave_whenSaveUser_thenRepositoryIsCalled() {
+    void givenUserToSave_whenSaveUser_thenRepositoryIsCalled() {
         //given
         UserEntity userToSave = DataUtils.getUserTransient();
         BDDMockito.given(userRepository.findByMail(anyString()))
@@ -81,7 +77,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("Test save user with duplicate email functionality")
-    public void givenUserToSaveWithDuplicatedEmail_whenSaveUser_thenExceptionIsThrown() {
+    void givenUserToSaveWithDuplicatedEmail_whenSaveUser_thenExceptionIsThrown() {
         //given
         UserEntity userToSave = DataUtils.getUserTransient();
         BDDMockito.given(userRepository.existsByMail(anyString()))
@@ -94,7 +90,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("Test update user functionality")
-    public void givenUserToUpdate_whenUpdateUser_thenRepositoryIsCalled() {
+    void givenUserToUpdate_whenUpdateUser_thenRepositoryIsCalled() {
         //given
         UserEntity userToUpdate = DataUtils.getUserTransient();
         UUID id = userToUpdate.getId();
@@ -114,7 +110,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("Test update user with unacceptable dtUpdate")
-    public void givenUserToUpdate_whenUpdateUser_thenExceptionIsThrown() {
+    void givenUserToUpdate_whenUpdateUser_thenExceptionIsThrown() {
         //given
         UserEntity userToUpdate = DataUtils.getUserTransient();
         UUID id = userToUpdate.getId();
@@ -133,7 +129,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("Test findInfo user by id functionality")
-    public void givenId_whenFindById_thenUserIsReturned() {
+    void givenId_whenFindById_thenUserIsReturned() {
         //given
         BDDMockito.given(userRepository.findById(any(UUID.class)))
                 .willReturn(Optional.of(DataUtils.getUserPersisted()));
@@ -147,18 +143,19 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("Test findInfo user by wrong id functionality")
-    public void givenIncorrectId_whenFindById_thenExceptionIsThrown() {
+    void givenIncorrectId_whenFindById_thenExceptionIsThrown() {
         //given
         BDDMockito.given(userRepository.findById(any(UUID.class)))
                 .willReturn(Optional.empty());
         //when
-        assertThrows(EntityNotFoundException.class, () -> serviceUnderTest.findById(any(UUID.class)));
+        UUID anyUUID = any(UUID.class);
+        assertThrows(EntityNotFoundException.class, () -> serviceUnderTest.findById(anyUUID));
         //then
     }
 
     @Test
     @DisplayName("Test register user functionality")
-    public void givenUserToRegister_whenRegisterUser_thenRepositoryIsCalled() {
+    void givenUserToRegister_whenRegisterUser_thenRepositoryIsCalled() {
         //given
         UserEntity userToRegister = DataUtils.getUserTransient();
         BDDMockito.given(userRepository.findByMail(anyString()))
@@ -174,7 +171,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("Test register user with duplicate email functionality")
-    public void givenUserToRegisterWithDuplicateEmail_whenRegister_thenExceptionIsThrown() {
+    void givenUserToRegisterWithDuplicateEmail_whenRegister_thenExceptionIsThrown() {
         //given
         UserEntity userToRegister = DataUtils.getUserTransient();
         BDDMockito.given(userRepository.existsByMail(anyString()))
@@ -188,7 +185,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("Test find user info functionality")
-    public void givenUserDetails_whenFindInfo_thenRepositoryIsCalled() {
+    void givenUserDetails_whenFindInfo_thenRepositoryIsCalled() {
         //given
         UserDetailsDTO userDetails = new UserDetailsDTO(UUID.randomUUID(), "test@mail.com", "Test", Role.USER);
 
@@ -215,14 +212,14 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("Test get page of users functionality")
-    public void givenPageParams_whenGetPage_thenRepositoryIsCalled() {
+    void givenPageParams_whenGetPage_thenRepositoryIsCalled() {
         //given
         List<UserEntity> entities = List.of(DataUtils.getUserPersisted(), DataUtils.getUserOnePersisted(), DataUtils.getUserTwoPersisted());
         int page = 1;
         int size = 20;
         Pageable pageRequest = PageRequest.of(page, size);
         BDDMockito.given(userRepository.findAll(pageRequest))
-                .willReturn(new PageImpl<UserEntity>(entities, pageRequest, size));
+                .willReturn(new PageImpl<>(entities, pageRequest, size));
         //when
         Page<UserDTO> testPage = serviceUnderTest.getPage(pageRequest);
         //then
