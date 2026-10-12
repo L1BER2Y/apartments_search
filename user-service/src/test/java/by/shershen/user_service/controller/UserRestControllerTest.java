@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = UserRestController.class)
 @WithMockUser
-public class UserRestControllerTest {
+class UserRestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -62,7 +62,7 @@ public class UserRestControllerTest {
 
     @Test
     @DisplayName("Test user registration functionality")
-    public void givenUserRegDTO_whenRegisterUser_thenReturnStatusCreated() throws Exception {
+    void givenUserRegDTO_whenRegisterUser_thenReturnStatusCreated() throws Exception {
         //given
         UserRegDTO userRegDTO = DataUtils.getUserRegDTOTransient();
         UserEntity userEntity = DataUtils.getUserPersisted();
@@ -83,7 +83,7 @@ public class UserRestControllerTest {
 
     @Test
     @DisplayName("Test user registration functionality")
-    public void givenUserRegDTOWithExistingMail_whenRegisterUser_thenReturnStatusBadRequest() throws Exception {
+    void givenUserRegDTOWithExistingMail_whenRegisterUser_thenReturnStatusBadRequest() throws Exception {
         //given
         UserRegDTO userRegDTO = DataUtils.getUserRegDTOTransient();
         UserEntity userEntity = DataUtils.getUserPersisted();
@@ -104,7 +104,7 @@ public class UserRestControllerTest {
 
     @Test
     @DisplayName("Test user verification functionality")
-    public void givenMailAndCode_whenVerifyUser_thenReturnStatusOk() throws Exception {
+    void givenMailAndCode_whenVerifyUser_thenReturnStatusOk() throws Exception {
         //given
         String mail = "test@test.com";
         String code = "code";
@@ -122,7 +122,7 @@ public class UserRestControllerTest {
 
     @Test
     @DisplayName("Test user verification functionality")
-    public void givenMailAndCode_whenVerifyUser_thenExceptionIsThrown() throws Exception {
+    void givenMailAndCode_whenVerifyUser_thenExceptionIsThrown() throws Exception {
         //given
         Mockito.doThrow(ValidationException.class).when(verificationService).verify(any(VerificationDTO.class));
         //when
@@ -137,7 +137,7 @@ public class UserRestControllerTest {
 
     @Test
     @DisplayName("Test user login functionality")
-    public void givenUserLoginDTO_whenLoginUser_thenReturnTokenAndStatusOk() throws Exception {
+    void givenUserLoginDTO_whenLoginUser_thenReturnTokenAndStatusOk() throws Exception {
         //given
         UserLoginDTO loginDTO = DataUtils.getUserLoginDTOTransient();
         //when
@@ -153,7 +153,7 @@ public class UserRestControllerTest {
 
     @Test
     @DisplayName("Test user login fail functionality")
-    public void givenUserLoginDTO_whenLoginUser_thenExceptionIsThrown() throws Exception {
+    void givenUserLoginDTO_whenLoginUser_thenExceptionIsThrown() throws Exception {
         //given
         Mockito.doThrow(ValidationException.class).when(authorizationService).login(any(UserLoginDTO.class));
         //when
@@ -168,7 +168,7 @@ public class UserRestControllerTest {
 
     @Test
     @DisplayName("Test get info about user functionality")
-    public void whenFindInfo_thenUserDTOIsReturned() throws Exception {
+    void whenFindInfo_thenUserDTOIsReturned() throws Exception {
         //given
         UserDTO userDTO = DataUtils.getUserDTOPersisted();
         Mockito.doReturn(userDTO).when(userService).findInfo();
