@@ -27,7 +27,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthorizationServiceTests {
+class AuthorizationServiceTests {
 
     @Mock
     private UserRepository userRepository;
@@ -46,7 +46,7 @@ public class AuthorizationServiceTests {
 
     @Test
     @DisplayName("Test user authorization functionality")
-    public void givenUserLoginDTO_whenLogin_thenRepositoryIsCalled() {
+    void givenUserLoginDTO_whenLogin_thenRepositoryIsCalled() {
         //given
         String token = "token";
         UserLoginDTO loginDTO = DataUtils.getUserLoginDTOTransient();
@@ -79,11 +79,9 @@ public class AuthorizationServiceTests {
 
     @Test
     @DisplayName("Test user authorization with wrong credentials functionality")
-    public void givenUserLoginDTOWithWrongCredentials_whenLogin_thenExceptionIsThrown() {
+    void givenUserLoginDTOWithWrongCredentials_whenLogin_thenExceptionIsThrown() {
         //given
         UserLoginDTO loginDTO = DataUtils.getUserLoginDTOTransient();
-
-        UserDetailsDTO userDetailsDTO = new UserDetailsDTO(UUID.randomUUID(), "test@mail.com", "Test", Role.USER);
 
         BDDMockito.given(userRepository.findByMail(loginDTO.getMail()))
                 .willReturn(Optional.of(DataUtils.getUserPersisted()));
