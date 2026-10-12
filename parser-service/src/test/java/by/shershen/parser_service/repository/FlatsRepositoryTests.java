@@ -15,25 +15,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("parser-test")
-public class FlatsRepositoryTests {
+class FlatsRepositoryTests {
 
     @Autowired
     private FlatsRepository flatsRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         flatsRepository.deleteAll();
     }
 
     @Test
     @DisplayName("Test save all parsed flats")
-    public void givenListOfFlats_whenSaveAll_thenRepositoryIsCalled() {
+    void givenListOfFlats_whenSaveAll_thenRepositoryIsCalled() {
         //given
         List<FlatEntity> flatsList = List.of(DataUtils.getFlatEntityTransient(), DataUtils.getFlatEntityOneTransient(), DataUtils.getFlatEntityTwoTransient());
         //when
         List<FlatEntity> obtainedFlats = flatsRepository.saveAll(flatsList);
         //then
-        assertThat(obtainedFlats).isNotEmpty();
-        assertThat(obtainedFlats.size()).isEqualTo(flatsList.size());
+        assertThat(obtainedFlats).isNotEmpty().hasSameSizeAs(flatsList);
     }
 }
