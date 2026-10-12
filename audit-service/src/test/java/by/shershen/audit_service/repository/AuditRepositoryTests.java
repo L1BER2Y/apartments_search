@@ -15,19 +15,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("audit-test")
-public class AuditRepositoryTests {
+class AuditRepositoryTests {
 
     @Autowired
     private AuditRepository auditRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         auditRepository.deleteAll();
     }
 
     @Test
     @DisplayName("Test audit save functionality")
-    public void givenAuditEntity_whenSave_thenRepositoryIsCalled() {
+    void givenAuditEntity_whenSave_thenRepositoryIsCalled() {
         //given
         AuditEntity auditEntity = DataUtils.getAuditEntityTransient();
         //when
@@ -39,7 +39,7 @@ public class AuditRepositoryTests {
 
     @Test
     @DisplayName("Test audit find by id functionality")
-    public void givenAuditEntity_whenFindById_thenRepositoryIsCalled() {
+    void givenAuditEntity_whenFindById_thenRepositoryIsCalled() {
         //given
         AuditEntity auditEntity = DataUtils.getAuditEntityTransient();
         AuditEntity savedAudit = auditRepository.save(auditEntity);
@@ -52,14 +52,13 @@ public class AuditRepositoryTests {
 
     @Test
     @DisplayName("Test find all audits functionality")
-    public void givenListOfAuditEntities_whenFindAll_thenRepositoryIsCalled() {
+    void givenListOfAuditEntities_whenFindAll_thenRepositoryIsCalled() {
         //given
         List<AuditEntity> auditList = List.of(DataUtils.getAuditEntityTransient(), DataUtils.getAuditEntityOneTransient(), DataUtils.getAuditEntityTwoTransient());
         auditRepository.saveAll(auditList);
         //when
         List<AuditEntity> obtainedAudits = auditRepository.findAll();
         //then
-        assertThat(obtainedAudits).isNotNull();
-        assertThat(obtainedAudits.size()).isEqualTo(auditList.size());
+        assertThat(obtainedAudits).isNotNull().hasSameSizeAs(auditList);
     }
 }
