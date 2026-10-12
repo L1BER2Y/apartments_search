@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @WebMvcTest
 @WithMockUser
-public class AuditRestControllerTests {
+class AuditRestControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -59,7 +59,7 @@ public class AuditRestControllerTests {
 
     @Test
     @DisplayName("Test get page of audit functionality")
-    public void givenPageParams_whenGetAudit_thenReturnPage() throws Exception {
+    void givenPageParams_whenGetAudit_thenReturnPage() throws Exception {
         //given
         int page = 1;
         int size = 10;
@@ -84,7 +84,7 @@ public class AuditRestControllerTests {
 
     @Test
     @DisplayName("Test get audit by id functionality")
-    public void givenAuditId_whenGetAudit_thenReturnAuditInfoDTO() throws Exception {
+    void givenAuditId_whenGetAudit_thenReturnAuditInfoDTO() throws Exception {
         //given
         UUID id = UUID.randomUUID();
         AuditInfoDTO auditInfoDTO = DataUtils.getAuditInfoDTOTransient();
@@ -104,9 +104,9 @@ public class AuditRestControllerTests {
 
     @Test
     @DisplayName("Test save request acceptance functionality")
-    public void givenAuditDtoToSave_whenSaveAudit_thenReturnAuditInfoDTO() throws Exception {
+    void givenAuditDtoToSave_whenSaveAudit_thenReturnAuditInfoDTO() throws Exception {
         //given
-        String AUTHORIZATION = "Authorization";
+        String authorization = "Authorization";
         AuditDTO auditDTO = DataUtils.getAuditDTOTransient();
 
         BDDMockito.given(auditService.saveAudit(any(AuditDTO.class)))
@@ -117,7 +117,7 @@ public class AuditRestControllerTests {
         //when
         ResultActions result = mockMvc.perform(post("/audit")
                 .with(csrf())
-                .header(AUTHORIZATION, "Authorization")
+                .header(authorization, "Authorization")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(auditDTO)));
         //then

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class VerificationServiceTests {
+class VerificationServiceTests {
     @Mock
     private VerificationRepository verificationRepository;
 
@@ -41,7 +41,7 @@ public class VerificationServiceTests {
 
     @Test
     @DisplayName("Test user verification functionality")
-    public void givenVerificationDTO_whenVerify_thenRepositoryIsCalled() {
+    void givenVerificationDTO_whenVerify_thenRepositoryIsCalled() {
         //given
         VerificationDTO verificationDTO = new VerificationDTO("code", "test@mail.com");
 
@@ -68,7 +68,7 @@ public class VerificationServiceTests {
 
     @Test
     @DisplayName("Test verified user functionality")
-    public void givenVerificationDTOVerified_whenVerify_thenExceptionIsThrown() {
+    void givenVerificationDTOVerified_whenVerify_thenExceptionIsThrown() {
         //given
         VerificationDTO verificationDTO = new VerificationDTO("code", "test@mail.com");
 

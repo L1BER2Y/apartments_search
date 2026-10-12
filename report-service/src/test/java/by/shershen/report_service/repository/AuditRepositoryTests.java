@@ -16,19 +16,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("report-test")
-public class AuditRepositoryTests {
+class AuditRepositoryTests {
 
     @Autowired
     private AuditRepository auditRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         auditRepository.deleteAll();
     }
 
     @Test
     @DisplayName("Test find all audits with parameters functionality")
-    public void givenParameters_whenFindAllAudits_thenListOfAuditsIsCreated() {
+    void givenParameters_whenFindAllAudits_thenListOfAuditsIsCreated() {
         //given
         AuditEntity audit = DataUtils.getAuditEntityTransient();
         AuditEntity audit1 = DataUtils.getAuditEntityOneTransient();

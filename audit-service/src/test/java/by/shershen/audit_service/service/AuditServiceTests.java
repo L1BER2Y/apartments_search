@@ -29,7 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class AuditServiceTests {
+class AuditServiceTests {
 
     @Mock
     private IAuditConverter auditConverter;
@@ -42,7 +42,7 @@ public class AuditServiceTests {
 
     @Test
     @DisplayName("Test get audit page functionality")
-    public void givenPageParameters_whenGetAudit_thenRepositoryIsCalled() {
+    void givenPageParameters_whenGetAudit_thenRepositoryIsCalled() {
         //given
         List<AuditEntity> listOfAudits = List.of(DataUtils.getAuditEntityTransient(), DataUtils.getAuditEntityOneTransient(), DataUtils.getAuditEntityTwoTransient());
         int page = 1;
@@ -61,7 +61,7 @@ public class AuditServiceTests {
 
     @Test
     @DisplayName("Test get audit by id functionality")
-    public void givenAuditId_whenGetAuditById_thenRepositoryIsCalled() {
+    void givenAuditId_whenGetAuditById_thenRepositoryIsCalled() {
         //given
         BDDMockito.given(auditRepository.findById(any(UUID.class)))
                 .willReturn(Optional.of(DataUtils.getAuditEntityTransient()));
@@ -77,7 +77,7 @@ public class AuditServiceTests {
 
     @Test
     @DisplayName("Test save audit functionality")
-    public void givenAuditDTO_whenSaveAudit_thenRepositoryIsCalled() {
+    void givenAuditDTO_whenSaveAudit_thenRepositoryIsCalled() {
         //given
         AuditDTO auditDTO = DataUtils.getAuditDTOTransient();
         BDDMockito.given(auditConverter.convertAuditDTOToAuditEntity(any(AuditDTO.class)))

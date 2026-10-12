@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(AdminRestController.class)
 @WithMockUser
-public class AdminRestControllerTest {
+class AdminRestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -73,7 +73,7 @@ public class AdminRestControllerTest {
 
     @Test
     @DisplayName("Test create User developer")
-    public void givenUserCreateDto_whenCreateUser_thenReturnStatusIsCreated() throws Exception {
+    void givenUserCreateDto_whenCreateUser_thenReturnStatusIsCreated() throws Exception {
         //given
         UserCreateDTO dto = UserCreateDTO.builder()
                 .fio("Test")
@@ -101,7 +101,7 @@ public class AdminRestControllerTest {
 
     @Test
     @DisplayName("Test createUser developer with existing id")
-    public void givenUserCreateDto_whenCreateUserUser_thenErrorResponse() throws Exception {
+    void givenUserCreateDto_whenCreateUserUser_thenErrorResponse() throws Exception {
         //given
         UserCreateDTO dto = UserCreateDTO.builder()
                 .fio("Test")
@@ -131,7 +131,7 @@ public class AdminRestControllerTest {
 
     @Test
     @DisplayName("Test get page with params")
-    public void givenPageParams_whenGetPage_thenReturnPagination() throws Exception {
+    void givenPageParams_whenGetPage_thenReturnPagination() throws Exception {
         //given
         UserDTO dto = new UserDTO(UUID.randomUUID(), 1L, 2L, "test@mail.com", "test", Role.USER, Status.WAITING_ACTIVATION);
         UserDTO dto1 = new UserDTO(UUID.randomUUID(), 2L, 3L, "test1@mail.com", "test1", Role.USER, Status.WAITING_ACTIVATION);
@@ -158,7 +158,7 @@ public class AdminRestControllerTest {
 
     @Test
     @DisplayName("Test findInfo user by id")
-    public void givenUserId_whenFindUserById_thenReturnUser() throws Exception {
+    void givenUserId_whenFindUserById_thenReturnUser() throws Exception {
         //given
         UUID id = UUID.randomUUID();
 
@@ -178,7 +178,7 @@ public class AdminRestControllerTest {
 
     @Test
     @DisplayName("Test findInfo user with incorrect id")
-    public void givenWrongUserId_whenFindUserById_thenReturnError() throws Exception {
+    void givenWrongUserId_whenFindUserById_thenReturnError() throws Exception {
         //given
         UUID id = UUID.randomUUID();
 
@@ -196,7 +196,7 @@ public class AdminRestControllerTest {
 
     @Test
     @DisplayName("Test update user")
-    public void givenUserUpdateDto_whenUpdateUser_thenReturnSuccessMessage() throws Exception {
+    void givenUserUpdateDto_whenUpdateUser_thenReturnSuccessMessage() throws Exception {
         //given
         UserCreateDTO dto = UserCreateDTO.builder()
                 .mail("test@mail.com")

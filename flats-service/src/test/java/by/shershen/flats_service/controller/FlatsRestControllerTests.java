@@ -28,7 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(FlatsRestController.class)
-public class FlatsRestControllerTests {
+class FlatsRestControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,7 +44,7 @@ public class FlatsRestControllerTests {
 
     @Test
     @DisplayName("Test get flats with filters and pagination functionality")
-    public void givenFiltersAndPagination_whenGetFlats_thenReturnFlats() throws Exception {
+    void givenFiltersAndPagination_whenGetFlats_thenReturnFlats() throws Exception {
         //given
         int page = 1;
         int size = 10;

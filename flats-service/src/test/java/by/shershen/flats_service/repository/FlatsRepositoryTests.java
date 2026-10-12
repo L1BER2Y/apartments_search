@@ -20,19 +20,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("flats-test")
-public class FlatsRepositoryTests {
+class FlatsRepositoryTests {
 
     @Autowired
     private FlatsRepository flatsRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         flatsRepository.deleteAll();
     }
 
     @Test
     @DisplayName("Test find all flats functionality")
-    public void givenFlatsFilterAndPageable_whenFindAll_thenFlatsPageReturned() {
+    void givenFlatsFilterAndPageable_whenFindAll_thenFlatsPageReturned() {
         //given
         Pageable pageable = PageRequest.of(1, 20);
         FlatsFilter flatsFilter = DataUtils.getFlatsFilterTransient();

@@ -28,7 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class FlatsServiceTests {
+class FlatsServiceTests {
 
     @Mock
     private FlatsRepository flatsRepository;
@@ -41,7 +41,7 @@ public class FlatsServiceTests {
 
     @Test
     @DisplayName("Test get page of flats functionality")
-    public void givenFilterAndPageable_whenGetPageOfFlats_thenReturnPageOfFlats() {
+    void givenFilterAndPageable_whenGetPageOfFlats_thenReturnPageOfFlats() {
         //given
         int page = 1;
         int size = 10;

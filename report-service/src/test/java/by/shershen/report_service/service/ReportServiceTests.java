@@ -34,7 +34,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class ReportServiceTests {
+class ReportServiceTests {
 
     @Mock
     private ReportRepository reportRepository;
@@ -53,7 +53,7 @@ public class ReportServiceTests {
 
     @Test
     @DisplayName("Test create report functionality")
-    public void givenTypeAndParams_whenCreateReport_thenRepositoryIsCalled() {
+    void givenTypeAndParams_whenCreateReport_thenRepositoryIsCalled() {
         //given
         Type type = Type.JOURNAL_AUDIT;
         UserActionAuditParamDTO paramDTO = DataUtils.getUserActionAuditParamDTOTransient();
@@ -74,7 +74,7 @@ public class ReportServiceTests {
 
     @Test
     @DisplayName("Test create report functionality")
-    public void givenTypeAndParams_whenCreateReport_thenExceptionIsThrown() throws Exception {
+    void givenTypeAndParams_whenCreateReport_thenExceptionIsThrown() throws Exception {
         //given
         Type type = Type.JOURNAL_AUDIT;
         UserActionAuditParamDTO paramDTO = DataUtils.getUserActionAuditParamDTOTransient();
@@ -99,7 +99,7 @@ public class ReportServiceTests {
 
     @Test
     @DisplayName("Test get reports page functionality")
-    public void givenPageParams_whenGetAllReports_thenRepositoryIsCalled() {
+    void givenPageParams_whenGetAllReports_thenRepositoryIsCalled() {
         //given
         List<ReportEntity> reportList = List.of(DataUtils.getReportEntityTransient(), DataUtils.getReportEntityOneTransient(), DataUtils.getReportEntityTwoTransient());
         int page = 1;
@@ -118,7 +118,7 @@ public class ReportServiceTests {
 
     @Test
     @DisplayName("Test get report status by id functionality")
-    public void givenReportId_whenGetStatusById_thenRepositoryIsCalled() {
+    void givenReportId_whenGetStatusById_thenRepositoryIsCalled() {
         //given
         String status = "DONE";
         String id = UUID.randomUUID().toString();
@@ -134,7 +134,7 @@ public class ReportServiceTests {
     @SneakyThrows
     @Test
     @DisplayName("Test export report functionality")
-    public void givenUUID_whenExportReport_thenResponseEntityIsReturned() {
+    void givenUUID_whenExportReport_thenResponseEntityIsReturned() {
         //given
         UUID uuid = UUID.randomUUID();
         //when

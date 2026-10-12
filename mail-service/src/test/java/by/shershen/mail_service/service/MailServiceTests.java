@@ -16,7 +16,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class MailServiceTests {
+class MailServiceTests {
 
     @Mock
     private JavaMailSender mailSender;
@@ -26,7 +26,7 @@ public class MailServiceTests {
 
     @Test
     @DisplayName("Test mail sending functionality")
-    public void givenMailAndCode_whenSend_thenMailSenderIsCalled() {
+    void givenMailAndCode_whenSend_thenMailSenderIsCalled() {
         //given
         MailDTO mailDTO = DataUtils.getMailDTOTransient();
         //when

@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(MailRestController.class)
-public class MailRestControllerTests {
+class MailRestControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,7 +34,7 @@ public class MailRestControllerTests {
 
     @Test
     @DisplayName("Test mail sending functionality")
-    public void givenMailDTO_whenSendMail_thenReturnStatusOk() throws Exception {
+    void givenMailDTO_whenSendMail_thenReturnStatusOk() throws Exception {
         //given
         MailDTO mailDTO = DataUtils.getMailDTOTransient();
         mailService.send(mailDTO);
