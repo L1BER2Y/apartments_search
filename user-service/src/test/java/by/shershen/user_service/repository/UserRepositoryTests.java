@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.CollectionUtils;
 
@@ -19,19 +18,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
-public class UserRepositoryTests {
+class UserRepositoryTests {
 
     @Autowired
     private UserRepository userRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         userRepository.deleteAll();
     }
 
     @Test
     @DisplayName("Test save user functionality")
-    public void givenDeveloperEntity_whenSave_thenUserIsCreated() {
+    void givenDeveloperEntity_whenSave_thenUserIsCreated() {
         //given
         UserEntity userToSave = DataUtils.getUserTransient();
         //when
@@ -43,7 +42,7 @@ public class UserRepositoryTests {
 
     @Test
     @DisplayName("Test update user functionality")
-    public void givenUserEntity_whenUpdate_thenEmailIsChanged() {
+    void givenUserEntity_whenUpdate_thenEmailIsChanged() {
         //given
         String updatedEmail = "updated@mail.com";
         UserEntity userToSave = DataUtils.getUserTransient();
@@ -59,7 +58,7 @@ public class UserRepositoryTests {
 
     @Test
     @DisplayName("Test get user by id functionality")
-    public void givenUserId_whenGetById_thenUserIsReturned() {
+    void givenUserId_whenGetById_thenUserIsReturned() {
         //given
         UserEntity userEntity = DataUtils.getUserTransient();
         UserEntity saved = userRepository.saveAndFlush(userEntity);
@@ -72,7 +71,7 @@ public class UserRepositoryTests {
 
     @Test
     @DisplayName("Test user not found functionality")
-    public void givenUserIsNotCreated_whenGetById_thenOptionalIsEmpty() {
+    void givenUserIsNotCreated_whenGetById_thenOptionalIsEmpty() {
         //given
 
         //when
@@ -83,7 +82,7 @@ public class UserRepositoryTests {
 
     @Test
     @DisplayName("Test get all developers functionality")
-    public void givenThreeUsersAreStored_whenFindAll_thenAllUsersAreReturned() {
+    void givenThreeUsersAreStored_whenFindAll_thenAllUsersAreReturned() {
         //given
         UserEntity user1 = DataUtils.getUserTransient();
         UserEntity user2 = DataUtils.getUserOneTransient();
@@ -98,7 +97,7 @@ public class UserRepositoryTests {
 
     @Test
     @DisplayName("Test get user functionality")
-    public void givenUserSaved_whenGetByEmail_thenUserIsReturned() {
+    void givenUserSaved_whenGetByEmail_thenUserIsReturned() {
         //given
         UserEntity user = DataUtils.getUserTransient();
         userRepository.saveAndFlush(user);
@@ -111,7 +110,7 @@ public class UserRepositoryTests {
 
     @Test
     @DisplayName("Test get user functionality")
-    public void givenUserSaved_whenGetIdFioAndRoleByEmail_thenUserIsReturned() {
+    void givenUserSaved_whenGetIdFioAndRoleByEmail_thenUserIsReturned() {
         //given
         UserEntity user = DataUtils.getUserTransient();
         userRepository.saveAndFlush(user);
@@ -127,20 +126,19 @@ public class UserRepositoryTests {
 
     @Test
     @DisplayName("Test get user functionality")
-    public void givenUserSaved_whenExistsByMail_thenTrue() {
+    void givenUserSaved_whenExistsByMail_thenTrue() {
         //given
         UserEntity user = DataUtils.getUserTransient();
         userRepository.saveAndFlush(user);
         //when
         Boolean userExists = userRepository.existsByMail(user.getMail());
         //then
-        assertThat(userExists).isNotNull();
-        assertThat(userExists).isTrue();
+        assertThat(userExists).isNotNull().isTrue();
     }
 
     @Test
     @DisplayName("Test delete user functionality")
-    public void givenUserIsSaved_whenDeleteById_thenUserIsRemovedFromDB() {
+    void givenUserIsSaved_whenDeleteById_thenUserIsRemovedFromDB() {
         //given
         UserEntity user = DataUtils.getUserTransient();
         userRepository.saveAndFlush(user);
