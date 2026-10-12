@@ -17,7 +17,7 @@ git clone https://github.com/L1BER2Y/apartments_search.git
 ### 2. Next, go to the root directory and start application in docker by following command:
 
 ```bash
-cp .env.example .env fill variables
+cp .env.example .env 'fill variables in this file'
 docker compose up -d
 ```
 
