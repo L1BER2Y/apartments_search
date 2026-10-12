@@ -14,22 +14,23 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ActiveProfiles("report-test")
-public class ReportRepositoryTests {
+class ReportRepositoryTests {
 
     @Autowired
     private ReportRepository reportRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         reportRepository.deleteAll();
     }
 
     @Test
     @DisplayName("Test exportReport report functionality")
-    public void givenReportEntity_whenSaveReport_thenReportIsSaved() {
+    void givenReportEntity_whenSaveReport_thenReportIsSaved() {
         //given
         ReportEntity reportEntity = DataUtils.getReportEntityTransient();
         //when
@@ -41,7 +42,7 @@ public class ReportRepositoryTests {
 
     @Test
     @DisplayName("Test find all reports functionality")
-    public void givenThreeReportEntitiesStored_whenFindAllReports_thenReportsAreReturned() {
+    void givenThreeReportEntitiesStored_whenFindAllReports_thenReportsAreReturned() {
         //given
         ReportEntity entity = DataUtils.getReportEntityTransient();
         ReportEntity entity1 = DataUtils.getReportEntityOneTransient();
@@ -51,12 +52,12 @@ public class ReportRepositoryTests {
         //when
         List<ReportEntity> reportEntities = reportRepository.findAll();
         //then
-        assertThat(CollectionUtils.isEmpty(reportEntities)).isNotNull();
+        assertTrue(CollectionUtils.isEmpty(reportEntities));
     }
 
     @Test
     @DisplayName("Test get report status by id functionality")
-    public void givenReportId_whenGetReportStatusById_thenStatusIsReturned() {
+    void givenReportId_whenGetReportStatusById_thenStatusIsReturned() {
         //given
         ReportEntity reportEntity = DataUtils.getReportEntityTransient();
         reportRepository.saveAndFlush(reportEntity);
