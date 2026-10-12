@@ -4,7 +4,6 @@ import by.shershen.report_service.controller.utils.JwtTokenHandler;
 import by.shershen.report_service.core.converters.api.IPageConverter;
 import by.shershen.report_service.core.dto.ReportDTO;
 import by.shershen.report_service.core.dto.UserActionAuditParamDTO;
-import by.shershen.report_service.core.entity.ReportEntity;
 import by.shershen.report_service.core.entity.Status;
 import by.shershen.report_service.core.entity.Type;
 import by.shershen.report_service.service.api.IReportService;
@@ -37,12 +36,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.head;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WithMockUser
 @WebMvcTest(controllers = ReportRestController.class)
 @ExtendWith(MockitoExtension.class)
-public class ReportRestControllerTests {
+class ReportRestControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -61,7 +62,7 @@ public class ReportRestControllerTests {
 
     @Test
     @DisplayName("Test create report functionality")
-    public void givenParamDtoAndReportType_whenCreateReport_thenReturnStatusCreated() throws Exception {
+    void givenParamDtoAndReportType_whenCreateReport_thenReturnStatusCreated() throws Exception {
         //given
         UserActionAuditParamDTO paramDTO = DataUtils.getUserActionAuditParamDTOTransient();
         Type type = Type.JOURNAL_AUDIT;
@@ -81,7 +82,7 @@ public class ReportRestControllerTests {
 
     @Test
     @DisplayName("Test get reports page functionality")
-    public void givenPageParams_whenGetReportPage_thenReturnPage() throws Exception {
+    void givenPageParams_whenGetReportPage_thenReturnPage() throws Exception {
         //given
         int page = 1;
         int size = 10;
@@ -105,7 +106,7 @@ public class ReportRestControllerTests {
 
     @Test
     @DisplayName("Test report export functionality")
-    public void givenUUID_whenExportReport_thenReturnReport() throws Exception {
+    void givenUUID_whenExportReport_thenReturnReport() throws Exception {
         //given
         UUID uuid = UUID.randomUUID();
         String reportLink = "test link";
@@ -124,7 +125,7 @@ public class ReportRestControllerTests {
 
     @Test
     @DisplayName("Test get report status functionality")
-    public void givenReportId_whenGetReportStatus_thenReturnReportStatus() throws Exception {
+    void givenReportId_whenGetReportStatus_thenReturnReportStatus() throws Exception {
         //given
         String id = "test id";
         BDDMockito.given(reportService.getStatusById(id))
