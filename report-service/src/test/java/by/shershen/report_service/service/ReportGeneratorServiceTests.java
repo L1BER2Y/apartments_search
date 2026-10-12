@@ -23,7 +23,7 @@ class ReportGeneratorServiceTests {
     private final ReportGeneratorService serviceUnderTest = new ReportGeneratorService();
 
     private final UUID reportId = UUID.randomUUID();
-    
+
     private final Path reportFile = Path.of(reportId + ".xlsx");
 
     @AfterEach
