@@ -1,15 +1,14 @@
 package by.shershen.user_service.service;
 
+import by.shershen.user_service.clients.MailFeignClient;
 import by.shershen.user_service.core.converters.api.IVerificationConverter;
 import by.shershen.user_service.core.dto.VerificationDTO;
 import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.core.entity.VerificationEntity;
 import by.shershen.user_service.core.exceptions.InternalServerErrorException;
 import by.shershen.user_service.repository.VerificationRepository;
-import by.shershen.user_service.service.api.ISendVerificationService;
 import by.shershen.user_service.service.api.IVerificationQueueService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SendVerificationService implements IVerificationQueueService {
     private final VerificationRepository verificationRepository;
-    private final ISendVerificationService sendVerificationService;
+    private final MailFeignClient mailClient;
     private final IVerificationConverter verificationConverter;
 
     @Override
@@ -46,7 +45,7 @@ public class SendVerificationService implements IVerificationQueueService {
 
         if(verificationEntity.isPresent()) {
             VerificationDTO verificationDTO = verificationConverter.convertFromEntityToDTO(verificationEntity.get());
-            sendVerificationService.send(verificationDTO);
+            mailClient.send(verificationDTO);
             verificationEntity.get().setSendCode(true);
 
             try {
@@ -54,6 +53,6 @@ public class SendVerificationService implements IVerificationQueueService {
             } catch (DataAccessException e) {
                 throw new InternalServerErrorException(e.getMessage());
             }
-        } else throw new InternalServerErrorException("No verification found");
+        }
     }
 }

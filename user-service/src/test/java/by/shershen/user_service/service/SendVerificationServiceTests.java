@@ -1,11 +1,11 @@
 package by.shershen.user_service.service;
 
+import by.shershen.user_service.clients.MailFeignClient;
 import by.shershen.user_service.core.converters.api.IVerificationConverter;
 import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.core.entity.VerificationEntity;
 import by.shershen.user_service.core.exceptions.InternalServerErrorException;
 import by.shershen.user_service.repository.VerificationRepository;
-import by.shershen.user_service.service.api.ISendVerificationService;
 import by.shershen.user_service.util.DataUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,16 +19,17 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class SendVerificationServiceTests {
+class SendVerificationServiceTests {
     @Mock
     private VerificationRepository verificationRepository;
 
     @Mock
-    private ISendVerificationService sendVerificationService;
+    private MailFeignClient mailClient;
 
     @Mock
     private IVerificationConverter verificationConverter;
@@ -38,7 +39,7 @@ public class SendVerificationServiceTests {
 
     @Test
     @DisplayName("Test add User to verification queue functionality")
-    public void givenVerificationEntity_whenAddUserToVerificationQueue_thenRepositoryIsCalled() {
+    void givenVerificationEntity_whenAddUserToVerificationQueue_thenRepositoryIsCalled() {
         //given
         UserEntity userEntity = DataUtils.getUserPersisted();
         //when
@@ -49,7 +50,7 @@ public class SendVerificationServiceTests {
 
     @Test
     @DisplayName("Test add User to verification queue functionality")
-    public void givenVerificationEntity_whenAddUserToVerificationQueue_thenExceptionIsThrown() {
+    void givenVerificationEntity_whenAddUserToVerificationQueue_thenExceptionIsThrown() {
         //given
         UserEntity userEntity = DataUtils.getUserPersisted();
         BDDMockito.given(verificationRepository.save(any(VerificationEntity.class)))
@@ -61,7 +62,7 @@ public class SendVerificationServiceTests {
 
     @Test
     @DisplayName("Test send verification code functionality")
-    public void givenVerificationEntity_whenSendVerificationCode_thenRepositoryIsCalled() {
+    void givenVerificationEntity_whenSendVerificationCode_thenRepositoryIsCalled() {
         //given
         BDDMockito.given(verificationRepository.findFirstBySendCodeFalse())
                 .willReturn(Optional.of(DataUtils.getVerificationEntityTransient()));
@@ -72,13 +73,15 @@ public class SendVerificationServiceTests {
     }
 
     @Test
-    @DisplayName("Test send verification code functionality")
-    public void givenVerificationEntity_whenSendVerificationCode_thenExceptionIsThrown() {
+    @DisplayName("Test send verification code with empty queue")
+    void givenNoVerificationEntity_whenSendVerificationCode_thenNothingIsSent() {
         //given
         BDDMockito.given(verificationRepository.findFirstBySendCodeFalse())
                 .willReturn(Optional.empty());
         //when
-        assertThrows(InternalServerErrorException.class, () -> serviceUnderTest.sendCode());
+        serviceUnderTest.sendCode();
         //then
+        verify(mailClient, never()).send(any());
+        verify(verificationRepository, never()).save(any());
     }
 }
