@@ -15,19 +15,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
-public class VerificationRepositoryTests {
+class VerificationRepositoryTests {
 
     @Autowired
     private VerificationRepository verificationRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         verificationRepository.deleteAll();
     }
 
     @Test
     @DisplayName("Test find verification entity by code functionality")
-    public void givenCode_whenFindVerificationEntityByCode_thenReturnVerificationEntity() {
+    void givenCode_whenFindVerificationEntityByCode_thenReturnVerificationEntity() {
         //given
         String code = "code";
         VerificationEntity verificationEntity = DataUtils.getVerificationEntityTransient();
@@ -41,9 +41,8 @@ public class VerificationRepositoryTests {
 
     @Test
     @DisplayName("Test find first verification entity with sendCode field false")
-    public void whenFindFirstVerificationEntityWithSendCodeFieldFalse_thenReturnFirstVerificationEntity() {
+    void whenFindFirstVerificationEntityWithSendCodeFieldFalse_thenReturnFirstVerificationEntity() {
         //given
-        String code = "code";
         VerificationEntity verificationEntity = DataUtils.getVerificationEntityTransient();
         verificationEntity.setSendCode(false);
         verificationRepository.save(verificationEntity);
