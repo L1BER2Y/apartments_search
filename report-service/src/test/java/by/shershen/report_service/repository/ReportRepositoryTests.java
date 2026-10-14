@@ -8,13 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ActiveProfiles("report-test")
@@ -52,7 +50,7 @@ class ReportRepositoryTests {
         //when
         List<ReportEntity> reportEntities = reportRepository.findAll();
         //then
-        assertTrue(CollectionUtils.isEmpty(reportEntities));
+        assertThat(reportEntities).hasSize(3);
     }
 
     @Test
