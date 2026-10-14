@@ -1,13 +1,14 @@
 {
   "Servers": {
     "1": {
-      "Name": "Apartments_search DB",
-      "Group": "Server Group 1",
-      "Port": 5432,
-      "Username": "postgres",
+      "Name": "apartments_search",
+      "Group": "Servers",
       "Host": "postgresql",
-      "SSLMode": "prefer",
-      "MaintenanceDB": "postgres"
+      "Port": 5432,
+      "MaintenanceDB": "user_service",
+      "Username": "postgres",
+      "SSLMode": "disable",
+      "Comment": "docker-compose db"
     }
   }
 }
