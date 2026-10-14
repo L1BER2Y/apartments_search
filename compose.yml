@@ -104,15 +104,17 @@ services:
 
   pgadmin:
     build: pgadmin
-    image: flats_pgadmin:1.0.0
+    image: flats_pgadmin:1.1.0
+    profiles:
+      - debug
     volumes:
       - pg-admin-data:/var/lib/pgadmin
-    restart: always
+    restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
-      - "82:80"
+      - "127.0.0.1:82:80"
     networks:
       - flats-network
     depends_on:
