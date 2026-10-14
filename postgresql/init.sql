@@ -142,6 +142,12 @@ ALTER TABLE users.users OWNER TO postgres;
 ALTER TABLE ONLY users.codes
     ADD CONSTRAINT codes_pkey PRIMARY KEY (id);
 
+--
+-- Name: flats flats_original_url_key; Type: CONSTRAINT; Schema: users; Owner: postgres
+--
+
+ALTER TABLE ONLY users.flats
+    ADD CONSTRAINT flats_original_url_key UNIQUE (original_url);
 
 --
 -- PostgreSQL database dump complete
