@@ -67,6 +67,28 @@ docker compose up -d
 - [Spring Cloud OpenFeign 4.1.0](https://spring.io/projects/spring-cloud-openfeign)
 
 # Future plans:
-- Expand audit functionality 
-- NoSQL database
-- Message broker (RabbitMQ)
+
+**Infrastructure & quality**
+- [ ] Database migrations with Liquibase instead of `init.sql`
+- [ ] Integration tests with Testcontainers (PostgreSQL) instead of H2
+- [ ] CI pipeline with GitHub Actions (build, tests, JaCoCo coverage, SonarCloud)
+- [ ] Upgrade to Java 21 and Spring Boot 3.5 (virtual threads)
+
+**Architecture**
+- [ ] Event-driven communication via Apache Kafka (audit, mail) with Transactional Outbox pattern
+- [ ] Database-per-service: remove direct access to audit table from report-service
+- [ ] Spring Cloud Gateway with centralized JWT validation, then Keycloak (OAuth2/OIDC)
+- [ ] Fault tolerance with Resilience4j (retry, circuit breaker, rate limiter)
+
+**Features**
+- [ ] Saved searches and notifications about new flats (Telegram bot / e-mail)
+- [ ] Price history tracking and price drop alerts
+- [ ] Full-text search over flat descriptions (Elasticsearch)
+- [ ] Additional sources besides Kufar (realt.by)
+- [ ] Store generated reports in MinIO (S3) with presigned download links
+- [ ] Redis caching for popular flat filters
+
+**Observability & deployment**
+- [ ] Metrics with Micrometer, Prometheus and Grafana dashboards
+- [ ] Distributed tracing (Micrometer Tracing + Zipkin) and centralized logs (Loki)
+- [ ] Deployment to Kubernetes with Helm charts
