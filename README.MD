@@ -24,6 +24,10 @@ cp .env.example .env
 ```bash
 docker compose up -d
 ```
+### 3.1 With pgAdmin enabled
+```bash
+docker compose --profile debug up -d pgadmin
+```
 
 # Application diagram:
 <img src="https://raw.githubusercontent.com/L1BER2Y/apartments_search/main/diagrams/Application%20diagram.png" alt="architecture-diagram" width="1000"/>
