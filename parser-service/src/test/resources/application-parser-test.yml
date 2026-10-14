@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: "qaForDevs"
   jpa:
     hibernate:
       ddl-auto: create
@@ -13,3 +11,6 @@ spring:
       data-locations: import.sql
 server:
   port: 8090
+app:
+  parsing:
+    initial-delay: PT24H
