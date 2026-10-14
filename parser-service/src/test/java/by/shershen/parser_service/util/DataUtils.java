@@ -3,16 +3,10 @@ package by.shershen.parser_service.util;
 import by.shershen.parser_service.core.entity.FlatEntity;
 import by.shershen.parser_service.core.entity.OfferType;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 public class DataUtils {
 
     public static FlatEntity getFlatEntityTransient() {
         return FlatEntity.builder()
-                .uuid(UUID.randomUUID())
-                .dtCreate(LocalDateTime.now())
-                .dtUpdate(LocalDateTime.now())
                 .offerType(OfferType.RENT)
                 .description("Test description")
                 .bedrooms(2)
@@ -26,9 +20,6 @@ public class DataUtils {
 
     public static FlatEntity getFlatEntityOneTransient() {
         return FlatEntity.builder()
-                .uuid(UUID.randomUUID())
-                .dtCreate(LocalDateTime.now())
-                .dtUpdate(LocalDateTime.now())
                 .offerType(OfferType.RENT)
                 .description("Test description")
                 .bedrooms(1)
@@ -36,15 +27,12 @@ public class DataUtils {
                 .price(350)
                 .floor(11)
                 .photoUrls(new String[] {"Test photo url", "Test photo url"})
-                .originalUrl("Test original url")
+                .originalUrl("Test original url one")
                 .build();
     }
 
     public static FlatEntity getFlatEntityTwoTransient() {
         return FlatEntity.builder()
-                .uuid(UUID.randomUUID())
-                .dtCreate(LocalDateTime.now())
-                .dtUpdate(LocalDateTime.now())
                 .offerType(OfferType.SALE)
                 .description("Test description")
                 .bedrooms(4)
@@ -52,7 +40,7 @@ public class DataUtils {
                 .price(230000)
                 .floor(8)
                 .photoUrls(new String[] {"Test photo url"})
-                .originalUrl("Test original url")
+                .originalUrl("Test original url two")
                 .build();
     }
 }
