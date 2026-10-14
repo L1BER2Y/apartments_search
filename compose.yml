@@ -121,8 +121,6 @@ services:
   swagger-ui:
     build: swagger-ui
     image: flats_swagger-ui:1.0.3
-    ports:
-      - "81:8080"
     networks:
       - flats-network
 
