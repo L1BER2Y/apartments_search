@@ -13,11 +13,15 @@ Clone project repository by this command:
 ```bash
 git clone https://github.com/L1BER2Y/apartments_search.git
 ```
-
-### 2. Next, go to the root directory and start application in docker by following command:
+### 2. Fill environment variables
 
 ```bash
-cp .env.example .env 'fill variables in this file'
+cp .env.example .env
+```
+
+### 3. Next, go to the root directory and start application in docker by following command:
+
+```bash
 docker compose up -d
 ```
 
@@ -63,7 +67,6 @@ docker compose up -d
 - [Spring Cloud OpenFeign 4.1.0](https://spring.io/projects/spring-cloud-openfeign)
 
 # Future plans:
-- ~~Unit-testing~~
 - Expand audit functionality 
 - NoSQL database
 - Message broker (RabbitMQ)
