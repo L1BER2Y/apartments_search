@@ -24,13 +24,122 @@ cp .env.example .env
 ```bash
 docker compose up -d
 ```
-### 3.1 With pgAdmin enabled
+### 3.1 With pgAdmin enabled (http://localhost:82)
 ```bash
 docker compose --profile debug up -d pgadmin
 ```
 
-# Application diagram:
-<img src="https://raw.githubusercontent.com/L1BER2Y/apartments_search/main/diagrams/Application%20diagram.png" alt="architecture-diagram" width="1000"/>
+# Application diagram
+
+```mermaid
+flowchart TD
+    client(["Client<br/>browser · Swagger UI"])
+    proxy["proxy<br/>nginx :80"]
+
+    subgraph services["Services · flats-network"]
+        swagger["swagger-ui"]
+        user["user-service<br/>issues JWT"]
+        audit["audit-service<br/>validates JWT"]
+        report["report-service<br/>validates JWT"]
+        flats["flats-service<br/>public"]
+        parser["parser-service<br/>every 15 min"]
+        mail["mail-service"]
+    end
+
+    db[("PostgreSQL 16<br/>users · codes · audits<br/>reports · flats")]
+    disk[/"report files *.xlsx"/]
+    kufar["re.kufar.by"]
+    smtp["SMTP server"]
+    pgadmin["pgAdmin<br/>debug profile"]
+
+    client -->|"/api/v1/*"| proxy
+    proxy -->|"/swagger/"| swagger
+    proxy -->|"/users"| user
+    proxy -->|"/audit"| audit
+    proxy -->|"/report"| report
+    proxy -->|"/flats"| flats
+
+    user -->|"POST /audit"| audit
+    user -->|"POST /mail/send"| mail
+    mail --> smtp
+    parser --> kufar
+
+    user & audit & report & flats & parser --> db
+    report --> disk
+    client -.->|":82"| pgadmin
+    pgadmin -.-> db
+```
+
+**Notes**
+- All services share one PostgreSQL database (`user_service`, schema `users`); report-service reads the `audits` table directly.
+- user-service → audit-service: Feign call from an AOP aspect on `@Audited` methods.
+- user-service → mail-service: verification codes are saved to `codes`, a scheduler sends them every 10 s.
+- JWT is issued by user-service and validated locally by audit-service and report-service; flats-service is public.
+- Generated `.xlsx` reports are stored on the report-service container filesystem.
+
+## Flows
+
+### Registration, verification, login
+```mermaid
+sequenceDiagram
+autonumber
+actor C as Client
+participant U as user-service
+participant DB as PostgreSQL
+participant A as audit-service
+participant M as mail-service
+participant S as SMTP
+
+    C->>U: POST /users/registration
+    U->>DB: insert users (WAITING_ACTIVATION)
+    U->>DB: insert codes (send_code = false)
+    U->>A: POST /audit (REGISTRATION)
+    U-->>C: 201 User registered
+
+    loop every 10 s
+        U->>DB: first code with send_code = false
+        U->>M: POST /mail/send
+        M->>S: email with code
+        U->>DB: send_code = true
+    end
+
+    C->>U: GET /users/verification?code&mail
+    U->>DB: status = ACTIVATED, delete code
+    U->>A: POST /audit (VERIFICATION)
+    U-->>C: 200 User verified
+
+    C->>U: POST /users/login
+    U->>A: POST /audit (LOGIN)
+    U-->>C: 200 JWT
+```
+
+### Report generation
+```mermaid
+sequenceDiagram
+autonumber
+actor C as Admin
+participant R as report-service
+participant DB as PostgreSQL
+participant F as container disk
+
+    C->>R: POST /report/JOURNAL_AUDIT + JWT
+    rect rgb(240, 240, 240)
+        Note over R,F: one @Transactional
+        R->>DB: insert reports (PROGRESS)
+        R->>DB: select audits by user and period
+        R->>F: write uuid.xlsx
+        R->>DB: update reports (DONE or ERROR)
+    end
+    R-->>C: 201 Report started
+
+    C->>R: HEAD /report/{uuid}/export
+    R-->>C: 200 if DONE
+
+    C->>R: GET /report/{uuid}/export
+    R->>F: read uuid.xlsx
+    R-->>C: file
+```
+All client requests go through proxy (api/v1 prefix is stripped).
 
 # Application microservices:
 
