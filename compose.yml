@@ -4,7 +4,7 @@ services:
 
   audit-service:
     build: audit-service
-    image: flats_audit-service:1.0.0
+    image: flats_audit-service:1.1.0
     environment:
       SPRING_PROFILES_ACTIVE: audit-docker
       DB_USERNAME: ${DB_USERNAME}
@@ -18,7 +18,7 @@ services:
 
   flats-service:
     build: flats-service
-    image: flats_flats-service:1.0.0
+    image: flats_flats-service:1.1.0
     environment:
       SPRING_PROFILES_ACTIVE: flats-docker
       DB_USERNAME: ${DB_USERNAME}
@@ -31,7 +31,7 @@ services:
 
   mail-service:
     build: mail-service
-    image: flats_mail-service:1.0.0
+    image: flats_mail-service:1.1.0
     environment:
       SPRING_PROFILES_ACTIVE: mail-docker
       MAIL_USERNAME: ${MAIL_USERNAME}
@@ -41,7 +41,7 @@ services:
 
   parser-service:
     build: parser-service
-    image: flats_parser-service:1.0.0
+    image: flats_parser-service:1.1.0
     environment:
       SPRING_PROFILES_ACTIVE: parser-docker
       DB_USERNAME: ${DB_USERNAME}
@@ -54,7 +54,7 @@ services:
 
   report-service:
     build: report-service
-    image: flats_report-service:1.0.0
+    image: flats_report-service:1.1.0
     environment:
       SPRING_PROFILES_ACTIVE: report-docker
       DB_USERNAME: ${DB_USERNAME}
@@ -68,7 +68,7 @@ services:
 
   user-service:
     build: user-service
-    image: flats_user-service:1.0.0
+    image: flats_user-service:1.1.0
     environment:
       SPRING_PROFILES_ACTIVE: docker
       DB_USERNAME: ${DB_USERNAME}
@@ -86,7 +86,7 @@ services:
 
   postgresql:
     build: postgresql
-    image: flats_postgresql:1.0.0
+    image: flats_postgresql:1.0.1
     volumes:
       - app-db-data:/var/lib/postgresql/data
     restart: always
@@ -120,13 +120,13 @@ services:
 
   swagger-ui:
     build: swagger-ui
-    image: flats_swagger-ui:1.0.3
+    image: flats_swagger-ui:1.1.0
     networks:
       - flats-network
 
   proxy:
     build: proxy
-    image: flats_proxy:1.0.1
+    image: flats_proxy:1.1.0
     ports:
       - "80:80"
     networks:
