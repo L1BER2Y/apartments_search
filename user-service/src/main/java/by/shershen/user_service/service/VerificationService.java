@@ -34,7 +34,7 @@ public class VerificationService implements IVerificationService {
     @Transactional
     @Audited(auditedAction = VERIFICATION, essenceType = USER)
     public void verify(VerificationDTO verificationDTO) {
-        Optional<VerificationEntity> verificationEntity = verificationRepository.findVerificationEntitiesByCode(verificationDTO.getCode());
+        Optional<VerificationEntity> verificationEntity = verificationRepository.findByCodeAndMail(verificationDTO.getCode(), verificationDTO.getMail());
         VerificationEntity verification = verificationConverter.convertFromOptionalToEntity(verificationEntity);
         if (verificationEntity.isPresent()) {
             Optional<UserEntity> byMail = userRepository.findByMail(verificationDTO.getMail());
@@ -47,7 +47,7 @@ public class VerificationService implements IVerificationService {
                 throw new InternalServerErrorException(e.getMessage());
             }
         } else {
-            throw new ValidationException("Verification already passed.");
+            throw new ValidationException("Invalid verification code or email");
         }
     }
 }

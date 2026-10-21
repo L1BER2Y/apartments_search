@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -37,7 +38,7 @@ class VerificationServiceTests {
     private IVerificationConverter verificationConverter;
 
     @InjectMocks
-    private VerificationService serviceUnderTest;
+    private VerificationService verificationService;
 
     @Test
     @DisplayName("Test user verification functionality")
@@ -45,7 +46,7 @@ class VerificationServiceTests {
         //given
         VerificationDTO verificationDTO = new VerificationDTO("code", "test@mail.com");
 
-        BDDMockito.given(verificationRepository.findVerificationEntitiesByCode(any()))
+        BDDMockito.given(verificationRepository.findByCodeAndMail(any(), any()))
                 .willReturn(Optional.of(DataUtils.getVerificationEntityTransient()));
 
         BDDMockito.given(verificationConverter.convertFromOptionalToEntity(any()))
@@ -57,10 +58,10 @@ class VerificationServiceTests {
         BDDMockito.given(userConverter.convertFromOptionalToEntity(any()))
                 .willReturn(DataUtils.getUserTransient());
         //when
-        serviceUnderTest.verify(verificationDTO);
+        verificationService.verify(verificationDTO);
         //then
-        verify(verificationRepository, times(1)).findVerificationEntitiesByCode(any());
-        verify(userRepository, times(1)).findByMail(any());
+        verify(verificationRepository, times(1)).findByCodeAndMail("code", "test@mail.com");
+        verify(userRepository, times(1)).findByMail("test@mail.com");
         verify(userConverter, times(1)).convertFromOptionalToEntity(any());
         verify(userRepository, times(1)).saveAndFlush(any());
         verify(verificationRepository, times(1)).delete(any());
@@ -72,10 +73,11 @@ class VerificationServiceTests {
         //given
         VerificationDTO verificationDTO = new VerificationDTO("code", "test@mail.com");
 
-        BDDMockito.given(verificationRepository.findVerificationEntitiesByCode(any()))
+        BDDMockito.given(verificationRepository.findByCodeAndMail(any(), any()))
                 .willReturn(Optional.empty());
         //when
-        assertThrows(ValidationException.class, () -> serviceUnderTest.verify(verificationDTO));
+        assertThrows(ValidationException.class, () -> verificationService.verify(verificationDTO));
         //then
+        verify(userRepository, never()).saveAndFlush(any());
     }
 }

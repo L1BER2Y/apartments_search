@@ -26,17 +26,19 @@ class VerificationRepositoryTests {
     }
 
     @Test
-    @DisplayName("Test find verification entity by code functionality")
-    void givenCode_whenFindVerificationEntityByCode_thenReturnVerificationEntity() {
+    @DisplayName("Test find verification entity")
+    void givenCodeAndMail_whenFindVerificationEntity_thenReturnVerificationEntity() {
         //given
-        String code = "code";
         VerificationEntity verificationEntity = DataUtils.getVerificationEntityTransient();
         verificationRepository.save(verificationEntity);
+        String code = verificationEntity.getCode();
+        String mail = verificationEntity.getMail();
         //when
-        Optional<VerificationEntity> verificationEntitiesByCode = verificationRepository.findVerificationEntitiesByCode(code);
+        Optional<VerificationEntity> foundEntity = verificationRepository.findByCodeAndMail(code, mail);
         //then
-        assertThat(verificationEntitiesByCode).isPresent();
-        assertThat(verificationEntitiesByCode.get().getCode()).isEqualTo(code);
+        assertThat(foundEntity).isPresent();
+        assertThat(foundEntity.get().getCode()).isEqualTo(code);
+        assertThat(foundEntity.get().getMail()).isEqualTo(mail);
     }
 
     @Test
@@ -50,5 +52,19 @@ class VerificationRepositoryTests {
         Optional<VerificationEntity> firstBySendCodeFalse = verificationRepository.findFirstBySendCodeFalse();
         //then
         assertThat(firstBySendCodeFalse).isPresent();
+    }
+
+    @Test
+    @DisplayName("Test email verification with other code")
+    void givenCode_whenEmailVerificationWithOtherCode_thenReturnNothing() {
+        //given
+        String code = "code";
+        String mail = "hack@mail.com";
+        VerificationEntity verificationEntity = DataUtils.getVerificationEntityTransient();
+        verificationRepository.save(verificationEntity);
+        //when
+        Optional<VerificationEntity> entityByCodeAndMail = verificationRepository.findByCodeAndMail(code, mail);
+        //then
+        assertThat(entityByCodeAndMail).isEmpty();
     }
 }
