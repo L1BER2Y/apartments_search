@@ -1,5 +1,6 @@
 package by.shershen.user_service.controller;
 
+import by.shershen.user_service.config.SecurityConfig;
 import by.shershen.user_service.controller.utils.JwtTokenHandler;
 import by.shershen.user_service.core.converters.api.IPageConverter;
 import by.shershen.user_service.core.converters.api.IUserConverter;
@@ -22,6 +23,7 @@ import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,19 +34,24 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(AdminRestController.class)
-@WithMockUser
+@WithMockUser(roles = "ADMIN")
+@Import(SecurityConfig.class)
 class AdminRestControllerTest {
 
     @Autowired
@@ -231,5 +238,72 @@ class AdminRestControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().bytes("User updated".getBytes()));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("Test update user with role USER")
+    void givenUserUpdateRequest_whenUpdateUser_thenReturnForbidden() throws Exception {
+        //given
+        UserCreateDTO dto = UserCreateDTO.builder()
+                .mail("test@mail.com")
+                .fio("Test")
+                .role(Role.ADMIN)
+                .status(Status.ACTIVATED)
+                .password("test")
+                .build();
+        //when
+        ResultActions result = mockMvc.perform(put("/users/{uuid}/dt_update/{dt_update}", UUID.randomUUID(), LocalDateTime.now())
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)));
+        //then
+        result
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        verifyNoInteractions(userService);
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("Test get users with role USER")
+    void givenUserGetRequest_whenGetUsers_thenReturnForbidden() throws Exception {
+        //given
+        //when
+        ResultActions result = mockMvc.perform(get("/users")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON));
+        //then
+        result
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        verifyNoInteractions(userService);
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("Test create users with role User")
+    void givenUserCreateRequest_whenCreateUsers_thenReturnForbidden() throws Exception {
+        //given
+        UserCreateDTO dto = UserCreateDTO.builder()
+                .mail("test@mail.com")
+                .fio("Test")
+                .role(Role.ADMIN)
+                .status(Status.ACTIVATED)
+                .password("test")
+                .build();
+        //when
+        ResultActions result = mockMvc.perform(post("/users")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)));
+        //then
+        result
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        verifyNoInteractions(userService);
     }
 }

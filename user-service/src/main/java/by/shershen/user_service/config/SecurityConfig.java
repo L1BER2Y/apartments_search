@@ -43,15 +43,11 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(HttpMethod.POST, "/users/registration").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/registration", "/users/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/verification").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/users").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/users/{uuid}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/users").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/users").hasAnyRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .requestMatchers("/users/**").hasRole("ADMIN")
+                        .anyRequest().denyAll()
                 )
 
 
