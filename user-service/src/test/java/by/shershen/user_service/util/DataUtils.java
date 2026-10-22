@@ -92,6 +92,19 @@ public class DataUtils {
                 .build();
     }
 
+    public static UserEntity getUnverifiedUserPersisted() {
+        return UserEntity.builder()
+                .id(UUID.fromString("431fb60d-2ae8-4b59-92b6-00f931401b85"))
+                .dtCreate(LocalDateTime.now())
+                .dtUpdate(LocalDateTime.now())
+                .mail("test@mail.com")
+                .fio("Test")
+                .role(Role.USER)
+                .status(Status.WAITING_ACTIVATION)
+                .password("test")
+                .build();
+    }
+
     public static UserDTO getUserDTOPersisted() {
         return UserDTO.builder()
                 .id(UUID.fromString("eaf4ca36-e201-43c9-9276-3e273ec93f27"))

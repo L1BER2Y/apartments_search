@@ -23,11 +23,16 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class AuthorizationServiceTests {
+
+    private static final String INVALID_CREDENTIALS = "Wrong mail or password";
+
+    private static final String UNVERIFIED = "You have not passed verification or your account has been deactivated.";
 
     @Mock
     private UserRepository userRepository;
@@ -42,10 +47,10 @@ class AuthorizationServiceTests {
     private IUserConverter userConverter;
 
     @InjectMocks
-    private AuthorizationService serviceUnderTest;
+    private AuthorizationService authorizationService;
 
     @Test
-    @DisplayName("Test user authorization functionality")
+    @DisplayName("Test user authorization")
     void givenUserLoginDTO_whenLogin_thenRepositoryIsCalled() {
         //given
         String token = "token";
@@ -55,9 +60,6 @@ class AuthorizationServiceTests {
 
         BDDMockito.given(userRepository.findByMail(loginDTO.getMail()))
                 .willReturn(Optional.of(DataUtils.getUserPersisted()));
-
-        BDDMockito.given(userConverter.convertFromOptionalToEntity(any()))
-                .willReturn(DataUtils.getUserPersisted());
 
         BDDMockito.given(passwordEncoder.matches(loginDTO.getPassword(), "test"))
                 .willReturn(true);
@@ -72,30 +74,78 @@ class AuthorizationServiceTests {
                 .willReturn(token);
 
         //when
-        String login = serviceUnderTest.login(loginDTO);
+        String login = authorizationService.login(loginDTO);
         //then
         assertThat(login).isNotNull();
     }
 
     @Test
-    @DisplayName("Test user authorization with wrong credentials functionality")
-    void givenUserLoginDTOWithWrongCredentials_whenLogin_thenExceptionIsThrown() {
+    @DisplayName("Test user authorization with wrong password")
+    void givenWrongPassword_whenLogin_thenExceptionIsThrown() {
         //given
         UserLoginDTO loginDTO = DataUtils.getUserLoginDTOTransient();
 
         BDDMockito.given(userRepository.findByMail(loginDTO.getMail()))
                 .willReturn(Optional.of(DataUtils.getUserPersisted()));
 
-        BDDMockito.given(userConverter.convertFromOptionalToEntity(any()))
-                .willReturn(DataUtils.getUserPersisted());
-
         BDDMockito.given(passwordEncoder.matches(loginDTO.getPassword(), "test"))
                 .willReturn(false);
 
         //when
-        assertThrows(ValidationException.class, () -> serviceUnderTest.login(loginDTO));
+        ValidationException validationException = assertThrows(ValidationException.class, () -> authorizationService.login(loginDTO));
         //then
         verify(userRepository, never()).findIdFioAndRoleByEmail(any());
+        verify(jwtTokenHandler, never()).generateAccessToken(any());
+        assertThat(validationException.getMessage()).isEqualTo(INVALID_CREDENTIALS);
+    }
+
+    @Test
+    @DisplayName("Test when mail is not found")
+    void givenMailIsNotFound_whenLogin_thenExceptionIsThrown() {
+        //given
+        UserLoginDTO loginDTO = DataUtils.getUserLoginDTOTransient();
+
+        BDDMockito.given(userRepository.findByMail(loginDTO.getMail()))
+                .willReturn(Optional.empty());
+        //when
+        ValidationException validationException = assertThrows(ValidationException.class, () -> authorizationService.login(loginDTO));
+        //then
+        verify(passwordEncoder).matches(eq(loginDTO.getPassword()), any());
+        verify(jwtTokenHandler, never()).generateAccessToken(any());
+        assertThat(validationException.getMessage()).isEqualTo(INVALID_CREDENTIALS);
+    }
+
+    @Test
+    @DisplayName("Test when account unverified and wrong password")
+    void givenAccountUnverifiedAndWrongPassword_whenLogin_thenExceptionIsThrown() {
+        //given
+        UserLoginDTO loginDTO = DataUtils.getUserLoginDTOTransient();
+
+        BDDMockito.given(userRepository.findByMail(loginDTO.getMail()))
+                .willReturn(Optional.of(DataUtils.getUnverifiedUserPersisted()));
+
+        BDDMockito.given(passwordEncoder.matches(loginDTO.getPassword(), "test"))
+                .willReturn(false);
+        //when
+        ValidationException validationException = assertThrows(ValidationException.class, () -> authorizationService.login(loginDTO));
+        //then
+        assertThat(validationException.getMessage()).isEqualTo(INVALID_CREDENTIALS);
+    }
+
+    @Test
+    @DisplayName("Test when account unverified but password is valid")
+    void givenAccountUnverified_whenLogin_thenExceptionIsThrown() {
+        //given
+        UserLoginDTO loginDTO = DataUtils.getUserLoginDTOTransient();
+        BDDMockito.given(userRepository.findByMail(loginDTO.getMail()))
+                .willReturn(Optional.of(DataUtils.getUnverifiedUserPersisted()));
+
+        BDDMockito.given(passwordEncoder.matches(loginDTO.getPassword(), "test"))
+                .willReturn(true);
+        //when
+        ValidationException validationException = assertThrows(ValidationException.class, () -> authorizationService.login(loginDTO));
+        //then
+        assertThat(validationException.getMessage()).isEqualTo(UNVERIFIED);
         verify(jwtTokenHandler, never()).generateAccessToken(any());
     }
 }
