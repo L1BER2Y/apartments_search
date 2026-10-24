@@ -5,11 +5,9 @@ import by.shershen.user_service.core.converters.api.IVerificationConverter;
 import by.shershen.user_service.core.dto.VerificationDTO;
 import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.core.entity.VerificationEntity;
-import by.shershen.user_service.core.exceptions.InternalServerErrorException;
 import by.shershen.user_service.repository.VerificationRepository;
 import by.shershen.user_service.service.api.IVerificationQueueService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +29,7 @@ public class SendVerificationService implements IVerificationQueueService {
         verificationEntity.setMail(userEntity.getMail());
         verificationEntity.setSendCode(false);
 
-        try {
-            verificationRepository.save(verificationEntity);
-        } catch (DataAccessException e) {
-            throw new InternalServerErrorException(e.getMessage());
-        }
-
+        verificationRepository.save(verificationEntity);
     }
 
     @Scheduled(fixedRate = 10000)
@@ -48,11 +41,7 @@ public class SendVerificationService implements IVerificationQueueService {
             mailClient.send(verificationDTO);
             verificationEntity.get().setSendCode(true);
 
-            try {
-                verificationRepository.save(verificationEntity.get());
-            } catch (DataAccessException e) {
-                throw new InternalServerErrorException(e.getMessage());
-            }
+            verificationRepository.save(verificationEntity.get());
         }
     }
 }

@@ -1,7 +1,5 @@
 package by.shershen.user_service.service;
 
-import by.shershen.user_service.core.converters.api.IUserConverter;
-import by.shershen.user_service.core.converters.api.IVerificationConverter;
 import by.shershen.user_service.core.dto.VerificationDTO;
 import by.shershen.user_service.core.exceptions.ValidationException;
 import by.shershen.user_service.repository.UserRepository;
@@ -31,12 +29,6 @@ class VerificationServiceTests {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private IUserConverter userConverter;
-
-    @Mock
-    private IVerificationConverter verificationConverter;
-
     @InjectMocks
     private VerificationService verificationService;
 
@@ -49,20 +41,14 @@ class VerificationServiceTests {
         BDDMockito.given(verificationRepository.findByCodeAndMail(any(), any()))
                 .willReturn(Optional.of(DataUtils.getVerificationEntityTransient()));
 
-        BDDMockito.given(verificationConverter.convertFromOptionalToEntity(any()))
-                        .willReturn(DataUtils.getVerificationEntityTransient());
-
         BDDMockito.given(userRepository.findByMail(any()))
                 .willReturn(Optional.of(DataUtils.getUserTransient()));
 
-        BDDMockito.given(userConverter.convertFromOptionalToEntity(any()))
-                .willReturn(DataUtils.getUserTransient());
         //when
         verificationService.verify(verificationDTO);
         //then
         verify(verificationRepository, times(1)).findByCodeAndMail("code", "test@mail.com");
         verify(userRepository, times(1)).findByMail("test@mail.com");
-        verify(userConverter, times(1)).convertFromOptionalToEntity(any());
         verify(userRepository, times(1)).saveAndFlush(any());
         verify(verificationRepository, times(1)).delete(any());
     }

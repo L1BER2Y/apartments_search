@@ -4,7 +4,6 @@ import by.shershen.user_service.clients.MailFeignClient;
 import by.shershen.user_service.core.converters.api.IVerificationConverter;
 import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.core.entity.VerificationEntity;
-import by.shershen.user_service.core.exceptions.InternalServerErrorException;
 import by.shershen.user_service.repository.VerificationRepository;
 import by.shershen.user_service.util.DataUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +13,7 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Optional;
 
@@ -54,9 +54,9 @@ class SendVerificationServiceTests {
         //given
         UserEntity userEntity = DataUtils.getUserPersisted();
         BDDMockito.given(verificationRepository.save(any(VerificationEntity.class)))
-                .willThrow(InternalServerErrorException.class);
+                .willThrow(new DataIntegrityViolationException("duplicate key"));
         //when
-        assertThrows(InternalServerErrorException.class, () -> serviceUnderTest.add(userEntity));
+        assertThrows(DataIntegrityViolationException.class, () -> serviceUnderTest.add(userEntity));
         //then
     }
 

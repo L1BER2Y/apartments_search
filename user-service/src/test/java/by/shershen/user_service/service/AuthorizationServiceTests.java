@@ -1,10 +1,7 @@
 package by.shershen.user_service.service;
 
 import by.shershen.user_service.controller.utils.JwtTokenHandler;
-import by.shershen.user_service.core.converters.api.IUserConverter;
-import by.shershen.user_service.core.dto.UserDetailsDTO;
 import by.shershen.user_service.core.dto.UserLoginDTO;
-import by.shershen.user_service.core.entity.Role;
 import by.shershen.user_service.core.exceptions.ValidationException;
 import by.shershen.user_service.repository.UserRepository;
 import by.shershen.user_service.util.DataUtils;
@@ -18,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -43,9 +39,6 @@ class AuthorizationServiceTests {
     @Mock
     private JwtTokenHandler jwtTokenHandler;
 
-    @Mock
-    private IUserConverter userConverter;
-
     @InjectMocks
     private AuthorizationService authorizationService;
 
@@ -56,21 +49,13 @@ class AuthorizationServiceTests {
         String token = "token";
         UserLoginDTO loginDTO = DataUtils.getUserLoginDTOTransient();
 
-        UserDetailsDTO userDetailsDTO = new UserDetailsDTO(UUID.randomUUID(), "test@mail.com", "Test", Role.USER);
-
         BDDMockito.given(userRepository.findByMail(loginDTO.getMail()))
                 .willReturn(Optional.of(DataUtils.getUserPersisted()));
 
         BDDMockito.given(passwordEncoder.matches(loginDTO.getPassword(), "test"))
                 .willReturn(true);
 
-        BDDMockito.given(userRepository.findIdFioAndRoleByEmail(loginDTO.getMail()))
-                .willReturn(Optional.of(userDetailsDTO));
-
-        BDDMockito.given(userConverter.convertFromOptionalToDTO(any()))
-                .willReturn(userDetailsDTO);
-
-        BDDMockito.given(jwtTokenHandler.generateAccessToken(userDetailsDTO))
+        BDDMockito.given(jwtTokenHandler.generateAccessToken(any()))
                 .willReturn(token);
 
         //when
@@ -94,7 +79,6 @@ class AuthorizationServiceTests {
         //when
         ValidationException validationException = assertThrows(ValidationException.class, () -> authorizationService.login(loginDTO));
         //then
-        verify(userRepository, never()).findIdFioAndRoleByEmail(any());
         verify(jwtTokenHandler, never()).generateAccessToken(any());
         assertThat(validationException.getMessage()).isEqualTo(INVALID_CREDENTIALS);
     }

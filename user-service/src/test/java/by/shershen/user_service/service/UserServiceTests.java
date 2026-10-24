@@ -58,7 +58,7 @@ class UserServiceTests {
     private UserRepository userRepository;
 
     @InjectMocks
-    private UserService serviceUnderTest;
+    private UserService userService;
 
     @Test
     @DisplayName("Test save user functionality")
@@ -70,7 +70,7 @@ class UserServiceTests {
         BDDMockito.given(userRepository.saveAndFlush(any(UserEntity.class)))
                 .willReturn(DataUtils.getUserPersisted());
         //when
-        UserEntity savedUser = serviceUnderTest.save(userToSave);
+        UserEntity savedUser = userService.save(userToSave);
         //then
         assertThat(savedUser).isNotNull();
     }
@@ -83,7 +83,7 @@ class UserServiceTests {
         BDDMockito.given(userRepository.existsByMail(anyString()))
                 .willReturn(true);
         //when
-        assertThrows(ValidationException.class, () -> serviceUnderTest.save(userToSave));
+        assertThrows(ValidationException.class, () -> userService.save(userToSave));
         //then
         verify(userRepository, never()).saveAndFlush(any(UserEntity.class));
     }
@@ -97,12 +97,10 @@ class UserServiceTests {
         LocalDateTime dtUpdate = LocalDateTime.now().plusSeconds(1L);
         BDDMockito.given(userRepository.findById(id))
                 .willReturn(Optional.of(userToUpdate));
-        Mockito.when(userConverter.convertFromOptionalToEntity(any()))
-                .thenReturn(userToUpdate);
         BDDMockito.given(userRepository.saveAndFlush(any(UserEntity.class)))
                 .willReturn(DataUtils.getUserPersisted());
         //when
-        UserEntity updatedUser = serviceUnderTest.update(userToUpdate, id, dtUpdate);
+        UserEntity updatedUser = userService.update(userToUpdate, id, dtUpdate);
         //then
         assertThat(updatedUser).isNotNull();
         verify(userRepository, times(1)).saveAndFlush(any(UserEntity.class));
@@ -117,12 +115,10 @@ class UserServiceTests {
         LocalDateTime dtUpdate = userToUpdate.getDtUpdate();
         BDDMockito.given(userRepository.findById(id))
                 .willReturn(Optional.of(userToUpdate));
-        Mockito.when(userConverter.convertFromOptionalToEntity(any()))
-                .thenReturn(userToUpdate);
         BDDMockito.given(userRepository.saveAndFlush(any(UserEntity.class)))
                 .willReturn(DataUtils.getUserPersisted());
         //when
-        assertThrows(ValidationException.class, () -> serviceUnderTest.update(userToUpdate, id, dtUpdate));
+        assertThrows(ValidationException.class, () -> userService.update(userToUpdate, id, dtUpdate));
         //then
         verify(userRepository, never()).saveAndFlush(any(UserEntity.class));
     }
@@ -133,10 +129,9 @@ class UserServiceTests {
         //given
         BDDMockito.given(userRepository.findById(any(UUID.class)))
                 .willReturn(Optional.of(DataUtils.getUserPersisted()));
-        Mockito.when(userConverter.convertFromOptionalToEntity(any())).thenReturn(DataUtils.getUserPersisted());
         Mockito.when(userConverter.convertFromEntityToDTO(any())).thenReturn(DataUtils.getUserDTOPersisted());
         //when
-        UserDTO obtainedUser = serviceUnderTest.findById(UUID.fromString("eaf4ca36-e201-43c9-9276-3e273ec93f27"));
+        UserDTO obtainedUser = userService.findById(UUID.fromString("eaf4ca36-e201-43c9-9276-3e273ec93f27"));
         //then
         assertThat(obtainedUser).isNotNull();
     }
@@ -149,7 +144,7 @@ class UserServiceTests {
                 .willReturn(Optional.empty());
         //when
         UUID anyUUID = any(UUID.class);
-        assertThrows(EntityNotFoundException.class, () -> serviceUnderTest.findById(anyUUID));
+        assertThrows(EntityNotFoundException.class, () -> userService.findById(anyUUID));
         //then
     }
 
@@ -163,7 +158,7 @@ class UserServiceTests {
         BDDMockito.given(userRepository.saveAndFlush(any(UserEntity.class)))
                 .willReturn(DataUtils.getUserPersisted());
         //when
-        UserEntity registeredUser = serviceUnderTest.register(userToRegister);
+        UserEntity registeredUser = userService.register(userToRegister);
         //then
         assertThat(registeredUser).isNotNull();
         verify(verificationQueueService, times(1)).add(any(UserEntity.class));
@@ -177,7 +172,7 @@ class UserServiceTests {
         BDDMockito.given(userRepository.existsByMail(anyString()))
                 .willReturn(true);
         //when
-        assertThrows(ValidationException.class, () -> serviceUnderTest.register(userToRegister));
+        assertThrows(ValidationException.class, () -> userService.register(userToRegister));
         //then
         verify(userRepository, never()).saveAndFlush(any(UserEntity.class));
         verify(verificationQueueService, never()).add(any(UserEntity.class));
@@ -199,13 +194,10 @@ class UserServiceTests {
         BDDMockito.given(userRepository.findById(userDetails.getId()))
                 .willReturn(Optional.of(DataUtils.getUserPersisted()));
 
-        Mockito.when(userConverter.convertFromOptionalToEntity(any()))
-                .thenReturn(DataUtils.getUserPersisted());
-
         Mockito.when(userConverter.convertFromEntityToDTO(any()))
                 .thenReturn(DataUtils.getUserDTOPersisted());
         //when
-        UserDTO info = serviceUnderTest.findInfo();
+        UserDTO info = userService.findInfo();
         //then
         assertThat(info).isNotNull();
     }
@@ -221,11 +213,47 @@ class UserServiceTests {
         BDDMockito.given(userRepository.findAll(pageRequest))
                 .willReturn(new PageImpl<>(entities, pageRequest, size));
         //when
-        Page<UserDTO> testPage = serviceUnderTest.getPage(pageRequest);
+        Page<UserDTO> testPage = userService.getPage(pageRequest);
         //then
         assertThat(testPage).isNotNull();
         assertThat(testPage.getNumberOfElements()).isEqualTo(entities.size());
         verify(userRepository, times(1)).findAll(pageRequest);
+    }
 
+    @Test
+    @DisplayName("Test update user with nonexistent id")
+    void givenNonexistentId_whenUpdateUser_thenExceptionIsThrown() {
+        //given
+        UUID id = UUID.randomUUID();
+        UserEntity user = DataUtils.getUserTransient();
+        LocalDateTime time = LocalDateTime.now();
+        BDDMockito.given(userRepository.findById(id))
+                .willReturn(Optional.empty());
+        //when
+        assertThrows(EntityNotFoundException.class, () -> userService.update(user, id, time));
+        //then
+        verify(userRepository, never()).saveAndFlush(any(UserEntity.class));
+    }
+
+    @Test
+    @DisplayName("Test find info about user with nonexistent id")
+    void givenNonexistentId_whenFindInfo_thenExceptionIsThrown() {
+        //given
+        UserDetailsDTO userDetails = new UserDetailsDTO(UUID.randomUUID(), "test@mail.com", "Test", Role.USER);
+
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + userDetails.getRole()));
+
+        UsernamePasswordAuthenticationToken
+                authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        BDDMockito.given(userRepository.findById(userDetails.getId()))
+                .willReturn(Optional.empty());
+        //when
+        assertThrows(EntityNotFoundException.class, () -> userService.findInfo());
+        //then
+        verify(userRepository, times(1)).findById(userDetails.getId());
+        verifyNoInteractions(userConverter);
     }
 }

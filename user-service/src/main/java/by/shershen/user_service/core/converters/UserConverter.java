@@ -3,21 +3,14 @@ package by.shershen.user_service.core.converters;
 import by.shershen.user_service.core.converters.api.IUserConverter;
 import by.shershen.user_service.core.dto.UserCreateDTO;
 import by.shershen.user_service.core.dto.UserDTO;
-import by.shershen.user_service.core.dto.UserDetailsDTO;
 import by.shershen.user_service.core.dto.UserRegDTO;
 import by.shershen.user_service.core.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
-import java.util.Optional;
 
 @Component
 public class UserConverter implements IUserConverter {
-
-    @Override
-    public UserEntity convertFromOptionalToEntity(Optional<UserEntity> userEntity) {
-        return userEntity.orElse(null);
-    }
 
     @Override
     public UserDTO convertFromEntityToDTO(UserEntity userEntity) {
@@ -30,11 +23,6 @@ public class UserConverter implements IUserConverter {
         userDTO.setRole(userEntity.getRole());
         userDTO.setStatus(userEntity.getStatus());
         return userDTO;
-    }
-
-    @Override
-    public UserDetailsDTO convertFromOptionalToDTO(Optional<UserDetailsDTO> userDetails) {
-        return userDetails.orElse(null);
     }
 
     @Override

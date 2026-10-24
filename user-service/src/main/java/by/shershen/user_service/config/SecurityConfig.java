@@ -1,6 +1,7 @@
 package by.shershen.user_service.config;
 
 import by.shershen.user_service.controller.filter.JwtFilter;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +44,7 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(requests -> requests
+                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/registration", "/users/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/verification").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/me").authenticated()

@@ -2,7 +2,6 @@ package by.shershen.user_service.service;
 
 import by.shershen.user_service.aop.Audited;
 import by.shershen.user_service.controller.utils.JwtTokenHandler;
-import by.shershen.user_service.core.converters.api.IUserConverter;
 import by.shershen.user_service.core.dto.UserDetailsDTO;
 import by.shershen.user_service.core.dto.UserLoginDTO;
 import by.shershen.user_service.core.entity.Status;
@@ -36,8 +35,6 @@ public class AuthorizationService implements IAuthorizationService {
 
     private final JwtTokenHandler jwtTokenHandler;
 
-    private final IUserConverter userConverter;
-
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -62,8 +59,7 @@ public class AuthorizationService implements IAuthorizationService {
             throw new ValidationException(UNVERIFIED);
         }
 
-        Optional<UserDetailsDTO> idFioAndRoleByEmail = this.userRepository.findIdFioAndRoleByEmail(user.getMail());
-        UserDetailsDTO userDetailsDTO = userConverter.convertFromOptionalToDTO(idFioAndRoleByEmail);
+        UserDetailsDTO userDetailsDTO = new UserDetailsDTO(entity.getId(), entity.getMail(), entity.getFio(), entity.getRole());
 
         return jwtTokenHandler.generateAccessToken(userDetailsDTO);
     }

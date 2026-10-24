@@ -1,6 +1,5 @@
 package by.shershen.user_service.repository;
 
-import by.shershen.user_service.core.dto.UserDetailsDTO;
 import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.util.DataUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -106,22 +105,6 @@ class UserRepositoryTests {
         //then
         assertThat(obtainedUser).isNotNull();
         assertThat(obtainedUser.getMail()).isEqualTo(user.getMail());
-    }
-
-    @Test
-    @DisplayName("Test get user functionality")
-    void givenUserSaved_whenGetIdFioAndRoleByEmail_thenUserIsReturned() {
-        //given
-        UserEntity user = DataUtils.getUserTransient();
-        userRepository.saveAndFlush(user);
-        //when
-        UserDetailsDTO obtainedUser = userRepository.findIdFioAndRoleByEmail(user.getMail()).orElse(null);
-        //then
-        assertThat(obtainedUser).isNotNull();
-        assertThat(obtainedUser.getMail()).isEqualTo(user.getMail());
-        assertThat(obtainedUser.getFio()).isEqualTo(user.getFio());
-        assertThat(obtainedUser.getId()).isEqualTo(user.getId());
-        assertThat(obtainedUser.getRole()).isEqualTo(user.getRole());
     }
 
     @Test

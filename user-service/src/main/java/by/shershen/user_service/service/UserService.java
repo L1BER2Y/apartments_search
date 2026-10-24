@@ -6,15 +6,13 @@ import by.shershen.user_service.core.dto.UserDTO;
 import by.shershen.user_service.core.dto.UserDetailsDTO;
 import by.shershen.user_service.core.entity.Role;
 import by.shershen.user_service.core.entity.Status;
+import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.core.exceptions.EntityNotFoundException;
-import by.shershen.user_service.core.exceptions.InternalServerErrorException;
 import by.shershen.user_service.core.exceptions.ValidationException;
 import by.shershen.user_service.repository.UserRepository;
-import by.shershen.user_service.core.entity.UserEntity;
 import by.shershen.user_service.service.api.IUserService;
 import by.shershen.user_service.service.api.IVerificationQueueService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,14 +20,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-import static by.shershen.user_service.core.entity.AuditedAction.*;
+import static by.shershen.user_service.core.entity.AuditedAction.INFO_ABOUT_ALL_USERS;
+import static by.shershen.user_service.core.entity.AuditedAction.INFO_ABOUT_ME;
+import static by.shershen.user_service.core.entity.AuditedAction.INFO_ABOUT_USER_BY_ID;
+import static by.shershen.user_service.core.entity.AuditedAction.REGISTRATION;
+import static by.shershen.user_service.core.entity.AuditedAction.SAVE_USER;
+import static by.shershen.user_service.core.entity.AuditedAction.UPDATE_USER;
 import static by.shershen.user_service.core.entity.EssenceType.USER;
 
 @Service
@@ -56,13 +59,9 @@ public class UserService implements IUserService {
         entity.setStatus(Status.WAITING_ACTIVATION);
         entity.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        try{
-            this.userRepository.saveAndFlush(entity);
-        } catch (DataAccessException e) {
-            throw new InternalServerErrorException(e.getMessage());
-        }
-
+        this.userRepository.saveAndFlush(entity);
         this.verificationQueueService.add(entity);
+
         return entity;
     }
 
@@ -79,8 +78,7 @@ public class UserService implements IUserService {
     @Override
     @Audited(auditedAction = INFO_ABOUT_USER_BY_ID, essenceType = USER)
     public UserDTO findById(UUID uuid) {
-        UserEntity entity = userConverter.convertFromOptionalToEntity(this.userRepository.findById(uuid));
-        emptyCheck(entity);
+        UserEntity entity = this.userRepository.findById(uuid).orElseThrow(() -> new EntityNotFoundException("No user found with id: " + uuid));
         return userConverter.convertFromEntityToDTO(entity);
     }
 
@@ -99,11 +97,7 @@ public class UserService implements IUserService {
         entity.setStatus(user.getStatus());
         entity.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        try{
-            this.userRepository.saveAndFlush(entity);
-        } catch (DataAccessException e) {
-            throw new InternalServerErrorException(e.getMessage());
-        }
+        this.userRepository.saveAndFlush(entity);
 
         return entity;
     }
@@ -112,9 +106,13 @@ public class UserService implements IUserService {
     @Transactional
     @Audited(auditedAction = UPDATE_USER, essenceType = USER)
     public UserEntity update(UserEntity entity, UUID id, LocalDateTime dtUpdate) {
-        Optional<UserEntity> optional = this.userRepository.findById(id);
-        UserEntity user = userConverter.convertFromOptionalToEntity(optional);
-        if(user.getDtUpdate().truncatedTo(ChronoUnit.MILLIS).isEqual(dtUpdate.truncatedTo(ChronoUnit.MILLIS))) {
+
+        UserEntity user = this.userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No user found by id"));
+
+        if(user.getDtUpdate()
+                .truncatedTo(ChronoUnit.MILLIS)
+                .isEqual(dtUpdate.truncatedTo(ChronoUnit.MILLIS))) {
             throw new ValidationException("Unacceptable dt_update - " + dtUpdate);
         } else {
             user.setDtUpdate(dtUpdate);
@@ -124,20 +122,21 @@ public class UserService implements IUserService {
             user.setStatus(entity.getStatus());
             user.setPassword(passwordEncoder.encode(entity.getPassword()));
         }
-        try {
-            this.userRepository.saveAndFlush(user);
-        } catch (DataAccessException e) {
-            throw new InternalServerErrorException(e.getMessage());
-        }
+
+        this.userRepository.saveAndFlush(user);
+
         return user;
     }
 
     @Override
     @Audited(auditedAction = INFO_ABOUT_ME, essenceType = USER)
     public UserDTO findInfo() {
-        UserDetailsDTO userDetails = (UserDetailsDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<UserEntity> userEntity = userRepository.findById(userDetails.getId());
-        UserEntity entity = userConverter.convertFromOptionalToEntity(userEntity);
+        UserDetailsDTO userDetails = (UserDetailsDTO) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        UserEntity entity = userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new EntityNotFoundException("No user found by id"));
         return userConverter.convertFromEntityToDTO(entity);
     }
 
@@ -154,14 +153,8 @@ public class UserService implements IUserService {
     }
 
     private void validateMail(String mail) {
-        if (userRepository.existsByMail(mail)) {
+        if (Boolean.TRUE.equals(userRepository.existsByMail(mail))) {
             throw new ValidationException("This login has already been used");
-        }
-    }
-
-    private void emptyCheck(UserEntity entity) {
-        if (entity == null) {
-            throw new EntityNotFoundException("No user found by this id");
         }
     }
 }

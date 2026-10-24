@@ -30,9 +30,13 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = UserRestController.class)
@@ -163,7 +167,28 @@ class UserRestControllerTest {
         //then
         result
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Incorrect request body. Try again."));
+    }
+
+    @Test
+    @DisplayName("Test user login internal error")
+    void givenUserLoginDTO_whenUserLogin_thenExceptionThrown() throws Exception {
+        //given
+        UserLoginDTO loginDTO = DataUtils.getUserLoginDTOTransient();
+        Mockito.doThrow(new RuntimeException("relation users.secret_table does not exist"))
+                .when(authorizationService).login(any(UserLoginDTO.class));
+        //when
+        ResultActions result = mockMvc.perform(post("/users/login")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginDTO)));
+        //then
+        result
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("The server can't handle request correctly. Please contact the administrator."))
+                .andExpect(content().string(not(containsString("secret_table"))));
     }
 
     @Test
